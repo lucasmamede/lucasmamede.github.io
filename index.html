@@ -4,13 +4,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lucas Mamede - Programador WEB Full Stack</title>
+<title>Programador WEB Full Stack - Lucas Mamede</title>
 
 <!-- Bootstrap -->
 <link href="bootstrap.css" rel="stylesheet">
 <link href="estilo.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="animate.css">
+
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
    <link rel="stylesheet"
@@ -25,6 +26,8 @@
   src="https://code.jquery.com/jquery-3.2.1.js"
   integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
   crossorigin="anonymous"></script>
+  
+  <link href="https://fonts.googleapis.com/css?family=Archivo+Black|Frijole" rel="stylesheet">
 
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -35,75 +38,223 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-inverse  ">
+<script src="wow.min.js"></script>
+              <script>
+              new WOW().init();
+              </script>
+              
+	<nav class="navbar navbar-inverse navbar ">
     	<div class="container-fluid">
     	<div class="navbar-brand">
-        <a ><img src="mini4.png" class="img-responsive"> </a>
+        <a ><img src="file:///C|/Users/Luv/Desktop/mini4.png" class="img-responsive"> </a>
         </div>
         
             <ul class="nav navbar-nav ">
-            	<li class=""><a href="#"></a>  </li>
-                <li><a href="#">  </a> </li>
-                <li><a href="#">  </a> </li>
-
-                <li> </li>
+            	<li class=""><a class="esq" href="#home">Home</a>  </li>
+                <li><a class="esq" href="#">Serviços</a> </li>
+                <li><a class="esq" href="#">Portifólio</a> </li>
+                <li><a class="esq" href="#">Contato</a> </li>
+                <li><a class="esq" href="#">Habilidades</a> </li>
+                
+                
             </ul>
         </div>          
     </nav>
+    
+    
+    
+    <script type="text/javascript">
+	
+$(function(){
 
-	<section class="fundo ">
+    var jElement = $('.navbar');
+
+    $(window).scroll(function(){
+        if ( $(this).scrollTop() > 558 ){
+            jElement.css({
+			
+			 'background-color': 'black',
+             'border-color': 'transparent',
+   	        'position':'fixed',
+             'z-index':'3',
+			 'width':'100%',
+			 'margin-left':'0',
+			 'border-radius':'0'
+				
+				
+				
+            });
+        }else{
+            jElement.css({
+				
+
+   
+   
+	         'background-color': 'transparent',
+             'border-color': 'transparent',
+   	        'position':'fixed',
+             'z-index':'3'
+								
+				
+            });
+        }
+    });
+
+});
+
+
+
+
+	</script>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+	<header  id="home" class="fundo ">
 	<div class="centralizar">	
          <center><h1 class="destaque  cor animated slideInDown esq " > Seja Bem Vindo !</h1></center><br>
          <p class=" text-center cor maior chamada esq  animated fadeInLeft"> Desenvolvemos e fazemos manutenção de sites institucionais, lojas virtuais, catálogo de produtos ou sistemas sob demandas específicas.  </p>
-         <center><button class=" btn btn-default animated fadeInUp" href="#contato"> Contatos</button></center>
+         <br>
+         <br>
+         <p class="text-center"><button class="botao btn btn-default animated fadeInUp" href="#contato"> Contatos</button></p>
       </div>
-   <br>
+  
+  
    
-</section>
+</header>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+<style>
+#caixa{
+	
+	
+  -webkit-animation-delay: 0.3s;
+  animation-delay: 0.3s;
+}
+
+#caixa1{
+	
+	
+  -webkit-animation-delay: 1s;
+  animation-delay: 1s;
+}
+
+#caixa2{
+	
+	
+  -webkit-animation-delay: 1.7s;
+  animation-delay: 1.7s;
+}
+
+
+
+
+
+</style>
+
 
 <section class="container margem" id="servicos">
-	<div class="box" >
-    	<center><span class="glyphicon glyphicon-shopping-cart gly">  </span></center>
-    
+	<div class="col-md-4">
+    	<div id="caixa" class="box wow bounceInLeft">
+            <center><span class=" fa  fa-file-photo-o fa-5x"></span></center>
+        	<center><h3>Sites Institucionais </h3></center>
+            <center><p>Sites com funcionalidades básicas personalizados de acordo com sua necessidade.</p></center>
+        </div>    	    
     </div>
-
+	
+    <div class="col-md-4">
+        <div id="caixa1" class="box wow bounceInLeft1">
+            <center><span class=" fa fa-cart-plus fa-5x"></span></center>
+            <center><h3>Lojas Virtuais</h3></center>
+            <center><p>Lojas virtuais para você expor e vender seus produtos, painel de controle sob medida.</p></center>
+        </div>    
+    </div>
+    
+    <div class="col-md-4">
+    	<div id="caixa2" class="box wow  bounceInLeft">
+        	 <center><span class=" fa fa-file-zip-o grande fa-5x"></span></center>
+             <center><h3>Blogs</h3></center>
+             <center><p>Seu Blog sob medida e fácil de administrar e divulgar.</p></center>
+        </div>
+    </div>
 
 </section>
 
-<section class=" fundo2">
-	<div class="row margem">
-    	<div class="col-md-2">
-        <img src="eu.jpg" class="img-circle">
-                </div>
-        <div class="col-md-9 margem cor">
-        <p class=""></p><br><br><br><br><br><br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<section id="" class=" fundo2">
+	<div class="row ">
+    	<div class="col-md-11">
+        
         </div>
-     
+        <div class="col-md-1 ">
+        
+        <img id="banner" class="wow fadeInLeft" src="banner1.png">
+        
+        
+        </div>
     </div>	
 
 
 </section>
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<section id="portifolio">
+	<div class="row">
+    	<div class="col-md-4">
+        Portifolio 1
+        </div>
+        <div class="col-md-4">
+                Portifolio 2
+
+        </div>
+        <div class="col-md-4">
+                Portifolio 3
+
+        </div>
+        
+        
+    </div>
+
+
+
+</section>
+
+
+
 <section id="contato " >
     <div class="container-fluid margem">
     	<div class="row">
         	<div class="col-md-6">
-            <i class="icomoon icon-mail"></i>EMAIL
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br><br><br><br><br>
-            </div>
-            <div class="col-md-6">
-            TELEFONE
+            
+            
             </div>
         </div>
     
@@ -111,8 +262,13 @@
 </section>
 
 
-<footer class="fundo3">
-	<center><div class="container cima">
+
+
+
+
+
+<footer id="rodape" class="fundo3">
+	<div class="container cima">
     
     <i class="fa fa-facebook-square fa-3x "></i>    
     <br>
@@ -120,7 +276,7 @@
 
     <i class="fa fa-instagram fa-3x"></i>         
     
-    </div></center>
+    </div>
 
 
 
@@ -128,12 +284,12 @@
 
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) --> 
-<script src="jquery-1.11.2.min.js"></script>
+<script src="file:jquery-1.11.2.min.js"></script>
 
 <!-- Include all compiled plugins (below), or include individual files as needed --> 
-<script src="bootstrap.js"></script>
+<script src="file:bootstrap.js"></script>
 
-   <script src="js/wow.min.js"></script>
+   <script src="wow.min.js"></script>
               <script>
               new WOW().init();
               </script>

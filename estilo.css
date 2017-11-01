@@ -313,7 +313,7 @@ font-size: 1.8em;
 	
 		 li:hover {
 		
-		 background-color: black;
+		 background-color: black !important;
 	}
 	
 	

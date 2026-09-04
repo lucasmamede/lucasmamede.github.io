@@ -1,0 +1,1679 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b1020">
+  <title>Meu Financeiro</title>
+  
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css">
+<style>:root{
+  --bg:#070d18;--surface:#0f1728;--surface-2:#111b2f;--surface-3:#162238;
+  --line:#24324c;--line-soft:rgba(143,160,188,.13);--text:#f7f9fd;--muted:#8fa0bc;
+  --primary:#7057ff;--primary-2:#8b5cf6;--green:#22c55e;--red:#fb4f72;--amber:#f59e0b;
+  --cyan:#22d3ee;--teal:#14b8a6;--radius:22px;--shadow:0 20px 55px rgba(0,0,0,.24)
+}
+*{box-sizing:border-box}html{background:var(--bg)}body{margin:0;background:linear-gradient(140deg,#070d18,#0a1120 50%,#07101d);color:var(--text);font-family:Inter,system-ui,sans-serif;min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}.hidden{display:none!important}.muted{color:var(--muted)}
+.app-shell{min-height:100vh}.sidebar{position:fixed;inset:0 auto 0 0;width:244px;background:rgba(8,14,25,.96);border-right:1px solid #1c2940;padding:22px 14px;display:flex;flex-direction:column;z-index:30}.brand{display:flex;align-items:center;gap:11px;padding:3px 8px 24px}.brand-mark{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--primary),#4bc7ff);font-weight:900;box-shadow:0 10px 25px rgba(112,87,255,.35)}.brand strong,.brand small{display:block}.brand strong{font-size:14px}.brand small{font-size:10px;color:var(--muted);margin-top:3px}.side-nav{display:flex;flex-direction:column;gap:5px;overflow:auto}.side-nav button{border:0;background:transparent;color:#8695ae;display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:12px;text-align:left;font-size:12px;font-weight:650;min-height:42px}.side-nav button svg{width:18px}.side-nav button:hover,.side-nav button.active{color:#fff;background:rgba(112,87,255,.12)}.side-nav button.active{box-shadow:inset 3px 0 var(--primary)}.sidebar-foot{margin-top:auto;padding:16px 10px 3px;color:var(--muted);font-size:10px;display:flex;align-items:center;gap:7px}.status-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 12px #22c55e}
+.main{margin-left:244px;padding:28px 30px 45px;min-width:0}.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:26px}.eyebrow{display:block;color:#8cb6e6;font-weight:800;font-size:10px;letter-spacing:.11em}.topbar h1{font-size:31px;margin:7px 0 0;letter-spacing:-.04em}.top-actions{display:flex;gap:10px;align-items:center}.icon-btn,.secondary-btn,.primary-btn,.danger-btn,.text-btn{border-radius:13px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:750}.icon-btn{width:44px;height:44px;border:1px solid var(--line);background:#111a2c;color:#dce5f5}.icon-btn svg,.primary-btn svg,.secondary-btn svg,.danger-btn svg,.text-btn svg{width:18px}.primary-btn{min-height:44px;border:0;color:#fff;background:linear-gradient(135deg,#7861ff,#6547f4);padding:10px 18px;box-shadow:0 12px 28px rgba(108,82,255,.22)}.primary-btn:hover{filter:brightness(1.08)}.secondary-btn{min-height:42px;border:1px solid #2b3854;background:#151f33;color:#dce5f5;padding:9px 14px}.danger-btn{min-height:40px;border:1px solid rgba(239,68,68,.26);background:rgba(239,68,68,.1);color:#ff8b9d;padding:8px 12px}.text-btn{border:0;background:transparent;color:#b7abff;padding:6px}.page{display:none}.page.active{display:block}
+.dashboard-period{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px;padding:12px 14px;background:rgba(15,23,40,.88);border:1px solid var(--line);border-radius:16px}.dashboard-period-title small{display:block;color:var(--muted);font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}.dashboard-period-title strong{display:block;margin-top:4px;font-size:15px}.dashboard-period-controls{display:flex;align-items:center;gap:8px}.dashboard-period-controls input[type=month]{height:44px;min-width:155px;border:1px solid var(--line);border-radius:12px;background:#111a2c;color:#fff;padding:0 11px;outline:0;color-scheme:dark}.dashboard-period-controls input[type=month]:focus{border-color:#6e62ff;box-shadow:0 0 0 3px rgba(110,98,255,.12)}
+.hero-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.metric-card{position:relative;background:linear-gradient(145deg,#111a2d,#0d1627);border:1px solid var(--line);border-radius:20px;padding:17px;min-height:146px;overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:.18s transform,.18s border-color}.metric-card:hover{transform:translateY(-2px);border-color:#3a4867}.metric-card:after{content:"";position:absolute;right:-30px;bottom:-46px;width:120px;height:120px;border-radius:50%;background:var(--primary);opacity:.07}.metric-card .metric-icon{width:36px;height:36px;border-radius:12px;background:#18233a;display:grid;place-items:center;color:#b9b0ff;margin-bottom:13px}.metric-card .metric-icon svg{width:19px}.metric-card small,.metric-card span{display:block;color:var(--muted)}.metric-card small{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}.metric-card strong{display:block;font-size:20px;margin:7px 0 6px;letter-spacing:-.03em}.metric-card span{font-size:10px}.metric-card.danger strong{color:#ff6681}.metric-card.success strong{color:#4ade80}.metric-card.warning strong{color:#f6b945}.metric-card.subscription strong{color:#45dfd0}.metric-card.subscription:after{background:var(--teal)}
+.insight-strip{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:14px 0;background:linear-gradient(90deg,rgba(112,87,255,.1),rgba(34,211,238,.05));border:1px solid rgba(112,87,255,.2);border-radius:16px;padding:13px 16px}.insight-strip>div{display:flex;align-items:center;gap:11px}.insight-strip>div>svg{color:#b0a3ff;width:20px}.insight-strip small{display:block;color:var(--muted);font-size:9px;text-transform:uppercase}.insight-strip strong{display:block;font-size:12px;margin-top:3px}.content-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:14px}.panel{background:rgba(15,23,40,.96);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);min-width:0}.panel.wide{grid-column:1/2}.goal-panel{grid-column:2/3}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}.panel-head small{font-size:9px;color:var(--muted);font-weight:800;letter-spacing:.06em}.panel-head h3{margin:4px 0 0;font-size:16px}.chart-wrap{height:255px}
+.section-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px}.section-toolbar p{margin:0;color:var(--muted);font-size:12px}.search-box{display:flex;align-items:center;gap:8px;background:#111a2d;border:1px solid var(--line);border-radius:13px;padding:0 12px;min-width:340px}.search-box svg{width:17px;color:var(--muted)}.search-box input{height:44px;background:transparent;border:0;outline:0;color:#fff;width:100%}.search-box input::placeholder{color:#71819b}
+.stack-list,.responsive-list,.tableish{display:flex;flex-direction:column}.list-row{display:grid;grid-template-columns:minmax(0,1.55fr) .75fr .75fr auto;align-items:center;gap:13px;padding:14px 2px;border-bottom:1px solid var(--line-soft)}.list-row:last-child{border-bottom:0}.list-row.compact{grid-template-columns:minmax(0,1.55fr) .72fr .72fr auto}.row-main{display:flex;align-items:center;gap:11px;min-width:0}.row-icon{width:36px;height:36px;border-radius:12px;background:#182238;display:grid;place-items:center;color:#a8b4c9;flex:0 0 auto}.row-icon svg{width:18px}.row-main strong,.row-main small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.row-main strong{font-size:12px}.row-main small{font-size:10px;color:var(--muted);margin-top:3px}.money{font-weight:800;font-size:12px}.money.negative{color:#fb7185}.money.positive{color:#4ade80}.badge{display:inline-flex;width:max-content;max-width:100%;padding:5px 8px;border-radius:999px;font-size:9px;font-weight:800;background:#182238;color:#aab8cf;white-space:nowrap}.badge.paid{background:rgba(34,197,94,.13);color:#70e49d}.badge.overdue{background:rgba(239,68,68,.13);color:#ff8a8a}.badge.paused{background:rgba(245,158,11,.13);color:#ffc75a}.badge.cancelled{background:rgba(148,163,184,.13);color:#aeb9ca}.empty-state{color:var(--muted);font-size:12px;padding:18px 4px}.mini-actions{display:flex;gap:6px;justify-content:flex-end}.mini-actions button{width:34px;height:34px;border-radius:9px;border:1px solid #2a3855;background:#172135;color:#aebbd0;display:grid;place-items:center}.mini-actions button:hover{background:#202d46;color:#fff}.mini-actions button.edit{color:#a99cff}.mini-actions button.success{color:#69df94}.mini-actions button.warning{color:#f7bd54}.mini-actions button.delete{color:#fb7185}.mini-actions svg{width:15px}
+.card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.entity-card{background:linear-gradient(145deg,#121b2f,#0f1728);border:1px solid var(--line);border-radius:20px;padding:18px;min-height:165px;position:relative;overflow:hidden}.entity-card:after{content:"";position:absolute;width:110px;height:110px;border-radius:50%;right:-40px;bottom:-48px;background:var(--entity,#7c5cff);opacity:.1}.entity-card .entity-top{display:flex;align-items:center;justify-content:space-between;gap:10px}.entity-card h3{margin:18px 0 4px;font-size:19px}.entity-card p{margin:0;color:var(--muted);font-size:11px}.entity-meta{display:flex;justify-content:space-between;gap:10px;margin-top:18px;font-size:10px;color:#91a0b8}.progress{height:8px;background:#1a2438;border-radius:999px;overflow:hidden}.progress>span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--primary),#22d3ee)}
+.compact-panel{display:flex;align-items:center;gap:38px;margin-bottom:14px}.compact-panel>div{min-width:150px}.compact-panel small{display:block;color:var(--muted);font-size:9px;text-transform:uppercase}.compact-panel strong{display:block;margin-top:5px;font-size:18px}.subscription-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}.small-metric{background:#0f182a;border:1px solid var(--line);border-radius:17px;padding:15px}.small-metric small,.small-metric span{display:block;color:var(--muted)}.small-metric small{font-size:9px;text-transform:uppercase;font-weight:800}.small-metric strong{display:block;font-size:19px;margin:7px 0 4px}.small-metric span{font-size:10px}.subscription-toolbar{margin-top:0}
+.calendar-page{min-height:calc(100vh - 120px)}.calendar-panel{padding:14px;min-height:720px}.calendar-legend{display:flex;gap:17px;align-items:center;margin-bottom:12px;color:var(--muted);font-size:10px}.calendar-legend span{display:flex;align-items:center;gap:6px}.dot{width:8px;height:8px;border-radius:50%}.dot.pending{background:var(--amber)}.dot.paid{background:var(--green)}.dot.overdue{background:#ef4444}.dot.carddot{background:#8b5cf6}.dot.subdot{background:var(--teal)}.fc{--fc-border-color:#253047;--fc-page-bg-color:transparent;--fc-neutral-bg-color:#11192a;--fc-list-event-hover-bg-color:#182238;--fc-today-bg-color:rgba(124,92,255,.08);font-size:11px}.fc .fc-toolbar-title{font-size:19px}.fc .fc-button-primary{background:#182238;border-color:#2b3854;color:#dbe4f2}.fc .fc-button-primary:not(:disabled).fc-button-active,.fc .fc-button-primary:hover{background:#2a3550;border-color:#3c4966}.fc .fc-daygrid-day-number{color:#aebbd0}.fc-event{border:0!important;padding:2px 4px;border-radius:6px;cursor:pointer}
+.settings-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.settings-grid p{color:var(--muted);font-size:12px;line-height:1.6}.link-btn,.file-btn{width:max-content}.file-btn input{display:none}
+.mobile-nav{display:none}.modal-backdrop,.sheet-backdrop{position:fixed;inset:0;background:rgba(1,5,12,.72);backdrop-filter:blur(7px);display:none;align-items:center;justify-content:center;z-index:100;padding:18px}.modal-backdrop.open,.sheet-backdrop.open{display:flex}.modal-card{width:min(720px,100%);max-height:92vh;overflow:auto;background:#0f1728;border:1px solid #2b3854;border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.5)}.modal-head{display:flex;justify-content:space-between;align-items:center;padding:20px 20px 10px;position:sticky;top:0;background:#0f1728;z-index:2}.modal-head h2{margin:4px 0 0;font-size:20px}.modal-head small{color:var(--muted);font-size:9px}.modal-form{padding:10px 20px 22px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:10px;color:#a8b5c9;font-weight:700}.field input,.field select,.field textarea{width:100%;border:1px solid #2b3854;background:#111a2c;color:#fff;border-radius:12px;min-height:44px;padding:10px 11px;outline:0}.field textarea{min-height:85px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:#6e62ff;box-shadow:0 0 0 3px rgba(110,98,255,.12)}.field-help{font-size:9px;color:#72819a;line-height:1.45}.form-actions{display:flex;justify-content:flex-end;gap:9px;flex-wrap:wrap;margin-top:18px}.form-divider{grid-column:1/-1;height:1px;background:var(--line-soft);margin:2px 0}.toggle-line{display:flex;align-items:center;gap:8px;color:#a9b5c8;font-size:10px}.toggle-line input{width:16px;height:16px;min-height:auto}.toast{position:fixed;right:22px;bottom:22px;z-index:200;background:#172236;border:1px solid #30405f;color:#fff;border-radius:13px;padding:12px 15px;box-shadow:var(--shadow);transform:translateY(80px);opacity:0;transition:.25s;max-width:350px;font-size:12px}.toast.show{transform:translateY(0);opacity:1}.bottom-sheet{width:min(520px,100%);background:#11192b;border:1px solid #293650;border-radius:24px;padding:10px 16px 24px;align-self:flex-end}.sheet-handle{width:46px;height:4px;border-radius:999px;background:#40506c;margin:2px auto 14px}.sheet-title{display:flex;align-items:center;justify-content:space-between}.sheet-title h3{margin:0}.more-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.more-grid button{min-height:74px;border:1px solid var(--line);background:#151f33;color:white;border-radius:16px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:8px;padding:14px;font-weight:700;font-size:11px}.more-grid svg{width:20px;color:#a99cff}
+@media(max-width:1350px){.hero-grid{grid-template-columns:repeat(3,1fr)}.card-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1000px){.subscription-summary{grid-template-columns:repeat(2,1fr)}.settings-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){body{padding-bottom:84px}.sidebar{display:none}.main{margin-left:0;padding:18px 14px 95px}.topbar{margin-bottom:16px}.topbar h1{font-size:25px}.top-actions #quickAddBtn{display:none}.dashboard-period{align-items:stretch;flex-direction:column;padding:11px 12px}.dashboard-period-controls{display:grid;grid-template-columns:44px minmax(0,1fr) 44px auto}.dashboard-period-controls input[type=month]{min-width:0;width:100%}.dashboard-period-controls .secondary-btn{padding:8px 11px;font-size:10px}.hero-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.metric-card{min-height:136px;padding:15px}.metric-card strong{font-size:18px}.content-grid{grid-template-columns:1fr}.panel.wide,.goal-panel{grid-column:auto}.card-grid,.settings-grid{grid-template-columns:1fr}.mobile-nav{position:fixed;display:grid;grid-template-columns:1fr 1fr 70px 1fr 1fr;left:10px;right:10px;bottom:10px;height:68px;border-radius:22px;background:rgba(14,21,36,.96);border:1px solid #2a3550;backdrop-filter:blur(18px);z-index:50;box-shadow:0 20px 60px rgba(0,0,0,.45);padding:6px}.mobile-nav button{border:0;background:transparent;color:#7f8da7;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:9px;font-weight:700}.mobile-nav button svg{width:19px}.mobile-nav button.active{color:#fff;background:rgba(124,92,255,.10)}.mobile-nav .mobile-fab{width:54px;height:54px;margin:-12px auto 0;border-radius:18px;background:linear-gradient(135deg,var(--primary),#22d3ee);color:#fff;box-shadow:0 12px 30px rgba(124,92,255,.38)}.mobile-nav .mobile-fab svg{width:25px}.section-toolbar{align-items:stretch}.section-toolbar p{display:none}.section-toolbar .primary-btn{white-space:nowrap}.search-box{min-width:0;flex:1}.list-row,.list-row.compact{grid-template-columns:minmax(0,1fr) auto}.list-row>div:nth-child(2):not(.mini-actions),.list-row>div:nth-child(3):not(.mini-actions),.list-row>span:nth-child(2),.list-row>span:nth-child(3){display:none}.calendar-panel{min-height:650px;padding:8px}.calendar-legend{overflow:auto;white-space:nowrap;padding-bottom:3px}.fc .fc-toolbar{gap:8px;flex-wrap:wrap}.fc .fc-toolbar-title{font-size:15px}.fc .fc-button{font-size:10px;padding:.35em .5em}.fc .fc-daygrid-event{font-size:8px;white-space:normal}.modal-backdrop{padding:0;align-items:flex-end}.modal-card{border-radius:24px 24px 0 0;max-height:94vh;width:100%}.form-grid{grid-template-columns:1fr}.field.full,.form-divider{grid-column:auto}.modal-head{padding:18px 16px 8px}.modal-form{padding:10px 16px calc(24px + env(safe-area-inset-bottom))}.form-actions{position:sticky;bottom:0;background:#0f1728;padding-top:10px}.toast{left:14px;right:14px;bottom:92px;max-width:none}.insight-strip .text-btn{display:none}.compact-panel{gap:18px;overflow:auto}.compact-panel>div{min-width:145px}}
+@media(max-width:520px){.dashboard-period-controls{grid-template-columns:42px minmax(0,1fr) 42px}.dashboard-period-controls .secondary-btn{grid-column:1/-1;width:100%}.dashboard-period-title strong{font-size:14px}.hero-grid{grid-template-columns:1fr 1fr}.metric-card{min-height:128px}.metric-card span{display:none}.metric-card strong{font-size:16px}.metric-card small{font-size:9px}.top-actions .icon-btn{width:38px;height:38px}.chart-wrap{height:220px}.section-toolbar{gap:8px}.section-toolbar .primary-btn{padding:10px 11px;font-size:11px}.search-box{padding:0 9px}.subscription-summary{grid-template-columns:1fr 1fr}.small-metric{padding:13px}.small-metric strong{font-size:16px}.more-grid{grid-template-columns:1fr 1fr}}
+
+/* Investimentos v2.6 */
+.investment-overview-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:14px}.investment-kpi{min-height:118px}.investment-kpi strong{font-size:21px}.positive-text{color:#4ade80!important}.negative-text{color:#fb7185!important}.investment-layout{display:grid;grid-template-columns:1.45fr 1fr;gap:14px;margin-bottom:14px}.investment-note{margin:-2px 0 16px;color:var(--muted);font-size:10px;line-height:1.6}.projection-controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}.projection-controls label{display:flex;flex-direction:column;gap:7px;color:#a8b5c9;font-size:10px;font-weight:700}.projection-controls input{width:100%;min-height:43px;border:1px solid #2b3854;background:#111a2c;color:#fff;border-radius:12px;padding:9px 11px;outline:0}.projection-controls input:focus{border-color:#6e62ff;box-shadow:0 0 0 3px rgba(110,98,255,.12)}.projection-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.projection-card{border:1px solid #27344e;background:linear-gradient(145deg,#121d31,#10182a);border-radius:15px;padding:13px;display:flex;flex-direction:column;gap:5px}.projection-card small{color:#91a0b8;font-size:9px;text-transform:uppercase;font-weight:800}.projection-card strong{font-size:17px}.projection-card span{font-size:9px;color:#91a0b8}.allocation-block+.allocation-block{margin-top:18px;padding-top:16px;border-top:1px solid var(--line-soft)}.allocation-block>small{display:block;margin-bottom:11px;color:#8fa0b9;font-size:9px;text-transform:uppercase;font-weight:800}.allocation-list{display:flex;flex-direction:column;gap:10px}.allocation-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 10px;align-items:center}.allocation-label{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:10px}.allocation-label span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.allocation-label strong{font-size:9px;color:#b9c4d6}.allocation-row>small{grid-column:2;grid-row:1/3;color:#91a0b8;font-size:9px;min-width:72px;text-align:right}.allocation-track{height:7px;border-radius:999px;background:#1a2438;overflow:hidden}.allocation-track span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--primary),#22d3ee)}.investment-portfolio-panel{margin-top:0}.investment-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.investment-card{min-height:280px}.investment-card h3{font-size:22px}.investment-badges{display:flex;gap:6px;flex-wrap:wrap}.investment-position-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:17px}.investment-position-grid>div{background:rgba(7,13,24,.38);border:1px solid rgba(42,56,85,.65);border-radius:11px;padding:9px;min-width:0}.investment-position-grid small,.investment-position-grid strong{display:block}.investment-position-grid small{font-size:8px;color:#7f8da7;text-transform:uppercase}.investment-position-grid strong{font-size:10px;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.investment-extra{margin-top:10px;color:#99a8be;font-size:9px}.investment-footer{display:flex;justify-content:space-between;gap:10px;margin-top:12px;padding-top:11px;border-top:1px solid var(--line-soft);color:#8190a7;font-size:9px}.investment-footer span:last-child{text-align:right}
+@media(max-width:1200px){.investment-overview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.investment-layout{grid-template-columns:1fr}.investment-card-grid{grid-template-columns:1fr}}
+@media(max-width:620px){.investment-overview-grid{grid-template-columns:1fr 1fr;gap:9px}.investment-kpi{min-height:104px;padding:12px}.investment-kpi strong{font-size:16px}.projection-controls{grid-template-columns:1fr}.projection-grid{grid-template-columns:1fr 1fr}.investment-position-grid{grid-template-columns:1fr 1fr}.investment-card{min-height:0}.investment-footer{flex-direction:column}.investment-footer span:last-child{text-align:left}}
+
+/* ========================================================================
+   Produção Supabase: Lançamentos unificados
+   As regras e estilos existentes acima permanecem inalterados.
+   ======================================================================== */
+.movement-intro,.cashflow-intro{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:14px;padding:17px 18px;background:linear-gradient(135deg,rgba(112,87,255,.08),rgba(34,211,238,.035));border:1px solid rgba(112,87,255,.18);border-radius:18px}.movement-intro h2,.cashflow-intro h2{margin:6px 0 5px;font-size:20px;letter-spacing:-.025em}.movement-intro p,.cashflow-intro p{margin:0;max-width:780px;color:var(--muted);font-size:11px;line-height:1.6}.movement-quick-actions{display:flex;align-items:center;gap:9px;flex:0 0 auto}.movement-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}.movement-toolbar{align-items:stretch}.movement-toolbar .search-box{flex:1}.movement-filter-wrap{display:flex;align-items:center}.movement-filter-wrap select{height:44px;min-width:210px;border:1px solid var(--line);border-radius:13px;background:#111a2d;color:#fff;padding:0 11px;outline:0}.movement-filter-wrap select:focus{border-color:#6e62ff;box-shadow:0 0 0 3px rgba(110,98,255,.12)}.movement-day-group+.movement-day-group{border-top:1px solid var(--line-soft)}.movement-day-title{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 2px 3px}.movement-day-title span{font-size:11px;font-weight:800;color:#c7d2e5}.movement-day-title small{font-size:9px;color:var(--muted)}.movement-bill-row .row-icon{color:#ffc45e}.dot.movementdot{background:#3b82f6}
+
+.cashflow-reserve-box{min-width:300px;background:rgba(7,13,24,.42);border:1px solid var(--line);border-radius:15px;padding:12px}.cashflow-reserve-box>label{display:block;margin-bottom:7px;color:#a8b5c9;font-size:9px;font-weight:800;text-transform:uppercase}.cashflow-reserve-line{display:grid;grid-template-columns:auto minmax(90px,1fr) auto;align-items:center;gap:8px}.cashflow-reserve-line>span{font-size:11px;color:var(--muted);font-weight:800}.cashflow-reserve-line input{min-width:0;height:42px;border:1px solid var(--line);border-radius:11px;background:#111a2c;color:#fff;padding:0 10px;outline:0}.cashflow-reserve-line input:focus{border-color:#6e62ff;box-shadow:0 0 0 3px rgba(110,98,255,.12)}.cashflow-summary{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:11px;margin-bottom:14px}.cashflow-insight{margin-top:0}.cashflow-insight strong{line-height:1.45}.cashflow-layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(300px,.75fr);gap:14px;align-items:start}.cashflow-calendar-panel{min-height:650px}.cashflow-side{display:flex;flex-direction:column;gap:14px;min-width:0}.cashflow-side .panel{box-shadow:none}.cashflow-plan-row,.cashflow-liquidity-row{grid-template-columns:minmax(0,1fr) auto auto}.cashflow-plan-row .row-icon{color:#6dd8ff}.cashflow-liquidity-row .row-icon{color:#9e91ff}.dot.income-dot{background:#22c55e}.dot.investment-dot{background:#6366f1}.dot.rescue-dot{background:#0ea5e9}
+
+@media(max-width:1200px){.cashflow-summary{grid-template-columns:repeat(3,minmax(0,1fr))}.cashflow-layout{grid-template-columns:1fr}.cashflow-side{display:grid;grid-template-columns:1fr 1fr}.movement-summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.movement-intro,.cashflow-intro{flex-direction:column}.movement-quick-actions{width:100%;flex-wrap:wrap}.movement-quick-actions .primary-btn,.movement-quick-actions .secondary-btn{flex:1}.cashflow-reserve-box{width:100%;min-width:0}.movement-toolbar{flex-wrap:wrap}.movement-filter-wrap{width:100%}.movement-filter-wrap select{width:100%;min-width:0}.cashflow-calendar-panel{min-height:580px}.cashflow-side{grid-template-columns:1fr}.cashflow-plan-row,.cashflow-liquidity-row{grid-template-columns:minmax(0,1fr) auto}.cashflow-plan-row>.money,.cashflow-liquidity-row>.money{display:block!important}.cashflow-plan-row>.mini-actions{display:flex!important}}
+@media(max-width:520px){.movement-summary,.cashflow-summary{grid-template-columns:1fr 1fr}.movement-intro,.cashflow-intro{padding:14px}.movement-intro h2,.cashflow-intro h2{font-size:17px}.movement-intro p,.cashflow-intro p{font-size:10px}.cashflow-reserve-line{grid-template-columns:auto minmax(0,1fr)}.cashflow-reserve-line .secondary-btn{grid-column:1/-1;width:100%}.movement-day-title{padding-top:11px}.cashflow-plan-row,.cashflow-liquidity-row{grid-template-columns:minmax(0,1fr) auto}}
+
+
+/* v3.1-safe: ajustes estritamente escopados às novas telas */
+.cashflow-page .cashflow-summary-primary{grid-template-columns:repeat(4,minmax(0,1fr));}
+.cashflow-page .cashflow-calendar-panel{min-height:650px;}
+.cashflow-page .cashflow-secondary-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);gap:14px;margin-top:14px;}
+.cashflow-page .cashflow-reserve-box.compact{min-width:0;width:100%;margin-bottom:14px;background:rgba(7,13,24,.35);}
+.cashflow-page .cashflow-secondary-metrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;}
+.cashflow-page .cashflow-secondary-metrics>div{border:1px solid var(--line-soft);border-radius:13px;padding:11px;background:rgba(17,26,45,.55);}
+.cashflow-page .cashflow-secondary-metrics small{display:block;color:var(--muted);font-size:9px;text-transform:uppercase;font-weight:800;}
+.cashflow-page .cashflow-secondary-metrics strong{display:block;margin-top:5px;font-size:16px;}
+.cashflow-page .fc .fc-daygrid-day-frame{min-height:108px;position:relative;padding-bottom:27px;}
+.cashflow-page .fc .cashflow-day-balance{position:absolute;left:4px;right:4px;bottom:3px;border-top:1px solid rgba(143,160,188,.14);padding-top:4px;font-size:9px;font-weight:800;line-height:1.15;color:#aebbd0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;z-index:2;}
+.cashflow-page .fc .cashflow-day-balance.positive{color:#70e49d;}
+.cashflow-page .fc .cashflow-day-balance.negative{color:#ff8a8a;}
+.cashflow-page .fc .cashflow-day-balance.zero{color:#aebbd0;}
+.cashflow-page .fc .fc-daygrid-day.fc-day-today .cashflow-day-balance{color:#fff;}
+.cashflow-page .fc .fc-daygrid-event{font-size:9px;}
+.movement-transfer-row .row-icon{color:#67e8f9;}
+.movement-type-note{display:block;margin-top:5px;color:var(--muted);font-size:10px;line-height:1.45;}
+@media(max-width:1200px){.cashflow-page .cashflow-summary-primary{grid-template-columns:repeat(2,minmax(0,1fr));}.cashflow-page .cashflow-secondary-grid{grid-template-columns:1fr;}}
+@media(max-width:620px){.cashflow-page .cashflow-summary-primary{grid-template-columns:1fr 1fr}.cashflow-page .fc .fc-daygrid-day-frame{min-height:90px;padding-bottom:24px}.cashflow-page .fc .cashflow-day-balance{font-size:7.5px;left:2px;right:2px}.cashflow-page .fc .fc-daygrid-event{font-size:7.5px}.cashflow-page .cashflow-secondary-metrics{grid-template-columns:1fr}.cashflow-page .cashflow-calendar-panel{padding:10px}}
+
+
+/* v4 - lançamento unificado */
+.movement-type-section{margin-bottom:14px}
+.movement-type-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:9px}
+.movement-type-btn{min-height:66px;border:1px solid var(--border);background:rgba(15,24,42,.75);color:var(--text);border-radius:14px;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 8px;font:inherit;font-weight:700;cursor:pointer;transition:.18s ease}
+.movement-type-btn svg{width:18px;height:18px;color:var(--muted)}
+.movement-type-btn:hover{border-color:rgba(124,92,255,.65);transform:translateY(-1px)}
+.movement-type-btn.active{background:linear-gradient(135deg,rgba(107,78,255,.28),rgba(74,144,245,.13));border-color:#765cff;box-shadow:0 0 0 1px rgba(118,92,255,.18) inset}
+.movement-type-btn.active svg{color:#b9adff}
+@media(max-width:720px){.movement-type-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.movement-type-btn{min-height:58px;font-size:13px}}
+
+.cloud-auth-gate{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at 30% 20%,rgba(99,102,241,.18),transparent 35%),#070b14}
+.cloud-auth-card{width:min(460px,100%);border:1px solid #263651;border-radius:24px;background:#0d1729;padding:28px;box-shadow:0 30px 90px rgba(0,0,0,.45)}
+.cloud-auth-brand{margin-bottom:26px}.cloud-auth-card h1,.cloud-auth-card h2{margin:8px 0}.cloud-auth-form{display:grid;gap:13px;margin-top:20px}.cloud-auth-form label{display:grid;gap:7px;font-size:12px;color:#9fb0c9;font-weight:700}.cloud-auth-form input{width:100%;border:1px solid #2a3954;border-radius:12px;padding:13px 14px;background:#111c30;color:#f8fafc;font:inherit}.cloud-auth-message{min-height:20px;color:#f87171;font-size:13px}.cloud-auth-message.ok{color:#4ade80}
+</style></head>
+<body>
+<div id="cloudAuthGate" class="cloud-auth-gate">
+  <div class="cloud-auth-card">
+    <div class="brand cloud-auth-brand"><div class="brand-mark">M</div><div><strong>Meu Financeiro</strong><small>Seus dados sincronizados</small></div></div>
+    <div id="cloudAuthLogin">
+      <small class="eyebrow">ACESSO SEGURO</small><h1>Entrar</h1><p class="muted">Acesse a mesma conta no computador e no celular.</p>
+      <form id="cloudAuthForm" class="cloud-auth-form">
+        <label>E-mail<input id="cloudEmail" type="email" autocomplete="email" required placeholder="seu@email.com"></label>
+        <label>Senha<input id="cloudPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="••••••••"></label>
+        <button class="primary-btn" type="submit">Entrar</button>
+        <button class="secondary-btn" type="button" id="cloudSignupBtn">Criar conta</button>
+      </form>
+      <p id="cloudAuthMessage" class="cloud-auth-message"></p>
+    </div>
+    <div id="cloudClaimBox" class="hidden">
+      <small class="eyebrow">PRIMEIRO ACESSO</small><h2>Importar seus dados</h2>
+      <p class="muted">Se quiser trazer o snapshot antigo que já migrei para o Supabase, use o código de migração. Se preferir usar seu backup mais recente, clique em “Começar vazio” e depois restaure o JSON em Configurações.</p>
+      <form id="cloudClaimForm" class="cloud-auth-form"><label>Código de migração<input id="cloudClaimCode" required autocomplete="off"></label><button class="primary-btn">Importar meus dados</button><button type="button" id="cloudStartEmptyBtn" class="secondary-btn">Começar vazio</button></form>
+      <p id="cloudClaimMessage" class="cloud-auth-message"></p>
+    </div>
+  </div>
+</div>
+
+<div class="app-shell" id="cloudAppShell" style="display:none">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">M</div>
+      <div><strong>Meu Financeiro</strong><small>Controle pessoal</small></div>
+    </div>
+    <nav id="desktopNav" class="side-nav">
+      <button data-page="dashboard" class="active"><i data-lucide="layout-dashboard"></i>Dashboard</button>
+      <button data-page="movements"><i data-lucide="list-tree"></i>Lançamentos</button>
+      <button data-page="accounts"><i data-lucide="wallet-cards"></i>Contas</button>
+      <button data-page="cards"><i data-lucide="credit-card"></i>Cartões</button>
+      <button data-page="calendar"><i data-lucide="calendar-days"></i>Calendário</button>
+      <button data-page="subscriptions"><i data-lucide="repeat-2"></i>Assinaturas</button>
+      <button data-page="investments"><i data-lucide="chart-no-axes-combined"></i>Investimentos</button>
+      <button data-page="goals"><i data-lucide="target"></i>Metas</button>
+      <button data-page="settings"><i data-lucide="settings"></i>Configurações</button>
+    </nav>
+    <div class="sidebar-foot"><span class="status-dot"></span>Supabase conectado</div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div><small class="eyebrow">VISÃO FINANCEIRA</small><h1 id="pageTitle">Dashboard</h1></div>
+      <div class="top-actions">
+        <button class="icon-btn" id="refreshBtn" title="Atualizar"><i data-lucide="refresh-cw"></i></button>
+        <button class="primary-btn" id="quickAddBtn" data-open="movement"><i data-lucide="plus"></i>Adicionar</button>
+      </div>
+    </header>
+
+    <section id="dashboard" class="page active">
+      <div class="dashboard-period">
+        <div class="dashboard-period-title">
+          <small>Competência do dashboard</small>
+          <strong id="dashboardMonthText">Mês atual</strong>
+        </div>
+        <div class="dashboard-period-controls">
+          <button class="icon-btn" id="dashboardPrevMonth" title="Mês anterior"><i data-lucide="chevron-left"></i></button>
+          <input type="month" id="dashboardMonthPicker" aria-label="Escolher mês do dashboard">
+          <button class="icon-btn" id="dashboardNextMonth" title="Próximo mês"><i data-lucide="chevron-right"></i></button>
+          <button class="secondary-btn" id="dashboardCurrentMonth"><i data-lucide="calendar-days"></i>Mês atual</button>
+        </div>
+      </div>
+
+      <div class="hero-grid">
+        <article class="metric-card success" id="monthBalanceCard" data-page="movements"><div class="metric-icon"><i data-lucide="scale"></i></div><small>Resultado do mês</small><strong id="mMonthBalance">R$ 0,00</strong><span id="mMonthBalanceCaption">Receitas − gastos de consumo</span></article>
+        <article class="metric-card success" data-page="movements"><div class="metric-icon"><i data-lucide="arrow-up-right"></i></div><small>Receitas do mês</small><strong id="mIncomes">R$ 0,00</strong><span>Entradas registradas</span></article>
+        <article class="metric-card danger" data-page="movements"><div class="metric-icon"><i data-lucide="arrow-down-right"></i></div><small>Gastos do mês</small><strong id="mExpenses">R$ 0,00</strong><span>Despesas + cartão + contas + assinaturas</span></article>
+        <article class="metric-card" data-page="investments"><div class="metric-icon"><i data-lucide="piggy-bank"></i></div><small>Aportes do mês</small><strong id="mContributions">R$ 0,00</strong><span>Transferido para investimentos</span></article>
+        <article class="metric-card warning" data-page="cards"><div class="metric-icon"><i data-lucide="credit-card"></i></div><small>Faturas do mês</small><strong id="mInvoices">R$ 0,00</strong><span>Por vencimento da fatura</span></article>
+        <article class="metric-card subscription" data-page="subscriptions"><div class="metric-icon"><i data-lucide="repeat-2"></i></div><small>Assinaturas no mês</small><strong id="mSubscriptions">R$ 0,00</strong><span>Incluídas nos gastos do mês</span></article>
+        <article class="metric-card" data-page="investments"><div class="metric-icon"><i data-lucide="trending-up"></i></div><small>Investimentos</small><strong id="mInvested">R$ 0,00</strong><span id="mInvestedCaption">Valor atual da carteira</span></article>
+        <article class="metric-card" data-page="dashboard"><div class="metric-icon"><i data-lucide="landmark"></i></div><small>Patrimônio</small><strong id="mPatrimony">R$ 0,00</strong><span>Contas + investimentos + bens − dívidas</span></article>
+      </div>
+
+      <div class="insight-strip">
+        <div><i data-lucide="sparkles"></i><div><small>Insight do mês</small><strong id="insightText">Adicione lançamentos para gerar seus primeiros insights.</strong></div></div>
+        <button data-page="movements" class="text-btn">Ver lançamentos <i data-lucide="arrow-right"></i></button>
+      </div>
+
+      <div class="content-grid dashboard-grid">
+        <article class="panel chart-panel"><div class="panel-head"><div><small>Distribuição</small><h3>Gastos por categoria</h3></div></div><div class="chart-wrap"><canvas id="categoryChart"></canvas></div></article>
+        <article class="panel"><div class="panel-head"><div><small>Competência selecionada</small><h3>Vencimentos e assinaturas</h3></div><button class="icon-btn" data-page="calendar"><i data-lucide="arrow-up-right"></i></button></div><div id="upcomingList" class="stack-list empty-state">Nenhum vencimento próximo.</div></article>
+        <article class="panel wide"><div class="panel-head"><div><small>Movimentação da competência</small><h3>Últimos lançamentos</h3></div><button class="text-btn" data-page="movements">Ver todos</button></div><div id="recentTransactions" class="tableish empty-state">Nenhum lançamento cadastrado.</div></article>
+        <article class="panel goal-panel"><div class="panel-head"><div><small>Objetivo</small><h3>Meta financeira</h3></div></div><div id="goalSnapshot" class="empty-state">Cadastre uma meta para acompanhar seu progresso.</div></article>
+      </div>
+    </section>
+
+    <section id="movements" class="page">
+      <div class="movement-intro">
+        <div>
+          <small class="eyebrow">LANÇAMENTOS</small>
+          <h2>Lançamentos do mês</h2>
+          <p>Tudo que entra, sai ou vence no mês, em uma única página.</p>
+        </div>
+        <div class="movement-quick-actions">
+          <button class="primary-btn" data-open="movement"><i data-lucide="plus"></i>Adicionar</button>
+        </div>
+      </div>
+
+      <div class="dashboard-period movement-period">
+        <div class="dashboard-period-title"><small>Mês dos lançamentos</small><strong id="movementMonthText">Mês atual</strong></div>
+        <div class="dashboard-period-controls">
+          <button class="icon-btn" id="movementPrevMonth" title="Mês anterior"><i data-lucide="chevron-left"></i></button>
+          <input type="month" id="movementMonthPicker" aria-label="Escolher mês das movimentações">
+          <button class="icon-btn" id="movementNextMonth" title="Próximo mês"><i data-lucide="chevron-right"></i></button>
+          <button class="secondary-btn" id="movementCurrentMonth"><i data-lucide="calendar-days"></i>Mês atual</button>
+        </div>
+      </div>
+
+      <div class="movement-summary">
+        <article class="small-metric"><small>Receitas</small><strong id="mvIncome">R$ 0,00</strong><span>lançamentos de entrada</span></article>
+        <article class="small-metric"><small>Despesas lançadas</small><strong id="mvExpenses">R$ 0,00</strong><span>despesas + compras no cartão</span></article>
+        <article class="small-metric"><small>Contas pendentes</small><strong id="mvPendingBills">R$ 0,00</strong><span>a pagar neste mês</span></article>
+        <article class="small-metric"><small>Aportes</small><strong id="mvInvestments">R$ 0,00</strong><span>movimentação para investimentos</span></article>
+      </div>
+
+      <div class="section-toolbar movement-toolbar">
+        <div class="search-box"><i data-lucide="search"></i><input id="movementSearch" placeholder="Buscar lançamento"></div>
+        <div class="movement-filter-wrap">
+          <select id="movementFilter" aria-label="Filtrar movimentações">
+            <option value="all">Tudo</option>
+            <option value="transaction">Despesas e receitas</option>
+            <option value="bill">Contas a pagar</option>
+            <option value="income">Receitas</option>
+            <option value="expense">Despesas</option>
+            <option value="card">Compras no cartão</option>
+            <option value="investment">Aportes e resgates</option>
+            <option value="pending">Pendentes</option>
+            <option value="paid">Pagos</option>
+          </select>
+        </div>
+      </div>
+      <div class="panel"><div id="movementList" class="responsive-list movement-list"></div></div>
+    </section>
+
+    <section id="accounts" class="page">
+      <div class="section-toolbar"><p>Contas, carteiras e saldos disponíveis.</p><button class="primary-btn" data-open="account"><i data-lucide="plus"></i>Nova conta</button></div>
+      <div id="accountCards" class="card-grid"></div>
+    </section>
+
+    <section id="cards" class="page">
+      <div class="section-toolbar"><p>Limite, fechamento, vencimento e parcelas.</p><button class="primary-btn" data-open="card"><i data-lucide="plus"></i>Novo cartão</button></div>
+      <div id="creditCards" class="card-grid"></div>
+    </section>
+
+    <section id="calendar" class="page calendar-page">
+      <div class="calendar-legend">
+        <span><b class="dot pending"></b>A pagar</span><span><b class="dot paid"></b>Pago</span><span><b class="dot overdue"></b>Atrasado</span><span><b class="dot carddot"></b>Cartão/parcela</span><span><b class="dot subdot"></b>Assinatura</span><span><b class="dot movementdot"></b>Lançamento</span>
+      </div>
+      <div class="panel calendar-panel"><div id="financialCalendar"></div></div>
+    </section>
+
+    <section id="subscriptions" class="page">
+      <div class="subscription-summary">
+        <article class="small-metric"><small>Custo mensal</small><strong id="sMonthly">R$ 0,00</strong><span>equivalente</span></article>
+        <article class="small-metric"><small>Projeção anual</small><strong id="sAnnual">R$ 0,00</strong><span>se nada mudar</span></article>
+        <article class="small-metric"><small>Assinaturas ativas</small><strong id="sActive">0</strong><span>serviços</span></article>
+        <article class="small-metric"><small>Próximos 30 dias</small><strong id="sNext30">R$ 0,00</strong><span id="sNext30Count">0 cobranças</span></article>
+      </div>
+      <div class="section-toolbar subscription-toolbar">
+        <div class="search-box"><i data-lucide="search"></i><input id="subscriptionSearch" placeholder="Buscar Netflix, academia, Google..."></div>
+        <button class="primary-btn" data-open="subscription"><i data-lucide="plus"></i>Nova assinatura</button>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><div><small>CONTROLE RECORRENTE</small><h3>Suas assinaturas</h3></div></div>
+        <div id="subscriptionList" class="responsive-list"></div>
+      </div>
+    </section>
+
+    <section id="investments" class="page">
+      <div class="section-toolbar"><p>Carteira completa, rentabilidade, aportes e projeção de crescimento.</p><button class="primary-btn" data-open="investment"><i data-lucide="plus"></i>Novo investimento</button></div>
+
+      <div class="investment-overview-grid">
+        <article class="small-metric investment-kpi"><small>Patrimônio investido</small><strong id="investmentTotal">R$ 0,00</strong><span>Valor atual da carteira</span></article>
+        <article class="small-metric investment-kpi"><small>Capital aplicado</small><strong id="investmentPrincipal">R$ 0,00</strong><span>Total efetivamente aportado</span></article>
+        <article class="small-metric investment-kpi"><small>Resultado acumulado</small><strong id="investmentResult">R$ 0,00</strong><span id="investmentReturnPct">0,00% sobre o capital</span></article>
+        <article class="small-metric investment-kpi"><small>Aporte mensal planejado</small><strong id="investmentMonthlyContribution">R$ 0,00</strong><span>Soma dos aportes cadastrados</span></article>
+        <article class="small-metric investment-kpi"><small>CDI de referência</small><strong id="investmentExpectedRate">0,00% a.a.</strong><span id="investmentExpectedRateCaption">Atualização automática pelo Banco Central</span></article>
+        <article class="small-metric investment-kpi"><small>Rendimento estimado/mês</small><strong id="investmentEstimatedMonthlyYield">R$ 0,00</strong><span>Estimativa pela taxa projetada</span></article>
+      </div>
+
+      <div class="investment-layout">
+        <article class="panel investment-projection-panel">
+          <div class="panel-head"><div><small>SIMULADOR</small><h3>Projeção da carteira</h3></div><span class="badge">Estimativa</span></div>
+          <p class="investment-note">Simule o crescimento usando o patrimônio atual, aportes mensais e o CDI como referência. O CDI é atualizado automaticamente pelo Banco Central; você informa apenas quanto do CDI deseja considerar.</p>
+          <div class="projection-controls">
+            <label><span>Aporte mensal</span><input id="projectionContribution" type="number" min="0" step="50" value="0"></label>
+            <label><span>% do CDI</span><input id="projectionCdiPercent" type="number" min="0" step="1" value="100"></label>
+          </div>
+          <p class="field-help" id="projectionCdiReference">CDI de referência sendo carregado...</p>
+          <div id="investmentProjectionCards" class="projection-grid"></div>
+        </article>
+
+        <article class="panel investment-allocation-panel">
+          <div class="panel-head"><div><small>DIVERSIFICAÇÃO</small><h3>Alocação da carteira</h3></div></div>
+          <div class="allocation-block"><small>Por tipo de ativo</small><div id="investmentAllocationType" class="allocation-list"></div></div>
+          <div class="allocation-block"><small>Por instituição</small><div id="investmentAllocationInstitution" class="allocation-list"></div></div>
+        </article>
+      </div>
+
+      <div class="panel investment-portfolio-panel">
+        <div class="panel-head"><div><small>POSIÇÕES</small><h3>Seus investimentos</h3></div><span id="investmentActiveCount" class="badge">0 ativos</span></div>
+        <div id="investmentCards" class="card-grid investment-card-grid"></div>
+      </div>
+    </section>
+
+    <section id="goals" class="page">
+      <div class="section-toolbar"><p>Metas com progresso, prazo e valor restante.</p><button class="primary-btn" data-open="goal"><i data-lucide="plus"></i>Nova meta</button></div>
+      <div id="goalCards" class="card-grid"></div>
+    </section>
+
+    <section id="settings" class="page">
+      <div class="settings-grid">
+        <article class="panel"><div class="panel-head"><div><small>Segurança</small><h3>Backup da nuvem</h3></div></div><p>Baixe uma cópia JSON dos seus dados do Supabase.</p><button class="primary-btn" id="cloudBackupBtn"><i data-lucide="download"></i>Fazer backup</button></article>
+        <article class="panel"><div class="panel-head"><div><small>Restauração</small><h3>Restaurar backup</h3></div></div><p>Restaura um backup JSON exportado por esta versão.</p><label class="secondary-btn file-btn"><i data-lucide="upload"></i>Selecionar backup<input id="restoreFile" type="file" accept=".json,application/json"></label></article>
+        <article class="panel"><div class="panel-head"><div><small>Celular</small><h3>Instalação PWA</h3></div></div><p id="pwaStatus">No Android, abra pelo Chrome e use “Adicionar à tela inicial”.</p><button id="installPwaBtn" class="primary-btn hidden"><i data-lucide="smartphone"></i>Instalar aplicativo</button></article>
+        <article class="panel"><div class="panel-head"><div><small>Acesso</small><h3>Sessão</h3></div></div><p>Encerre a sessão neste dispositivo.</p><button class="secondary-btn" id="cloudLogoutBtn"><i data-lucide="log-out"></i>Sair</button></article>
+      </div>
+    </section>
+  </main>
+</div>
+
+<nav class="mobile-nav" id="cloudMobileNav" style="display:none">
+  <button data-page="dashboard" class="active"><i data-lucide="house"></i><span>Início</span></button>
+  <button data-page="movements"><i data-lucide="list-tree"></i><span>Lançamentos</span></button>
+  <button class="mobile-fab" data-open="movement"><i data-lucide="plus"></i></button>
+  <button data-page="calendar"><i data-lucide="calendar-days"></i><span>Calendário</span></button>
+  <button id="mobileMore"><i data-lucide="menu"></i><span>Mais</span></button>
+</nav>
+
+<div id="moreSheet" class="sheet-backdrop"><div class="bottom-sheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title"><h3>Mais</h3><button class="icon-btn" data-close><i data-lucide="x"></i></button></div>
+  <div class="more-grid">
+    <button data-page="accounts"><i data-lucide="wallet-cards"></i>Contas</button>
+    <button data-page="cards"><i data-lucide="credit-card"></i>Cartões</button>
+    <button data-page="subscriptions"><i data-lucide="repeat-2"></i>Assinaturas</button>
+    <button data-page="investments"><i data-lucide="chart-no-axes-combined"></i>Investimentos</button>
+    <button data-page="goals"><i data-lucide="target"></i>Metas</button>
+    <button data-page="settings"><i data-lucide="settings"></i>Configurações</button>
+  </div>
+</div></div>
+
+<div id="modal" class="modal-backdrop"><div class="modal-card">
+  <div class="modal-head"><div><small id="modalEyebrow">Cadastro</small><h2 id="modalTitle">Adicionar</h2></div><button class="icon-btn" data-close><i data-lucide="x"></i></button></div>
+  <div id="modalBody"></div>
+</div></div>
+<div id="toast" class="toast"></div>
+
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+let cloudStarted=false;
+function cloudSetMessage(id,msg,ok=false){const el=document.getElementById(id);if(el){el.textContent=msg||'';el.classList.toggle('ok',!!ok)}}
+async function cloudSeedCategories(){const uid=cloudUser.id;const defaults=[['Alimentação','expense','#f97316','utensils'],['Mercado','expense','#84cc16','shopping-cart'],['Moradia','expense','#06b6d4','house'],['Transporte','expense','#3b82f6','car'],['Saúde','expense','#ef4444','heart-pulse'],['Educação','expense','#8b5cf6','graduation-cap'],['Lazer','expense','#ec4899','gamepad-2'],['Compras','expense','#f59e0b','shopping-bag'],['Assinaturas','expense','#14b8a6','repeat'],['Investimentos','investment','#22c55e','trending-up'],['Salário','income','#10b981','banknote'],['Outros','expense','#64748b','tag']];const r=await sb.from('categories').insert(defaults.map(([name,kind,color,icon])=>({user_id:uid,name,kind,color,icon})));if(r.error)throw r.error}
+function cloudShowApp(){document.getElementById('cloudAuthGate').style.display='none';document.getElementById('cloudAppShell').style.display='grid';const nav=document.getElementById('cloudMobileNav');if(nav)nav.style.display='';if(!cloudStarted){cloudStarted=true;cloudResolve()}}
+async function cloudAfterSession(session){cloudUser=session?.user||null;if(!cloudUser){document.getElementById('cloudAuthGate').style.display='flex';document.getElementById('cloudAuthLogin').classList.remove('hidden');document.getElementById('cloudClaimBox').classList.add('hidden');return}const {count,error}=await sb.from('categories').select('*',{count:'exact',head:true});if(error)throw error;if((count||0)>0){cloudShowApp();return}document.getElementById('cloudAuthLogin').classList.add('hidden');document.getElementById('cloudClaimBox').classList.remove('hidden')}
+document.getElementById('cloudAuthForm').addEventListener('submit',async e=>{e.preventDefault();cloudSetMessage('cloudAuthMessage','Entrando...');const email=document.getElementById('cloudEmail').value.trim(),password=document.getElementById('cloudPassword').value;const {data,error}=await sb.auth.signInWithPassword({email,password});if(error)return cloudSetMessage('cloudAuthMessage',error.message);await cloudAfterSession(data.session)});
+document.getElementById('cloudSignupBtn').addEventListener('click',async()=>{const email=document.getElementById('cloudEmail').value.trim(),password=document.getElementById('cloudPassword').value;if(!email||password.length<6)return cloudSetMessage('cloudAuthMessage','Informe e-mail e senha com pelo menos 6 caracteres.');const {data,error}=await sb.auth.signUp({email,password});if(error)return cloudSetMessage('cloudAuthMessage',error.message);if(!data.session)return cloudSetMessage('cloudAuthMessage','Conta criada. Confirme o e-mail e depois entre.',true);await cloudAfterSession(data.session)});
+document.getElementById('cloudClaimForm').addEventListener('submit',async e=>{e.preventDefault();cloudSetMessage('cloudClaimMessage','Importando...');const code=document.getElementById('cloudClaimCode').value.trim();const {data,error}=await sb.rpc('claim_legacy_data',{p_code:code});if(error||!data)return cloudSetMessage('cloudClaimMessage',error?.message||'Código inválido.');cloudSetMessage('cloudClaimMessage','Dados importados.',true);cloudShowApp()});
+document.getElementById('cloudStartEmptyBtn').addEventListener('click',async()=>{try{await cloudSeedCategories();cloudShowApp()}catch(e){cloudSetMessage('cloudClaimMessage',e.message)}});
+(async()=>{const {data}=await sb.auth.getSession();await cloudAfterSession(data.session)})().catch(e=>cloudSetMessage('cloudAuthMessage',e.message));
+sb.auth.onAuthStateChange((_event,session)=>{if(session&&!cloudStarted)cloudAfterSession(session).catch(e=>cloudSetMessage('cloudAuthMessage',e.message))});
+</script>
+<script>const state = {
+  bootstrap: { accounts: [], cards: [], categories: [], investments: [] },
+  data: { transactions: [], accounts: [], cards: [], bills: [], subscriptions: [], investments: [], goals: [] },
+  calendar: null,
+  cashflowCalendar: null,
+  categoryChart: null,
+  deferredPrompt: null,
+  dashboardMonth: null,
+  movementMonth: null,
+  cashflowMonth: null,
+  cashflowData: null,
+  modalReturnPage: null,
+};
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const money = v => Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+const dateBR = s => s ? new Date(`${s}T12:00:00`).toLocaleDateString('pt-BR') : '—';
+const esc = s => String(s ?? '').replace(/[&<>'"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[c]));
+const attr = s => esc(s ?? '');
+const todayISO = () => new Date().toISOString().slice(0, 10);
+const currentMonthKey = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`; };
+const numberBR = v => {
+  const raw = String(v ?? '').trim().replace(/\s/g, '');
+  if (!raw) return 0;
+  let normalized = raw;
+  if (raw.includes(',') && raw.includes('.')) normalized = raw.replace(/\./g, '').replace(',', '.');
+  else if (raw.includes(',')) normalized = raw.replace(',', '.');
+  const n = Number(normalized);
+  return Number.isFinite(n) ? n : 0;
+};
+function monthKeyLabel(key) { const [y,m] = (key || currentMonthKey()).split('-').map(Number); return new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric'}).format(new Date(y,m-1,1)).replace(/^./,c=>c.toUpperCase()); }
+function activePageId() { return $('.page.active')?.id || 'dashboard'; }
+function shiftMonthKey(key, delta) {
+  const [year, month] = (key || currentMonthKey()).split('-').map(Number);
+  const d = new Date(year, month - 1 + delta, 1);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+
+const SUPABASE_URL = 'https://ycjpwryzfpigixabxwxd.supabase.co';const SUPABASE_KEY = 'sb_publishable_cbpoSftZ7-XVaDSERT1xRQ_5AEEhARA';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+let cloudUser = null;
+let cloudResolve;
+window.cloudReady = new Promise(r => cloudResolve = r);
+const n=v=>Number(v||0); const emptyId=v=>v?Number(v):null;
+function isoDate(d){return d.toISOString().slice(0,10)}
+function parseISO(s){return new Date(`${s}T12:00:00`)}
+function addMonthsISO(s,m){const d=parseISO(s),day=d.getDate(); d.setDate(1); d.setMonth(d.getMonth()+m); const last=new Date(d.getFullYear(),d.getMonth()+1,0).getDate(); d.setDate(Math.min(day,last)); return isoDate(d)}
+function addRecurrenceISO(s,r,i){if(r==='Semanal'){const d=parseISO(s);d.setDate(d.getDate()+7*i);return isoDate(d)} const mult={Mensal:1,Bimestral:2,Trimestral:3,Semestral:6,Anual:12}[r]||0; return mult?addMonthsISO(s,mult*i):s}
+function monthlyEquivalent(a,r){return n(a)*({Semanal:52/12,Mensal:1,Bimestral:.5,Trimestral:1/3,Semestral:1/6,Anual:1/12}[r]||1)}
+function invoiceDueISO(purchase,closing,due){const p=parseISO(purchase);const safe=(y,m,d)=>new Date(y,m,Math.min(d,new Date(y,m+1,0).getDate()),12);let close=safe(p.getFullYear(),p.getMonth(),closing);if(p>close)close=safe(p.getFullYear(),p.getMonth()+1,closing);const off=due<=closing?1:0;return isoDate(safe(close.getFullYear(),close.getMonth()+off,due))}
+function splitInstallments(total,count,current=1){const cents=Math.round(n(total)*100),base=Math.round(cents/count),vals=Array(count).fill(base);vals[count-1]+=cents-vals.reduce((a,b)=>a+b,0);return vals.map((v,i)=>[i+1,v/100]).filter(x=>x[0]>=current)}
+async function sbRows(table,order){let q=sb.from(table).select('*'); if(order) q=q.order(order,{ascending:true}); const {data,error}=await q;if(error)throw error;return data||[]}
+async function userId(){if(cloudUser)return cloudUser.id;const {data,error}=await sb.auth.getUser();if(error)throw error;cloudUser=data.user;return cloudUser?.id}
+async function adjustAccount(id,delta){if(!id||!delta)return;const {data,error}=await sb.from('accounts').select('balance').eq('id',id).single();if(error)throw error;const e=await sb.from('accounts').update({balance:n(data.balance)+delta,updated_at:new Date().toISOString()}).eq('id',id);if(e.error)throw e.error}
+async function adjustInvestment(id,delta){if(!id||!delta)return;const {data,error}=await sb.from('investments').select('invested_value,current_value').eq('id',id).single();if(error)throw error;const e=await sb.from('investments').update({invested_value:Math.max(0,n(data.invested_value)+delta),current_value:Math.max(0,n(data.current_value)+delta),updated_at:new Date().toISOString()}).eq('id',id);if(e.error)throw e.error}
+async function applyTxEffect(tx,dir=1){const a=n(tx.amount)*dir;if(tx.type==='transfer'){await adjustAccount(tx.account_id,-a);await adjustAccount(tx.destination_account_id,a);return} if(['income','rescue'].includes(tx.type))await adjustAccount(tx.account_id,a);if(['expense','investment'].includes(tx.type))await adjustAccount(tx.account_id,-a);if(tx.investment_id&&tx.type==='investment')await adjustInvestment(tx.investment_id,a);if(tx.investment_id&&tx.type==='rescue')await adjustInvestment(tx.investment_id,-a)}
+async function enrichedTransactions(){const [tx,acc,cards,inv]=await Promise.all([sbRows('transactions'),sbRows('accounts'),sbRows('cards'),sbRows('investments')]);const am=new Map(acc.map(x=>[x.id,x.name])),cm=new Map(cards.map(x=>[x.id,x.name])),im=new Map(inv.map(x=>[x.id,x.product]));return tx.map(x=>({...x,account_name:am.get(x.account_id)||null,destination_account_name:am.get(x.destination_account_id)||null,card_name:cm.get(x.card_id)||null,investment_name:im.get(x.investment_id)||null})).sort((a,b)=>String(b.transaction_date).localeCompare(String(a.transaction_date))||b.id-a.id)}
+async function billsEnriched(){const [b,a]=await Promise.all([sbRows('bills'),sbRows('accounts')]);const m=new Map(a.map(x=>[x.id,x.name]));return b.map(x=>({...x,account_name:m.get(x.account_id)||null})).sort((x,y)=>String(x.due_date).localeCompare(String(y.due_date))||x.id-y.id)}
+function subOccurrences(sub,start,end){if(sub.status!=='Ativa')return[];let out=[],i=0,d=sub.next_charge;while(d<end&&i<240){if(d>=start)out.push(d);i++;const nd=addRecurrenceISO(sub.next_charge,sub.recurrence||'Mensal',i);if(nd<=d)break;d=nd}return out}
+async function cloudDashboard(month){const [acc,inv,tx,bills,subs,goals,assets,settings]=await Promise.all([sbRows('accounts'),sbRows('investments'),enrichedTransactions(),billsEnriched(),sbRows('subscriptions'),sbRows('goals'),sbRows('assets'),sbRows('settings')]); const m=month||new Date().toISOString().slice(0,7), start=m+'-01', next=addMonthsISO(start,1);const inMonth=(d)=>d>=start&&d<next;const income=tx.filter(x=>x.type==='income'&&inMonth(x.transaction_date)).reduce((a,x)=>a+n(x.amount),0);const normal=tx.filter(x=>x.type==='expense'&&inMonth(x.transaction_date)).reduce((a,x)=>a+n(x.amount),0);const card=tx.filter(x=>x.type==='card'&&inMonth(x.transaction_date)).reduce((a,x)=>a+n(x.amount),0);const invoices=tx.filter(x=>x.type==='card'&&x.invoice_due_date&&inMonth(x.invoice_due_date)).reduce((a,x)=>a+n(x.amount),0);const mb=bills.filter(x=>inMonth(x.due_date));const billsTotal=mb.reduce((a,x)=>a+n(x.amount),0);const contrib=tx.filter(x=>x.type==='investment'&&inMonth(x.transaction_date)).reduce((a,x)=>a+n(x.amount),0);const rescues=tx.filter(x=>x.type==='rescue'&&inMonth(x.transaction_date)).reduce((a,x)=>a+n(x.amount),0);let subTotal=0,subItems=[];for(const s of subs)for(const d of subOccurrences(s,start,next)){subTotal+=n(s.amount);subItems.push({id:s.id,kind:'subscription',name:s.name,amount:s.amount,due_date:d,category:s.category||'Assinaturas',status:s.status})}const expenses=normal+card+billsTotal+subTotal;const invested=inv.filter(x=>x.status!=='Encerrado').reduce((a,x)=>a+n(x.current_value),0),bank=acc.reduce((a,x)=>a+n(x.balance),0),asset=assets.reduce((a,x)=>a+(x.liability?-n(x.value):n(x.value)),0);const cats={};for(const x of tx.filter(x=>['expense','card'].includes(x.type)&&inMonth(x.transaction_date)))cats[x.category||'Outros']=(cats[x.category||'Outros']||0)+n(x.amount);for(const x of mb)cats[x.category||'Outros']=(cats[x.category||'Outros']||0)+n(x.amount);for(const x of subItems)cats[x.category||'Assinaturas']=(cats[x.category||'Assinaturas']||0)+n(x.amount);const cdi=n(settings.find(x=>x.key==='cdi_annual_pct')?.value);const recent=tx.filter(x=>inMonth(x.transaction_date)).slice(0,8);const upcoming=[...mb.filter(x=>x.status!=='Pago').map(x=>({...x,kind:'bill'})),...subItems].sort((a,b)=>String(a.due_date).localeCompare(String(b.due_date))).slice(0,8);const [yy,mm]=m.split('-').map(Number);const label=new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric'}).format(new Date(yy,mm-1,1)).replace(/^./,c=>c.toUpperCase());return {selected_month:m,month_label:label,is_current_month:m===new Date().toISOString().slice(0,7),bank_total:bank,invested,investment_value_date:new Date().toISOString().slice(0,10),investment_projection_change:0,investment_rate_missing_count:0,cdi_annual_rate:cdi,patrimony:bank+invested+asset,expenses,incomes:income,result_month:income-expenses,monthly_invoices:invoices,investment_contributions:contrib,investment_rescues:rescues,subscription_monthly:subTotal,category_chart:Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([label,value])=>({label,value})),recent,upcoming,goal:goals[0]||null}}
+async function api(url,opts={}){await window.cloudReady;const u=new URL(url,location.origin),p=u.pathname,m=(opts.method||'GET').toUpperCase(),body=opts.body&&!(opts.body instanceof FormData)?JSON.parse(opts.body):{};const uid=await userId();
+if(p==='/api/restore'&&m==='POST'){
+  const file=opts.body instanceof FormData?opts.body.get('file'):null;
+  if(!file)throw new Error('Selecione um backup JSON.');
+  const backup=JSON.parse(await file.text());
+  const tables=['transactions','bills','subscriptions','goals','investments','cards','accounts','assets','settings','categories'];
+  for(const table of tables){const del=await sb.from(table).delete().eq('user_id',uid);if(del.error)throw del.error;const rows=(backup[table]||[]).map(x=>({...x,user_id:uid}));if(rows.length){const ins=await sb.from(table).insert(rows);if(ins.error)throw ins.error}}
+  return {ok:true};
+}
+if(p==='/api/bootstrap'){const [accounts,cards,categories,investments]=await Promise.all([sbRows('accounts','name'),sbRows('cards','name'),sbRows('categories','name'),sbRows('investments','product')]);return{accounts,cards,categories,investments:investments.filter(x=>x.status!=='Encerrado').map(x=>({id:x.id,product:x.product,institution:x.institution,type:x.type,current_value:x.current_value}))}}
+if(p==='/api/dashboard')return cloudDashboard(u.searchParams.get('month'));
+if(p==='/api/accounts'&&m==='GET')return sbRows('accounts','name');if(p==='/api/accounts'&&m==='POST'){const {data,error}=await sb.from('accounts').insert({...body,user_id:uid,icon:'wallet'}).select('id').single();if(error)throw error;return data}let z=p.match(/^\/api\/accounts\/(\d+)$/);if(z){if(m==='DELETE'){const r=await sb.from('accounts').delete().eq('id',z[1]);if(r.error)throw r.error;return{ok:true}}const r=await sb.from('accounts').update({...body,updated_at:new Date().toISOString()}).eq('id',z[1]);if(r.error)throw r.error;return{ok:true}}
+if(p==='/api/cards'&&m==='GET'){const [cards,tx]=await Promise.all([sbRows('cards','name'),sbRows('transactions')]);const fm=new Date().toISOString().slice(0,7)+'-01';return cards.map(c=>({...c,used:tx.filter(t=>t.card_id===c.id&&t.type==='card'&&t.invoice_due_date>=fm).reduce((a,t)=>a+n(t.amount),0)}))}if(p==='/api/cards'&&m==='POST'){const r=await sb.from('cards').insert({...body,user_id:uid}).select('id').single();if(r.error)throw r.error;return r.data}z=p.match(/^\/api\/cards\/(\d+)$/);if(z){const id=Number(z[1]);if(m==='DELETE'){const r=await sb.from('cards').delete().eq('id',id);if(r.error)throw r.error;return{ok:true}}const r=await sb.from('cards').update(body).eq('id',id);if(r.error)throw r.error;const tx=(await sbRows('transactions')).filter(t=>t.card_id===id&&t.type==='card');const groups={};for(const t of tx)(groups[t.group_id||`single-${t.id}`]??=[]).push(t);for(const g of Object.values(groups)){const original=g.map(t=>t.transaction_date).sort()[0],base=invoiceDueISO(original,n(body.closing_day),n(body.due_day)),first=Math.min(...g.map(t=>n(t.installment_no)||1));for(const t of g){const due=addMonthsISO(base,(n(t.installment_no)||first)-first);await sb.from('transactions').update({invoice_due_date:due}).eq('id',t.id)}}return{ok:true}}
+if(p==='/api/transactions'&&m==='GET')return enrichedTransactions();if(p==='/api/transactions'&&m==='POST'){const type=body.type||'expense',amount=n(body.amount),description=(body.description||'').trim(),date=body.transaction_date||isoDate(new Date()),group_id=crypto.randomUUID(),account_id=emptyId(body.account_id),card_id=emptyId(body.card_id);if(!description||amount<=0)throw new Error('Descrição e valor são obrigatórios.');if(type==='card'){if(!card_id)throw new Error('Selecione um cartão.');const {data:card,error}=await sb.from('cards').select('*').eq('id',card_id).single();if(error)throw error;const total=Math.max(1,n(body.installment_total)||1),current=Math.max(1,n(body.current_installment)||1);if(current>total)throw new Error('A parcela atual não pode ser maior que o total.');const base=invoiceDueISO(date,n(card.closing_day),n(card.due_day));const rows=splitInstallments(amount,total,current).map(([no,val])=>({user_id:uid,group_id,type:'card',description,amount:val,transaction_date:date,category:body.category||null,subcategory:body.subcategory||null,card_id,payment_method:'Cartão de crédito',notes:body.notes||'',recurring:false,installment_no:no,installment_total:total,invoice_due_date:addMonthsISO(base,no-current)}));const r=await sb.from('transactions').insert(rows).select('id');if(r.error)throw r.error;return{ids:r.data.map(x=>x.id),group_id}}
+let investment_id=emptyId(body.investment_id),destination_account_id=emptyId(body.destination_account_id);if(type==='transfer'&&(!account_id||!destination_account_id||account_id===destination_account_id))throw new Error('Selecione contas de origem e destino diferentes.');if(type==='investment'&&!investment_id){const ir=await sb.from('investments').insert({user_id:uid,institution:body.investment_institution||'',product:body.investment_product||description,type:body.investment_type||'CDB',invested_value:0,current_value:0,application_date:date,status:'Ativo',color:'#22c55e',notes:'Criado pelo lançamento.'}).select('id').single();if(ir.error)throw ir.error;investment_id=ir.data.id}if(type==='rescue'&&!investment_id)throw new Error('Selecione o investimento que será resgatado.');const tx={user_id:uid,group_id,type,description,amount,transaction_date:date,category:body.category||null,subcategory:body.subcategory||null,account_id,destination_account_id:type==='transfer'?destination_account_id:null,payment_method:type==='transfer'?'Transferência':body.payment_method||null,notes:body.notes||'',recurring:false,investment_id:['investment','rescue'].includes(type)?investment_id:null};const r=await sb.from('transactions').insert(tx).select('*').single();if(r.error)throw r.error;await applyTxEffect(r.data,1);return{id:r.data.id,investment_id}}
+z=p.match(/^\/api\/transactions\/(\d+)$/);if(z){const id=Number(z[1]),all=await sbRows('transactions'),old=all.find(x=>x.id===id);if(!old)throw new Error('Lançamento não encontrado.');const scope=u.searchParams.get('scope')||'one';let targets=[old];if(m==='DELETE'){if(scope==='all'&&old.group_id)targets=all.filter(x=>x.group_id===old.group_id);if(scope==='future'&&old.group_id&&old.installment_no)targets=all.filter(x=>x.group_id===old.group_id&&n(x.installment_no)>=n(old.installment_no));for(const t of targets)if(t.type!=='card')await applyTxEffect(t,-1);const r=await sb.from('transactions').delete().in('id',targets.map(x=>x.id));if(r.error)throw r.error;return{ok:true}}if(old.type!=='card')await applyTxEffect(old,-1);const patch={description:body.description||old.description,amount:n(body.amount)||n(old.amount),transaction_date:body.transaction_date||old.transaction_date,category:body.category??old.category,notes:body.notes??old.notes};if(old.type==='transfer'){patch.account_id=emptyId(body.account_id)||old.account_id;patch.destination_account_id=emptyId(body.destination_account_id)||old.destination_account_id} else if(old.type==='card'){patch.card_id=emptyId(body.card_id)||old.card_id;const {data:card,error}=await sb.from('cards').select('*').eq('id',patch.card_id).single();if(error)throw error;patch.invoice_due_date=invoiceDueISO(patch.transaction_date,n(card.closing_day),n(card.due_day))}else patch.account_id=emptyId(body.account_id);const r=await sb.from('transactions').update(patch).eq('id',id).select('*').single();if(r.error)throw r.error;if(old.type!=='card')await applyTxEffect(r.data,1);return{ok:true}}
+if(p==='/api/bills'&&m==='GET')return billsEnriched();if(p==='/api/bills'&&m==='POST'){const amount=n(body.amount),name=(body.name||'').trim(),rec=body.recurrence||'Nenhuma';if(!name||amount<=0)throw new Error('Informe nome e valor da conta.');const count=rec==='Nenhuma'?1:Math.max(1,Math.min(120,n(body.recurrence_count)||({Mensal:24,Semanal:26,Anual:6}[rec]||12))),series_id=count>1?crypto.randomUUID():null,rows=[];for(let i=0;i<count;i++)rows.push({user_id:uid,name,amount,due_date:addRecurrenceISO(body.due_date,rec,i),category:body.category||null,recurrence:rec,account_id:emptyId(body.account_id),status:i===0?(body.status||'A pagar'):'A pagar',notes:body.notes||'',series_id,series_index:i,paid_at:i===0&&body.status==='Pago'?new Date().toISOString():null});const r=await sb.from('bills').insert(rows).select('*');if(r.error)throw r.error;if(rows[0].status==='Pago')await adjustAccount(rows[0].account_id,-amount);return{ids:r.data.map(x=>x.id),series_id}}
+z=p.match(/^\/api\/bills\/(\d+)$/);if(z){const id=Number(z[1]),all=await sbRows('bills'),old=all.find(x=>x.id===id);if(!old)throw new Error('Conta não encontrada.');const scope=u.searchParams.get('scope')||'one';let targets=[old];if(old.series_id&&scope==='future')targets=all.filter(x=>x.series_id===old.series_id&&n(x.series_index)>=n(old.series_index));if(old.series_id&&scope==='all')targets=all.filter(x=>x.series_id===old.series_id);if(m==='DELETE'){for(const x of targets)if(x.status==='Pago')await adjustAccount(x.account_id,n(x.amount));const r=await sb.from('bills').delete().in('id',targets.map(x=>x.id));if(r.error)throw r.error;return{ok:true,deleted:targets.length}}if(Object.keys(body).every(k=>k==='status')){if(old.status==='Pago'&&body.status!=='Pago')await adjustAccount(old.account_id,n(old.amount));if(old.status!=='Pago'&&body.status==='Pago')await adjustAccount(old.account_id,-n(old.amount));const r=await sb.from('bills').update({status:body.status,paid_at:body.status==='Pago'?new Date().toISOString():null}).eq('id',id);if(r.error)throw r.error;return{ok:true}}const baseDue=body.due_date||old.due_date,rec=body.recurrence||old.recurrence;for(const x of targets){if(x.status==='Pago')await adjustAccount(x.account_id,n(x.amount));const rel=n(x.series_index)-n(old.series_index),patch={name:body.name??x.name,amount:n(body.amount)||n(x.amount),due_date:targets.length>1?addRecurrenceISO(baseDue,rec,rel):baseDue,category:body.category??x.category,recurrence:rec,account_id:emptyId(body.account_id),status:targets.length===1?(body.status||x.status):x.status,notes:body.notes??x.notes};patch.paid_at=patch.status==='Pago'?new Date().toISOString():null;const r=await sb.from('bills').update(patch).eq('id',x.id).select('*').single();if(r.error)throw r.error;if(r.data.status==='Pago')await adjustAccount(r.data.account_id,-n(r.data.amount))}if(!old.series_id&&rec!=='Nenhuma'&&n(body.recurrence_count)>1){const sid=crypto.randomUUID();await sb.from('bills').update({series_id:sid,series_index:0}).eq('id',id);const fresh=(await sbRows('bills')).find(x=>x.id===id),rows=[];for(let i=1;i<n(body.recurrence_count);i++)rows.push({...fresh,id:undefined,user_id:uid,due_date:addRecurrenceISO(baseDue,rec,i),status:'A pagar',paid_at:null,series_id:sid,series_index:i,created_at:undefined});const r=await sb.from('bills').insert(rows.map(({id,created_at,...x})=>x));if(r.error)throw r.error}return{ok:true}}
+if(p==='/api/investments'&&m==='GET'){const [items,settings]=await Promise.all([sbRows('investments'),sbRows('settings')]);const cdi=n(settings.find(x=>x.key==='cdi_annual_pct')?.value),ref=settings.find(x=>x.key==='cdi_reference_date')?.value||'';for(const x of items){x.calculated_current_value=n(x.current_value);x.capital_as_of_today=n(x.invested_value);x.effective_annual_rate=String(x.benchmark||'').toUpperCase()==='CDI'?cdi*(n(x.benchmark_percent)||100)/100:n(x.expected_annual_rate||x.profitability)}const active=items.filter(x=>x.status!=='Encerrado'),current=active.reduce((a,x)=>a+n(x.calculated_current_value),0),principal=active.reduce((a,x)=>a+n(x.invested_value),0),monthly=active.reduce((a,x)=>a+n(x.monthly_contribution),0);let w=0,b=0;for(const x of active){w+=n(x.current_value)*n(x.effective_annual_rate);b+=n(x.current_value)}const rate=b?w/b:0,mr=Math.pow(1+rate/100,1/12)-1;const alloc=(key)=>{const o={};for(const x of active)o[x[key]||'Não informada']=(o[x[key]||'Não informada']||0)+n(x.current_value);return Object.entries(o).sort((a,b)=>b[1]-a[1]).map(([label,value])=>({label,value,percent:current?value/current*100:0}))};return{items,summary:{current,principal,result:current-principal,return_pct:principal?(current-principal)/principal*100:0,active_count:active.length,monthly_contribution:monthly,weighted_annual_rate:rate,estimated_monthly_yield:current*mr,cdi_annual_rate:cdi,cdi_reference_date:ref},allocation_type:alloc('type'),allocation_institution:alloc('institution')}}if(p==='/api/investments'&&m==='POST'){const invested=n(body.invested_value),r=await sb.from('investments').insert({...body,user_id:uid,invested_value:invested,current_value:body.current_value===''||body.current_value==null?invested:n(body.current_value),application_date:body.application_date||isoDate(new Date()),updated_at:new Date().toISOString()}).select('id').single();if(r.error)throw r.error;return r.data}z=p.match(/^\/api\/investments\/(\d+)$/);if(z){if(m==='DELETE'){await sb.from('transactions').update({investment_id:null}).eq('investment_id',z[1]);const r=await sb.from('investments').delete().eq('id',z[1]);if(r.error)throw r.error;return{ok:true}}const r=await sb.from('investments').update({...body,updated_at:new Date().toISOString()}).eq('id',z[1]);if(r.error)throw r.error;return{ok:true}}
+if(p==='/api/subscriptions'&&m==='GET'){const [items,acc,cards]=await Promise.all([sbRows('subscriptions'),sbRows('accounts'),sbRows('cards')]);const am=new Map(acc.map(x=>[x.id,x.name])),cm=new Map(cards.map(x=>[x.id,x.name])),q=(u.searchParams.get('q')||'').toLowerCase();let list=items.map(x=>({...x,account_name:am.get(x.account_id)||null,card_name:cm.get(x.card_id)||null})).filter(x=>!q||`${x.name} ${x.provider} ${x.category}`.toLowerCase().includes(q));const active=list.filter(x=>x.status==='Ativa'),monthly=active.reduce((a,x)=>a+monthlyEquivalent(x.amount,x.recurrence),0),today=isoDate(new Date()),end=isoDate(new Date(Date.now()+31*86400000));let next30=0,count=0;for(const x of active)for(const d of subOccurrences(x,today,end)){next30+=n(x.amount);count++}return{items:list,summary:{monthly,annual:monthly*12,active_count:active.length,next30,next30_count:count}}}if(p==='/api/subscriptions'&&m==='POST'){const r=await sb.from('subscriptions').insert({...body,user_id:uid,updated_at:new Date().toISOString()}).select('id').single();if(r.error)throw r.error;return r.data}z=p.match(/^\/api\/subscriptions\/(\d+)$/);if(z){if(m==='DELETE'){const r=await sb.from('subscriptions').delete().eq('id',z[1]);if(r.error)throw r.error;return{ok:true}}const r=await sb.from('subscriptions').update({...body,updated_at:new Date().toISOString()}).eq('id',z[1]);if(r.error)throw r.error;return{ok:true}}
+if(p==='/api/goals'&&m==='GET')return (await sbRows('goals')).sort((a,b)=>b.id-a.id);if(p==='/api/goals'&&m==='POST'){const r=await sb.from('goals').insert({...body,user_id:uid,updated_at:new Date().toISOString()}).select('id').single();if(r.error)throw r.error;return r.data}z=p.match(/^\/api\/goals\/(\d+)$/);if(z){if(m==='DELETE'){const r=await sb.from('goals').delete().eq('id',z[1]);if(r.error)throw r.error;return{ok:true}}const r=await sb.from('goals').update({...body,updated_at:new Date().toISOString()}).eq('id',z[1]);if(r.error)throw r.error;return{ok:true}}
+if(p==='/api/calendar'){const start=(u.searchParams.get('start')||'2000-01-01').slice(0,10),end=(u.searchParams.get('end')||'2100-01-01').slice(0,10),[b,tx,subs]=await Promise.all([sbRows('bills'),sbRows('transactions'),sbRows('subscriptions')]),ev=[];for(const x of b.filter(x=>x.due_date>=start&&x.due_date<end))ev.push({id:`bill-${x.id}`,title:`${x.name} • R$ ${n(x.amount).toFixed(2)}`,start:x.due_date,color:x.status==='Pago'?'#22c55e':x.due_date<isoDate(new Date())?'#ef4444':'#f59e0b',extendedProps:{kind:'bill',item_id:x.id}});for(const x of tx.filter(x=>x.type==='card'&&x.invoice_due_date>=start&&x.invoice_due_date<end))ev.push({id:`tx-${x.id}`,title:`${x.description}${x.installment_total?` ${x.installment_no}/${x.installment_total}`:''} • R$ ${n(x.amount).toFixed(2)}`,start:x.invoice_due_date,color:'#8b5cf6',extendedProps:{kind:'transaction',item_id:x.id}});const colors={income:'#22c55e',expense:'#3b82f6',investment:'#6366f1',rescue:'#06b6d4',transfer:'#22d3ee'};for(const x of tx.filter(x=>x.type!=='card'&&x.transaction_date>=start&&x.transaction_date<end))ev.push({id:`cash-tx-${x.id}`,title:`${{income:'Receita',expense:'Despesa',investment:'Aporte',rescue:'Resgate',transfer:'Transferência'}[x.type]||'Lançamento'}: ${x.description} • R$ ${n(x.amount).toFixed(2)}`,start:x.transaction_date,color:colors[x.type]||'#3b82f6',extendedProps:{kind:'cash_transaction',item_id:x.id}});for(const s of subs)for(const d of subOccurrences(s,start,end))ev.push({id:`sub-${s.id}-${d}`,title:`${s.name} • R$ ${n(s.amount).toFixed(2)}`,start:d,color:s.color||'#14b8a6',extendedProps:{kind:'subscription',item_id:s.id}});return ev}
+throw new Error(`Operação não suportada: ${m} ${p}`)}
+
+
+function toast(message) {
+  const el = $('#toast');
+  el.textContent = message;
+  el.classList.add('show');
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+function closeOverlays() {
+  $('#modal')?.classList.remove('open');
+  $('#moreSheet')?.classList.remove('open');
+  state.modalReturnPage = null;
+}
+
+function iconRefresh() { window.lucide?.createIcons(); }
+
+function pageTitle(id) {
+  return ({
+    dashboard: 'Dashboard', movements: 'Lançamentos', accounts: 'Contas', cards: 'Cartões',
+    calendar: 'Calendário financeiro', subscriptions: 'Assinaturas',
+    investments: 'Investimentos', goals: 'Metas', settings: 'Configurações'
+  })[id] || 'Meu Financeiro';
+}
+
+async function showPage(id) {
+  $$('.page').forEach(p => p.classList.toggle('active', p.id === id));
+  $$('[data-page]').forEach(b => b.classList.toggle('active', b.dataset.page === id));
+  $('#pageTitle').textContent = pageTitle(id);
+  $('#quickAddBtn').classList.toggle('hidden', id !== 'dashboard');
+  closeOverlays();
+
+  if (id === 'dashboard') await loadDashboard();
+  if (id === 'movements') await loadMovements();
+  if (id === 'accounts') await loadAccounts();
+  if (id === 'cards') await loadCards();
+  if (id === 'subscriptions') await loadSubscriptions();
+  if (id === 'investments') await loadInvestments();
+  if (id === 'goals') await loadGoals();
+  if (id === 'calendar') initCalendar(true);
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  iconRefresh();
+}
+
+async function refreshBootstrap() {
+  state.bootstrap = await api('/api/bootstrap');
+}
+
+function selectOptions(items, selected = '', value = 'id', label = 'name', empty = 'Selecione') {
+  return `<option value="">${empty}</option>` + items.map(x =>
+    `<option value="${x[value]}" ${String(x[value]) === String(selected ?? '') ? 'selected' : ''}>${esc(x[label])}</option>`
+  ).join('');
+}
+
+function categoryOptions(selected = '') {
+  return `<option value="">Sem categoria</option>` + state.bootstrap.categories.map(x =>
+    `<option value="${attr(x.name)}" ${x.name === selected ? 'selected' : ''}>${esc(x.name)}</option>`
+  ).join('');
+}
+
+function recurrenceOptions(selected = 'Mensal') {
+  return ['Semanal', 'Mensal', 'Bimestral', 'Trimestral', 'Semestral', 'Anual'].map(x =>
+    `<option ${x === selected ? 'selected' : ''}>${x}</option>`
+  ).join('');
+}
+
+function statusBadge(status, overdue = false) {
+  const text = overdue ? 'Atrasado' : status;
+  const cls = status === 'Pago' || status === 'Ativa' ? 'paid' : overdue ? 'overdue' : status === 'Pausada' ? 'paused' : status === 'Cancelada' ? 'cancelled' : '';
+  return `<span class="badge ${cls}">${esc(text)}</span>`;
+}
+
+async function loadDashboard() {
+  if (!state.dashboardMonth) state.dashboardMonth = currentMonthKey();
+  const d = await api(`/api/dashboard?month=${encodeURIComponent(state.dashboardMonth)}`);
+  state.dashboardMonth = d.selected_month;
+  $('#dashboardMonthText').textContent = d.month_label;
+  $('#dashboardMonthPicker').value = d.selected_month;
+  $('#dashboardCurrentMonth').classList.toggle('hidden', d.is_current_month);
+  const monthBalance = Number(d.result_month ?? (Number(d.incomes) - Number(d.expenses)));
+  $('#mMonthBalance').textContent = money(monthBalance);
+  const balanceCaption = $('#mMonthBalanceCaption');
+  if (balanceCaption) {
+    balanceCaption.textContent = `${money(d.incomes || 0)} receitas • ${money(d.expenses || 0)} gastos`;
+  }
+  const monthBalanceCard = $('#monthBalanceCard');
+  monthBalanceCard.classList.toggle('success', monthBalance >= 0);
+  monthBalanceCard.classList.toggle('danger', monthBalance < 0);
+  $('#mInvested').textContent = money(d.invested);
+  const investmentCaption = $('#mInvestedCaption');
+  if (investmentCaption) {
+    const valueDate = d.investment_value_date ? dateBR(d.investment_value_date) : '';
+    const change = Number(d.investment_projection_change || 0);
+    const missingRates = Number(d.investment_rate_missing_count || 0);
+    const cdiText = Number(d.cdi_annual_rate || 0) > 0 ? ` • CDI ${pct(d.cdi_annual_rate)} a.a.` : '';
+    if (d.is_current_month) {
+      investmentCaption.textContent = missingRates
+        ? `Estimado até hoje${cdiText} • ${missingRates} sem referência`
+        : `Valor estimado até hoje${cdiText}`;
+    } else {
+      const changeText = Math.abs(change) >= 0.01 ? ` • ${change >= 0 ? '+' : ''}${money(change)}` : '';
+      investmentCaption.textContent = `Projetado até ${valueDate}${changeText}${cdiText}${missingRates ? ` • ${missingRates} sem referência` : ''}`;
+    }
+  }
+  $('#mPatrimony').textContent = money(d.patrimony);
+  $('#mInvoices').textContent = money(d.monthly_invoices);
+  $('#mExpenses').textContent = money(d.expenses);
+  $('#mIncomes').textContent = money(d.incomes);
+  $('#mSubscriptions').textContent = money(d.subscription_monthly);
+  $('#mContributions') && ($('#mContributions').textContent = money(d.investment_contributions || 0));
+
+  const diff = monthBalance;
+  const hasMovement = Number(d.incomes || 0) || Number(d.expenses || 0) || Number(d.investment_contributions || 0);
+  if (hasMovement) {
+    const aporte = Number(d.investment_contributions || 0);
+    $('#insightText').textContent = `Resultado de ${d.month_label}: ${money(diff)} (receitas − gastos).${aporte > 0 ? ` Aportes do mês: ${money(aporte)}.` : ''}`;
+  } else {
+    $('#insightText').textContent = `Nenhuma movimentação financeira encontrada em ${d.month_label}.`;
+  }
+
+  $('#upcomingList').innerHTML = d.upcoming.length ? d.upcoming.map(b => `
+    <div class="list-row">
+      <div class="row-main">
+        <div class="row-icon"><i data-lucide="${b.kind === 'subscription' ? 'repeat-2' : 'receipt-text'}"></i></div>
+        <div><strong>${esc(b.name)}</strong><small>${dateBR(b.due_date)} • ${esc(b.category || 'Conta')}</small></div>
+      </div>
+      <div class="money negative">${money(b.amount)}</div>
+      ${statusBadge(b.status || 'A pagar')}
+      <div></div>
+    </div>`).join('') : '<div class="empty-state">Nenhum vencimento nesta competência.</div>';
+
+  $('#recentTransactions').innerHTML = d.recent.length ? d.recent.map(tx => txRow(tx, false)).join('') : '<div class="empty-state">Nenhum lançamento nesta competência.</div>';
+
+  if (d.goal) {
+    const pct = Math.min(100, Number(d.goal.current_value) / Math.max(1, Number(d.goal.target_value)) * 100);
+    $('#goalSnapshot').innerHTML = `<div><strong style="font-size:19px">${esc(d.goal.name)}</strong><p class="muted">${money(d.goal.current_value)} de ${money(d.goal.target_value)}</p><div class="progress"><span style="width:${pct}%"></span></div><p class="muted">${pct.toFixed(1)}% concluído • faltam ${money(Math.max(0, d.goal.target_value - d.goal.current_value))}</p></div>`;
+  } else {
+    $('#goalSnapshot').innerHTML = '<div class="empty-state">Cadastre uma meta para acompanhar seu progresso.</div>';
+  }
+
+  if (window.Chart) {
+    const labels = d.category_chart.map(x => x.label);
+    const values = d.category_chart.map(x => x.value);
+    if (state.categoryChart) state.categoryChart.destroy();
+    state.categoryChart = new Chart($('#categoryChart'), {
+      type: 'doughnut', data: { labels, datasets: [{ data: values, borderWidth: 0 }] },
+      options: { maintainAspectRatio: false, cutout: '70%', plugins: { legend: { position: 'bottom', labels: { color: '#9fb0c9', boxWidth: 10, usePointStyle: true, padding: 16, font: { size: 10 } } } } }
+    });
+  }
+  iconRefresh();
+}
+
+function txTypeLabel(type) {
+  return ({ expense: 'Despesa', income: 'Receita', card: 'Cartão', investment: 'Investimento', rescue: 'Resgate', transfer: 'Transferência' })[type] || type;
+}
+
+function txRow(tx, actions = true) {
+  const positive = tx.type === 'income' || tx.type === 'rescue';
+  const transfer = tx.type === 'transfer';
+  const icon = transfer ? 'arrow-right-left' : positive ? 'arrow-down-to-line' : tx.type === 'card' ? 'credit-card' : tx.type === 'investment' ? 'trending-up' : 'arrow-up-from-line';
+  const installment = tx.installment_total ? ` • ${tx.installment_no}/${tx.installment_total}` : '';
+  const when = tx.type === 'card' && tx.invoice_due_date ? `Compra ${dateBR(tx.transaction_date)} • fatura ${dateBR(tx.invoice_due_date)}` : dateBR(tx.transaction_date);
+  const linkName = transfer ? `${tx.account_name || 'Conta origem'} → ${tx.destination_account_name || 'Conta destino'}` : (tx.investment_name || tx.account_name || tx.card_name || tx.payment_method || '—');
+  const amountText = transfer ? `↔ ${money(tx.amount)}` : `${positive ? '+' : '−'} ${money(tx.amount)}`;
+  return `<div class="list-row ${transfer ? 'movement-transfer-row' : ''}">
+    <div class="row-main"><div class="row-icon"><i data-lucide="${icon}"></i></div><div><strong>${esc(tx.description)}${installment}</strong><small>${esc(tx.category || txTypeLabel(tx.type))} • ${when}</small></div></div>
+    <div class="muted">${esc(linkName)}</div>
+    <div class="money ${transfer ? '' : positive ? 'positive' : 'negative'}">${amountText}</div>
+    ${actions ? `<div class="mini-actions"><button class="edit" data-edit-tx="${tx.id}" title="Editar"><i data-lucide="pencil"></i></button><button class="delete" data-delete-tx="${tx.id}" title="Excluir"><i data-lucide="trash-2"></i></button></div>` : '<div></div>'}
+  </div>`;
+}
+
+async function loadTransactions() {
+  const q = $('#txSearch')?.value?.trim() || '';
+  const data = await api(`/api/transactions${q ? `?q=${encodeURIComponent(q)}` : ''}`);
+  state.data.transactions = data;
+  $('#transactionList').innerHTML = data.length ? data.map(tx => txRow(tx)).join('') : '<div class="empty-state">Nenhum lançamento encontrado.</div>';
+  iconRefresh();
+}
+
+
+function movementBillRow(b) {
+  const overdue = b.status !== 'Pago' && b.due_date < todayISO();
+  const series = b.series_id ? ` • ${esc(b.recurrence)} #${Number(b.series_index) + 1}` : b.recurrence && b.recurrence !== 'Nenhuma' ? ` • ${esc(b.recurrence)}` : '';
+  return `<div class="list-row movement-bill-row">
+    <div class="row-main"><div class="row-icon"><i data-lucide="receipt-text"></i></div><div><strong>${esc(b.name)}</strong><small>Conta a pagar • ${dateBR(b.due_date)} • ${esc(b.category || 'Conta')}${series}</small></div></div>
+    ${statusBadge(b.status, overdue)}
+    <div class="money negative">− ${money(b.amount)}</div>
+    <div class="mini-actions">
+      <button class="${b.status === 'Pago' ? 'warning' : 'success'}" data-toggle-bill="${b.id}" title="${b.status === 'Pago' ? 'Desmarcar pagamento' : 'Marcar como pago'}"><i data-lucide="${b.status === 'Pago' ? 'rotate-ccw' : 'check'}"></i></button>
+      <button class="edit" data-edit-bill="${b.id}" title="Editar"><i data-lucide="pencil"></i></button>
+      <button class="delete" data-delete-bill="${b.id}" title="Excluir"><i data-lucide="trash-2"></i></button>
+    </div>
+  </div>`;
+}
+
+async function loadMovements() {
+  if (!state.movementMonth) state.movementMonth = currentMonthKey();
+  const [transactions, bills] = await Promise.all([api('/api/transactions'), api('/api/bills')]);
+  state.data.transactions = transactions;
+  state.data.bills = bills;
+
+  $('#movementMonthPicker').value = state.movementMonth;
+  $('#movementMonthText').textContent = monthKeyLabel(state.movementMonth);
+  $('#movementCurrentMonth').classList.toggle('hidden', state.movementMonth === currentMonthKey());
+
+  const month = state.movementMonth;
+  const monthTx = transactions.filter(t => String(t.transaction_date || '').slice(0,7) === month);
+  const monthBills = bills.filter(b => String(b.due_date || '').slice(0,7) === month);
+
+  $('#mvIncome').textContent = money(monthTx.filter(t => t.type === 'income').reduce((a,t) => a + Number(t.amount || 0), 0));
+  $('#mvExpenses').textContent = money(monthTx.filter(t => t.type === 'expense' || t.type === 'card').reduce((a,t) => a + Number(t.amount || 0), 0));
+  $('#mvPendingBills').textContent = money(monthBills.filter(b => b.status !== 'Pago').reduce((a,b) => a + Number(b.amount || 0), 0));
+  $('#mvInvestments').textContent = money(monthTx.filter(t => t.type === 'investment').reduce((a,t) => a + Number(t.amount || 0), 0));
+
+  const q = ($('#movementSearch')?.value || '').trim().toLowerCase();
+  const filter = $('#movementFilter')?.value || 'all';
+  let items = [
+    ...monthTx.map(t => ({kind:'transaction', date:t.transaction_date, item:t})),
+    ...monthBills.map(b => ({kind:'bill', date:b.due_date, item:b})),
+  ];
+
+  items = items.filter(entry => {
+    const item = entry.item;
+    const text = `${item.description || item.name || ''} ${item.category || ''} ${item.amount || ''}`.toLowerCase();
+    if (q && !text.includes(q)) return false;
+    if (filter === 'income' && !(entry.kind === 'transaction' && item.type === 'income')) return false;
+    if (filter === 'expense' && !(entry.kind === 'transaction' && item.type === 'expense')) return false;
+    if (filter === 'card' && !(entry.kind === 'transaction' && item.type === 'card')) return false;
+    if (filter === 'investment' && !(entry.kind === 'transaction' && ['investment','rescue'].includes(item.type))) return false;
+    if (filter === 'transfer' && !(entry.kind === 'transaction' && item.type === 'transfer')) return false;
+    if (filter === 'pending' && !(entry.kind === 'bill' && item.status !== 'Pago')) return false;
+    if (filter === 'paid' && !(entry.kind === 'bill' && item.status === 'Pago')) return false;
+    return true;
+  });
+
+  items.sort((a,b) => String(a.date).localeCompare(String(b.date)) || (a.kind === 'bill' ? -1 : 1) || Number(a.item.id)-Number(b.item.id));
+
+  if (!items.length) {
+    $('#movementList').innerHTML = '<div class="empty-state">Nenhuma movimentação encontrada neste mês.</div>';
+    iconRefresh();
+    return;
+  }
+
+  const groups = new Map();
+  items.forEach(entry => {
+    if (!groups.has(entry.date)) groups.set(entry.date, []);
+    groups.get(entry.date).push(entry);
+  });
+  $('#movementList').innerHTML = [...groups.entries()].map(([date, dayItems]) => `
+    <div class="movement-day-group">
+      <div class="movement-day-title"><span>${dateBR(date)}</span><small>${dayItems.length} item${dayItems.length === 1 ? '' : 's'}</small></div>
+      <div>${dayItems.map(entry => entry.kind === 'bill' ? movementBillRow(entry.item) : txRow(entry.item)).join('')}</div>
+    </div>`).join('');
+  iconRefresh();
+}
+
+async function loadAccounts() {
+  const data = await api('/api/accounts');
+  state.data.accounts = data;
+  state.bootstrap.accounts = data;
+  $('#accountCards').innerHTML = data.length ? data.map(a => `
+    <article class="entity-card" style="--entity:${attr(a.color)}">
+      <div class="entity-top"><div class="row-icon"><i data-lucide="wallet"></i></div><div class="mini-actions"><button class="edit" data-edit-account="${a.id}" title="Editar"><i data-lucide="pencil"></i></button><button class="delete" data-delete-account="${a.id}" title="Excluir"><i data-lucide="trash-2"></i></button></div></div>
+      <h3>${money(a.balance)}</h3><p>${esc(a.name)} • ${esc(a.bank || a.type)}</p>
+      <div class="entity-meta"><span>${esc(a.type)}</span><span>Saldo atual</span></div>
+    </article>`).join('') : '<div class="empty-state">Cadastre sua primeira conta.</div>';
+  iconRefresh();
+}
+
+async function loadCards() {
+  const data = await api('/api/cards');
+  state.data.cards = data;
+  state.bootstrap.cards = data;
+  $('#creditCards').innerHTML = data.length ? data.map(c => {
+    const used = Number(c.used || 0), limit = Number(c.credit_limit || 0), pct = Math.min(100, limit ? used / limit * 100 : 0);
+    return `<article class="entity-card" style="--entity:${attr(c.color)}">
+      <div class="entity-top"><div class="row-icon"><i data-lucide="credit-card"></i></div><div class="mini-actions"><button class="edit" data-edit-card="${c.id}" title="Editar"><i data-lucide="pencil"></i></button><button class="delete" data-delete-card="${c.id}" title="Excluir"><i data-lucide="trash-2"></i></button></div></div>
+      <h3>${esc(c.name)}</h3><p>${esc(c.bank || c.brand || 'Cartão')}</p>
+      <div style="margin:16px 0 8px" class="progress"><span style="width:${pct}%"></span></div>
+      <div class="entity-meta"><span>${money(used)} comprometidos</span><span>Fecha ${c.closing_day} • vence ${c.due_day}</span></div>
+    </article>`;
+  }).join('') : '<div class="empty-state">Cadastre seu primeiro cartão.</div>';
+  iconRefresh();
+}
+
+async function loadBills() {
+  const data = await api('/api/bills');
+  state.data.bills = data;
+  $('#billList').innerHTML = data.length ? data.map(b => {
+    const overdue = b.status !== 'Pago' && b.due_date < todayISO();
+    const series = b.series_id ? ` • ${esc(b.recurrence)} #${Number(b.series_index) + 1}` : b.recurrence && b.recurrence !== 'Nenhuma' ? ` • ${esc(b.recurrence)}` : '';
+    return `<div class="list-row">
+      <div class="row-main"><div class="row-icon"><i data-lucide="receipt-text"></i></div><div><strong>${esc(b.name)}</strong><small>${dateBR(b.due_date)} • ${esc(b.category || 'Conta')}${series}</small></div></div>
+      ${statusBadge(b.status, overdue)}
+      <div class="money negative">${money(b.amount)}</div>
+      <div class="mini-actions">
+        <button class="${b.status === 'Pago' ? 'warning' : 'success'}" data-toggle-bill="${b.id}" title="${b.status === 'Pago' ? 'Desmarcar pagamento' : 'Marcar como pago'}"><i data-lucide="${b.status === 'Pago' ? 'rotate-ccw' : 'check'}"></i></button>
+        <button class="edit" data-edit-bill="${b.id}" title="Editar"><i data-lucide="pencil"></i></button>
+        <button class="delete" data-delete-bill="${b.id}" title="Excluir"><i data-lucide="trash-2"></i></button>
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty-state">Nenhuma conta cadastrada.</div>';
+  iconRefresh();
+}
+
+async function loadSubscriptions() {
+  const q = $('#subscriptionSearch')?.value?.trim() || '';
+  const data = await api(`/api/subscriptions${q ? `?q=${encodeURIComponent(q)}` : ''}`);
+  state.data.subscriptions = data.items;
+  $('#sMonthly').textContent = money(data.summary.monthly);
+  $('#sAnnual').textContent = money(data.summary.annual);
+  $('#sActive').textContent = data.summary.active_count;
+  $('#sNext30').textContent = money(data.summary.next30);
+  $('#sNext30Count').textContent = `${data.summary.next30_count} cobrança${data.summary.next30_count === 1 ? '' : 's'}`;
+
+  $('#subscriptionList').innerHTML = data.items.length ? data.items.map(s => {
+    const payment = s.card_name ? `Cartão: ${s.card_name}` : s.account_name ? `Conta: ${s.account_name}` : 'Pagamento não definido';
+    return `<div class="list-row compact">
+      <div class="row-main"><div class="row-icon" style="color:${attr(s.color || '#14b8a6')}"><i data-lucide="repeat-2"></i></div><div><strong>${esc(s.name)}</strong><small>${esc(s.provider || 'Assinatura')} • ${esc(s.recurrence)} • ${payment}</small></div></div>
+      ${statusBadge(s.status)}
+      <div><div class="money negative">${money(s.amount)}</div><small class="muted">próxima ${dateBR(s.next_charge)}</small></div>
+      <div class="mini-actions">
+        <button class="${s.status === 'Ativa' ? 'warning' : 'success'}" data-toggle-subscription="${s.id}" title="${s.status === 'Ativa' ? 'Pausar' : 'Ativar'}"><i data-lucide="${s.status === 'Ativa' ? 'pause' : 'play'}"></i></button>
+        <button class="edit" data-edit-subscription="${s.id}" title="Editar"><i data-lucide="pencil"></i></button>
+        <button class="delete" data-delete-subscription="${s.id}" title="Excluir"><i data-lucide="trash-2"></i></button>
+      </div>
+    </div>`;
+  }).join('') : '<div class="empty-state">Nenhuma assinatura encontrada.</div>';
+  iconRefresh();
+}
+
+function pct(v, digits = 2) {
+  return `${Number(v || 0).toLocaleString('pt-BR', { minimumFractionDigits: digits, maximumFractionDigits: digits })}%`;
+}
+
+function projectedValue(current, monthlyContribution, annualRate, years) {
+  const months = years * 12;
+  const annual = Number(annualRate || 0) / 100;
+  const monthlyRate = annual > -1 ? Math.pow(1 + annual, 1 / 12) - 1 : 0;
+  let future;
+  if (Math.abs(monthlyRate) < 1e-12) future = Number(current || 0) + Number(monthlyContribution || 0) * months;
+  else {
+    const factor = Math.pow(1 + monthlyRate, months);
+    future = Number(current || 0) * factor + Number(monthlyContribution || 0) * ((factor - 1) / monthlyRate);
+  }
+  const contributions = Number(monthlyContribution || 0) * months;
+  return { years, future, contributions, gain: future - Number(current || 0) - contributions };
+}
+
+function renderInvestmentProjection() {
+  const summary = state.investmentSummary || {};
+  const current = Number(summary.current || 0);  const contribution = Number($('#projectionContribution')?.value || 0);
+  const cdiPercent = Number($('#projectionCdiPercent')?.value || 100);
+  const annualRate = Number(summary.cdi_annual_rate || 0) * cdiPercent / 100;
+  const horizons = [1, 3, 5, 10];
+  $('#investmentProjectionCards').innerHTML = horizons.map(years => {
+    const p = projectedValue(current, contribution, annualRate, years);
+    return `<article class="projection-card">
+      <small>Em ${years} ${years === 1 ? 'ano' : 'anos'}</small>
+      <strong>${money(p.future)}</strong>
+      <span>Aportes: ${money(p.contributions)}</span>
+      <span class="${p.gain >= 0 ? 'positive-text' : 'negative-text'}">Rendimento: ${p.gain >= 0 ? '+' : ''}${money(p.gain)}</span>
+    </article>`;
+  }).join('');
+}
+
+function renderAllocation(target, items) {
+  const el = $(target);
+  if (!el) return;
+  if (!items?.length) {
+    el.innerHTML = '<div class="empty-state">Cadastre investimentos para visualizar a distribuição.</div>';
+    return;
+  }
+  el.innerHTML = items.slice(0, 8).map(item => `<div class="allocation-row">
+    <div class="allocation-label"><span>${esc(item.label)}</span><strong>${pct(item.percent, 1)}</strong></div>
+    <div class="allocation-track"><span style="width:${Math.max(1, Math.min(100, Number(item.percent || 0)))}%"></span></div>
+    <small>${money(item.value)}</small>
+  </div>`).join('');
+}
+
+async function loadInvestments() {
+  const response = await api('/api/investments');
+  const data = Array.isArray(response) ? response : (response.items || []);
+  const summary = Array.isArray(response) ? {
+    current: data.reduce((a, x) => a + Number(x.current_value || 0), 0),
+    principal: data.reduce((a, x) => a + Number(x.invested_value || 0), 0),
+    monthly_contribution: data.reduce((a, x) => a + Number(x.monthly_contribution || 0), 0),
+    weighted_annual_rate: 0,
+    estimated_monthly_yield: 0,
+    active_count: data.filter(x => x.status !== 'Encerrado').length,
+  } : (response.summary || {});
+  summary.result = Number(summary.result ?? (Number(summary.current || 0) - Number(summary.principal || 0)));
+  summary.return_pct = Number(summary.return_pct ?? (Number(summary.principal || 0) ? summary.result / Number(summary.principal) * 100 : 0));
+  state.investmentSummary = summary;
+  state.data.investments = data;
+  state.bootstrap.investments = data.filter(x => x.status !== 'Encerrado').map(x => ({ id: x.id, product: x.product, institution: x.institution, type: x.type, current_value: x.calculated_current_value ?? x.current_value }));
+
+  $('#investmentTotal').textContent = money(summary.current);
+  $('#investmentPrincipal').textContent = money(summary.principal);
+  $('#investmentResult').textContent = `${summary.result >= 0 ? '+' : ''}${money(summary.result)}`;
+  $('#investmentResult').className = summary.result >= 0 ? 'positive-text' : 'negative-text';
+  $('#investmentReturnPct').textContent = `${summary.return_pct >= 0 ? '+' : ''}${pct(summary.return_pct)} sobre o capital`;
+  $('#investmentMonthlyContribution').textContent = money(summary.monthly_contribution);
+  $('#investmentExpectedRate').textContent = `${pct(summary.cdi_annual_rate)} a.a.`;
+  const cdiCaption = $('#investmentExpectedRateCaption');
+  if (cdiCaption) cdiCaption.textContent = summary.cdi_reference_date ? `BCB • referência ${summary.cdi_reference_date}` : 'Atualização automática pelo Banco Central';
+  $('#investmentEstimatedMonthlyYield').textContent = money(summary.estimated_monthly_yield);
+  $('#investmentActiveCount').textContent = `${summary.active_count || 0} ${Number(summary.active_count || 0) === 1 ? 'ativo' : 'ativos'}`;
+
+  const contributionInput = $('#projectionContribution');
+  const cdiPercentInput = $('#projectionCdiPercent');
+  contributionInput.value = Number(summary.monthly_contribution || 0).toFixed(2);
+  cdiPercentInput.value = '100';
+  const cdiRef = $('#projectionCdiReference');
+  if (cdiRef) cdiRef.textContent = `CDI atual usado: ${pct(summary.cdi_annual_rate)} a.a.${summary.cdi_reference_date ? ` • referência ${summary.cdi_reference_date}` : ''}.`;
+  contributionInput.oninput = renderInvestmentProjection;
+  cdiPercentInput.oninput = renderInvestmentProjection;
+  renderInvestmentProjection();
+  renderAllocation('#investmentAllocationType', response.allocation_type || []);
+  renderAllocation('#investmentAllocationInstitution', response.allocation_institution || []);
+
+  $('#investmentCards').innerHTML = data.length ? data.map(x => {
+    const current = Number(x.calculated_current_value ?? x.current_value ?? 0);
+    const principal = Number(x.capital_as_of_today ?? x.invested_value ?? 0);
+    const result = current - principal;
+    const returnPct = principal ? result / principal * 100 : 0;
+    const expectedRate = Number(x.effective_annual_rate ?? x.expected_annual_rate ?? x.profitability ?? 0);
+    const benchmarkPct = Number(x.benchmark_percent || (String(x.benchmark || '').toUpperCase() === 'CDI' ? 100 : 0));
+    const benchmark = x.benchmark ? `${esc(x.benchmark)}${benchmarkPct ? ` • ${pct(benchmarkPct, 0)}` : ''}` : 'Sem benchmark';
+    const detail = [x.liquidity, x.risk_level ? `Risco ${x.risk_level}` : '', x.maturity_date ? `Vence ${dateBR(x.maturity_date)}` : ''].filter(Boolean).join(' • ');
+    const quantityInfo = Number(x.quantity || 0) > 0 ? `<span>Qtd. ${Number(x.quantity).toLocaleString('pt-BR')} • PM ${money(x.average_price)}</span>` : '';
+    return `<article class="entity-card investment-card" style="--entity:${attr(x.color || '#22c55e')}">
+      <div class="entity-top"><div class="investment-badges"><span class="badge">${esc(x.type)}</span><span class="badge ${x.status === 'Ativo' ? 'paid' : 'cancelled'}">${esc(x.status || 'Ativo')}</span></div><div class="mini-actions"><button class="edit" data-edit-investment="${x.id}" title="Editar"><i data-lucide="pencil"></i></button><button class="delete" data-delete-investment="${x.id}" title="Excluir"><i data-lucide="trash-2"></i></button></div></div>
+      <h3>${money(current)}</h3><p>${esc(x.product)} • ${esc(x.institution || 'Instituição não informada')}</p>
+      <div class="investment-position-grid">
+        <div><small>Aplicado</small><strong>${money(principal)}</strong></div>
+        <div><small>Resultado</small><strong class="${result >= 0 ? 'positive-text' : 'negative-text'}">${result >= 0 ? '+' : ''}${money(result)}</strong></div>
+        <div><small>Rentabilidade</small><strong class="${returnPct >= 0 ? 'positive-text' : 'negative-text'}">${returnPct >= 0 ? '+' : ''}${pct(returnPct)}</strong></div>
+        <div><small>Taxa projetada</small><strong>${expectedRate ? `${pct(expectedRate)} a.a.` : '—'}</strong></div>
+        <div><small>Aporte mensal</small><strong>${money(x.monthly_contribution || 0)}</strong></div>
+        <div><small>Referência</small><strong>${benchmark}</strong></div>
+      </div>
+      ${quantityInfo ? `<div class="investment-extra">${quantityInfo}</div>` : ''}
+      <div class="investment-footer"><span>${detail || 'Sem vencimento ou liquidez informados'}</span><span>${x.application_date ? `Desde ${dateBR(x.application_date)}` : ''}</span></div>
+    </article>`;
+  }).join('') : '<div class="empty-state">Nenhum investimento cadastrado. Cadastre sua primeira posição para acompanhar rentabilidade e projeções.</div>';
+  iconRefresh();
+}
+
+
+async function loadGoals() {
+  const data = await api('/api/goals');
+  state.data.goals = data;
+  $('#goalCards').innerHTML = data.length ? data.map(g => {
+    const pct = Math.min(100, Number(g.current_value) / Math.max(1, Number(g.target_value)) * 100);
+    return `<article class="entity-card" style="--entity:#22d3ee"><div class="entity-top"><div class="row-icon"><i data-lucide="target"></i></div><div class="mini-actions"><button class="edit" data-edit-goal="${g.id}" title="Editar"><i data-lucide="pencil"></i></button><button class="delete" data-delete-goal="${g.id}" title="Excluir"><i data-lucide="trash-2"></i></button></div></div><h3>${esc(g.name)}</h3><p>${money(g.current_value)} de ${money(g.target_value)}</p><div style="margin:16px 0 8px" class="progress"><span style="width:${pct}%"></span></div><div class="entity-meta"><span>${pct.toFixed(1)}%</span><span>${g.target_date ? dateBR(g.target_date) : 'Sem prazo'}</span></div></article>`;
+  }).join('') : '<div class="empty-state">Cadastre sua primeira meta financeira.</div>';
+  iconRefresh();
+}
+
+function formObject(form) {
+  return Object.fromEntries(new FormData(form).entries());
+}
+
+function setModal(title, eyebrow = 'MEU FINANCEIRO') {
+  $('#modalTitle').textContent = title;
+  $('#modalEyebrow').textContent = eyebrow;
+}
+
+function selected(value, target) { return String(value ?? '') === String(target ?? '') ? 'selected' : ''; }
+
+
+function unifiedTransactionFormHtml(type) {
+  const t = todayISO();
+  const isTransfer = type === 'transfer';
+  const descriptionPlaceholder = isTransfer ? 'Ex.: Transferência para conta principal' : 'Ex.: Mercado, salário, aporte CDB...';
+  return `<form class="modal-form" id="transactionForm" data-id="">
+    <input type="hidden" name="type" value="${attr(type)}">
+    <div class="form-grid">
+      <div class="field"><label>Valor</label><input name="amount" type="number" min="0.01" step="0.01" required placeholder="0,00"></div>
+      <div class="field full"><label>Descrição</label><input name="description" required placeholder="${descriptionPlaceholder}"></div>
+      <div class="field"><label>Data</label><input name="transaction_date" type="date" value="${attr(t)}" required></div>
+      <div class="field category-field"><label>Categoria</label><select name="category">${categoryOptions('')}</select></div>
+      <div class="field account-field"><label>${isTransfer ? 'Conta de origem' : 'Conta'}</label><select name="account_id">${selectOptions(state.bootstrap.accounts, '')}</select></div>
+      <div class="field transfer-destination-field hidden"><label>Conta de destino</label><select name="destination_account_id">${selectOptions(state.bootstrap.accounts, '')}</select></div>
+      <div class="field card-field hidden"><label>Cartão</label><select name="card_id">${selectOptions(state.bootstrap.cards, '')}</select></div>
+      <div class="field card-field hidden"><label>Total de parcelas</label><input name="installment_total" type="number" min="1" value="1"><span class="field-help">Informe o valor total da compra. O sistema divide automaticamente.</span></div>
+      <div class="field card-field hidden"><label>Parcela atual</label><input name="current_installment" type="number" min="1" value="1"></div>
+      <div class="field investment-select-field hidden"><label>Investimento</label><select name="investment_id" id="txInvestmentId">${selectOptions(state.bootstrap.investments, '', 'id', 'product', 'Criar novo investimento')}</select></div>
+      <div class="field new-investment-field hidden"><label>Tipo do investimento</label><select name="investment_type"><option>CDB</option><option>CDI</option><option>Tesouro</option><option>LCI</option><option>LCA</option><option>FII</option><option>Ações</option><option>ETF</option><option>Fundos</option><option>Criptomoedas</option><option>Outros</option></select></div>
+      <div class="field new-investment-field hidden"><label>Instituição</label><input name="investment_institution" placeholder="Ex.: Nubank"></div>
+      <div class="field new-investment-field full hidden"><label>Nome do investimento</label><input name="investment_product" placeholder="Ex.: Caixinha 120% CDI"><span class="field-help">Ao salvar, ele passa a aparecer automaticamente na página Investimentos e no Dashboard.</span></div>
+      <div class="field full"><label>Observação</label><textarea name="notes" placeholder="Opcional"></textarea></div>
+    </div>
+    <div class="form-actions"><button type="button" class="secondary-btn" data-close>Cancelar</button><button class="primary-btn" type="submit">Salvar</button></div>
+  </form>`;
+}
+
+function unifiedBillFormHtml() {
+  const t = todayISO();
+  return `<form class="modal-form" id="billForm" data-id=""><div class="form-grid">
+      <div class="field full"><label>Conta</label><input name="name" required placeholder="Ex.: Aluguel"></div>
+      <div class="field"><label>Valor</label><input name="amount" type="number" min="0.01" step="0.01" required></div>
+      <div class="field"><label>Vencimento</label><input name="due_date" type="date" value="${attr(t)}" required></div>
+      <div class="field"><label>Categoria</label><select name="category">${categoryOptions('')}</select></div>
+      <div class="field"><label>Recorrência</label><select name="recurrence" id="billRecurrence"><option selected>Nenhuma</option><option>Semanal</option><option>Mensal</option><option>Bimestral</option><option>Trimestral</option><option>Semestral</option><option>Anual</option></select></div>
+      <div class="field recurrence-count-field hidden"><label id="billRecurrenceCountLabel">Quantidade de ocorrências</label><input name="recurrence_count" type="number" min="1" max="120" value="12"><span class="field-help" id="billRecurrenceCountHelp"></span></div>
+      <div class="field"><label>Conta para pagamento</label><select name="account_id">${selectOptions(state.bootstrap.accounts, '')}</select></div>
+      <div class="field"><label>Status</label><select name="status"><option selected>A pagar</option><option>Pago</option></select></div>
+      <div class="field full"><label>Observação</label><textarea name="notes"></textarea></div>
+    </div><div class="form-actions"><button type="button" class="secondary-btn" data-close>Cancelar</button><button class="primary-btn">Salvar</button></div></form>`;
+}
+
+function renderUnifiedMovementForm(type) {
+  const host = $('#movementDynamicForm');
+  if (!host) return;
+  host.innerHTML = type === 'bill' ? unifiedBillFormHtml() : unifiedTransactionFormHtml(type);
+  if (type === 'bill') {
+    $('#billRecurrence')?.addEventListener('change', toggleBillRecurrence);
+    bindBillForm();
+    toggleBillRecurrence();
+  } else {
+    bindTransactionForm();
+    toggleTxFields();
+  }
+  iconRefresh();
+}
+
+function openModal(kind, payload = null) {
+  const body = $('#modalBody');
+  const editing = !!payload?.id;
+  const t = todayISO();
+
+  if (kind === 'movement') {
+    setModal('Adicionar lançamento');
+    body.innerHTML = `<div class="modal-form">
+      <div class="field full movement-type-section">
+        <label>Tipo de lançamento</label>
+        <input type="hidden" id="movementCreateType" value="expense">
+        <div class="movement-type-grid" role="group" aria-label="Tipo de lançamento">
+          <button type="button" class="movement-type-btn active" data-movement-type="expense"><i data-lucide="arrow-down-to-line"></i><span>Despesa</span></button>
+          <button type="button" class="movement-type-btn" data-movement-type="income"><i data-lucide="arrow-up-from-line"></i><span>Receita</span></button>
+          <button type="button" class="movement-type-btn" data-movement-type="bill"><i data-lucide="receipt-text"></i><span>Conta a pagar</span></button>
+          <button type="button" class="movement-type-btn" data-movement-type="card"><i data-lucide="credit-card"></i><span>Cartão</span></button>
+          <button type="button" class="movement-type-btn" data-movement-type="investment"><i data-lucide="trending-up"></i><span>Aporte</span></button>
+          <button type="button" class="movement-type-btn" data-movement-type="rescue"><i data-lucide="landmark"></i><span>Resgate</span></button>
+          <button type="button" class="movement-type-btn" data-movement-type="transfer"><i data-lucide="arrow-left-right"></i><span>Transferência</span></button>
+        </div>
+      </div>
+      <div id="movementDynamicForm"></div>
+    </div>`;
+  }
+
+  if (kind === 'transaction') {
+    const tx = payload || {};
+    setModal(editing ? 'Editar lançamento' : 'Novo lançamento');
+    const type = tx.type || 'expense';
+    const typeField = editing
+      ? `<div class="field"><label>Tipo</label><input value="${esc(txTypeLabel(type))}" disabled><input type="hidden" name="type" value="${attr(type)}"></div>`
+      : `<div class="field"><label>Tipo</label><select name="type" id="txType"><option value="expense">Despesa</option><option value="income">Receita</option><option value="card">Compra no cartão</option><option value="investment">Investimento / aporte</option><option value="rescue">Resgate de investimento</option></select></div>`;
+
+    body.innerHTML = `<form class="modal-form" id="transactionForm" data-id="${editing ? tx.id : ''}"><div class="form-grid">
+      ${typeField}
+      <div class="field"><label>Valor</label><input name="amount" type="number" min="0.01" step="0.01" required value="${editing ? attr(tx.amount) : ''}" placeholder="0,00"></div>
+      <div class="field full"><label>Descrição</label><input name="description" required value="${editing ? attr(tx.description) : ''}" placeholder="Ex.: Mercado, salário, aporte CDB..."></div>
+      <div class="field"><label>Data</label><input name="transaction_date" type="date" value="${attr(tx.transaction_date || t)}" required></div>
+      <div class="field"><label>Categoria</label><select name="category">${categoryOptions(tx.category || '')}</select></div>
+      <div class="field account-field"><label>Conta</label><select name="account_id">${selectOptions(state.bootstrap.accounts, tx.account_id)}</select></div>
+      <div class="field transfer-destination-field hidden"><label>Conta de destino</label><select name="destination_account_id">${selectOptions(state.bootstrap.accounts, tx.destination_account_id)}</select></div>
+      <div class="field card-field hidden"><label>Cartão</label><select name="card_id">${selectOptions(state.bootstrap.cards, tx.card_id)}</select></div>
+      ${editing ? '' : `<div class="field card-field hidden"><label>Total de parcelas</label><input name="installment_total" type="number" min="1" value="1"><span class="field-help">Informe o valor total da compra. O sistema divide automaticamente.</span></div><div class="field card-field hidden"><label>Parcela atual</label><input name="current_installment" type="number" min="1" value="1"></div>`}
+      <div class="field investment-select-field hidden"><label>Investimento</label><select name="investment_id" id="txInvestmentId">${selectOptions(state.bootstrap.investments, tx.investment_id, 'id', 'product', 'Criar novo investimento')}</select></div>
+      <div class="field new-investment-field hidden"><label>Tipo do investimento</label><select name="investment_type"><option>CDB</option><option>CDI</option><option>Tesouro</option><option>LCI</option><option>LCA</option><option>FII</option><option>Ações</option><option>ETF</option><option>Fundos</option><option>Criptomoedas</option><option>Outros</option></select></div>
+      <div class="field new-investment-field hidden"><label>Instituição</label><input name="investment_institution" placeholder="Ex.: Nubank"></div>
+      <div class="field new-investment-field full hidden"><label>Nome do investimento</label><input name="investment_product" placeholder="Ex.: Caixinha 120% CDI"><span class="field-help">Ao salvar, ele passa a aparecer automaticamente na página Investimentos e no Dashboard.</span></div>
+      <div class="field full"><label>Observação</label><textarea name="notes" placeholder="Opcional">${editing ? esc(tx.notes || '') : ''}</textarea></div>
+    </div><div class="form-actions"><button type="button" class="secondary-btn" data-close>Cancelar</button><button class="primary-btn" type="submit">${editing ? 'Salvar alterações' : 'Salvar lançamento'}</button></div></form>`;
+  }
+
+  if (kind === 'account') {
+    const a = payload || {};
+    setModal(editing ? 'Editar conta' : 'Nova conta');
+    body.innerHTML = `<form class="modal-form" id="accountForm" data-id="${editing ? a.id : ''}"><div class="form-grid">
+      <div class="field full"><label>Nome da conta</label><input name="name" required value="${attr(a.name || '')}" placeholder="Ex.: Nubank"></div>
+      <div class="field"><label>Banco</label><input name="bank" value="${attr(a.bank || '')}"></div>
+      <div class="field"><label>Tipo</label><select name="type"><option ${selected(a.type,'Conta corrente')}>Conta corrente</option><option ${selected(a.type,'Conta salário')}>Conta salário</option><option ${selected(a.type,'Conta digital')}>Conta digital</option><option ${selected(a.type,'Poupança')}>Poupança</option><option ${selected(a.type,'Carteira')}>Carteira</option><option ${selected(a.type,'Dinheiro')}>Dinheiro</option><option ${selected(a.type,'Outros')}>Outros</option></select></div>
+      <div class="field"><label>Saldo atual</label><input name="balance" type="number" step="0.01" value="${attr(a.balance ?? 0)}"></div>
+      <div class="field"><label>Cor</label><input name="color" type="color" value="${attr(a.color || '#6d5dfc')}"></div>
+    </div><div class="form-actions"><button type="button" class="secondary-btn" data-close>Cancelar</button><button class="primary-btn">${editing ? 'Salvar alterações' : 'Salvar conta'}</button></div></form>`;
+  }
+
+  if (kind === 'card') {
+    const c = payload || {};
+    setModal(editing ? 'Editar cartão' : 'Novo cartão');
+    body.innerHTML = `<form class="modal-form" id="cardForm" data-id="${editing ? c.id : ''}"><div class="form-grid">
+      <div class="field full"><label>Nome do cartão</label><input name="name" required value="${attr(c.name || '')}" placeholder="Ex.: Nubank Croma"></div>
+      <div class="field"><label>Banco</label><input name="bank" value="${attr(c.bank || '')}"></div>
+      <div class="field"><label>Bandeira</label><input name="brand" value="${attr(c.brand || '')}" placeholder="Mastercard, Visa..."></div>
+      <div class="field"><label>Limite</label><input name="credit_limit" type="number" min="0" step="0.01" value="${attr(c.credit_limit ?? '')}" required></div>
+      <div class="field"><label>Fechamento</label><input name="closing_day" type="number" min="1" max="31" value="${attr(c.closing_day ?? '')}" required></div>
+      <div class="field"><label>Vencimento</label><input name="due_day" type="number" min="1" max="31" value="${attr(c.due_day ?? '')}" required></div>
+      <div class="field"><label>Cor</label><input name="color" type="color" value="${attr(c.color || '#7c3aed')}"></div>
+      <div class="field full"><span class="field-help">Ao alterar fechamento/vencimento, as faturas das compras cadastradas são recalculadas.</span></div>
+    </div><div class="form-actions"><button type="button" class="secondary-btn" data-close>Cancelar</button><button class="primary-btn">${editing ? 'Salvar alterações' : 'Salvar cartão'}</button></div></form>`;
+  }
+
+  if (kind === 'bill') {
+    const b = payload || {};
+    setModal(editing ? 'Editar conta a pagar' : 'Nova conta a pagar');
+    body.innerHTML = `<form class="modal-form" id="billForm" data-id="${editing ? b.id : ''}"><div class="form-grid">
+      <div class="field full"><label>Conta</label><input name="name" required value="${attr(b.name || '')}" placeholder="Ex.: Aluguel"></div>
+      <div class="field"><label>Valor</label><input name="amount" type="number" min="0.01" step="0.01" required value="${attr(b.amount ?? '')}"></div>
+      <div class="field"><label>Vencimento</label><input name="due_date" type="date" value="${attr(b.due_date || t)}" required></div>
+      <div class="field"><label>Categoria</label><select name="category">${categoryOptions(b.category || '')}</select></div>
+      <div class="field"><label>Recorrência</label><select name="recurrence" id="billRecurrence"><option ${selected(b.recurrence,'Nenhuma')}>Nenhuma</option><option ${selected(b.recurrence,'Semanal')}>Semanal</option><option ${selected(b.recurrence,'Mensal')}>Mensal</option><option ${selected(b.recurrence,'Bimestral')}>Bimestral</option><option ${selected(b.recurrence,'Trimestral')}>Trimestral</option><option ${selected(b.recurrence,'Semestral')}>Semestral</option><option ${selected(b.recurrence,'Anual')}>Anual</option></select></div>
+      ${(!editing || !b.series_id) ? `<div class="field recurrence-count-field"><label id="billRecurrenceCountLabel">Quantos meses?</label><input name="recurrence_count" type="number" min="1" max="120" value="${editing ? 1 : 24}"><span class="field-help" id="billRecurrenceCountHelp">Mensal: 12 gera 12 vencimentos mensais.</span></div>` : ''}
+      <div class="field"><label>Conta para pagamento</label><select name="account_id">${selectOptions(state.bootstrap.accounts, b.account_id)}</select></div>
+      <div class="field"><label>Status</label><select name="status"><option ${selected(b.status,'A pagar')}>A pagar</option><option ${selected(b.status,'Pago')}>Pago</option></select></div>
+      ${editing && b.series_id ? `<div class="field full"><label>Aplicar a alteração</label><select name="edit_scope"><option value="one">Somente esta ocorrência</option><option value="future">Esta e as próximas</option><option value="all">Toda a série</option></select><span class="field-help">Ideal para reajuste de aluguel, condomínio, mensalidades e outras contas fixas.</span></div>` : ''}
+      <div class="field full"><label>Observação</label><textarea name="notes">${esc(b.notes || '')}</textarea></div>
+    </div><div class="form-actions"><button type="button" class="secondary-btn" data-close>Cancelar</button><button class="primary-btn">${editing ? 'Salvar alterações' : 'Criar conta(s)'}</button></div></form>`;
+  }
+
+  if (kind === 'subscription') {
+    const s = payload || {};
+    setModal(editing ? 'Editar assinatura' : 'Nova assinatura');
+    body.innerHTML = `<form class="modal-form" id="subscriptionForm" data-id="${editing ? s.id : ''}"><div class="form-grid">
+      <div class="field full"><label>Assinatura / serviço</label><input name="name" required value="${attr(s.name || '')}" placeholder="Ex.: Netflix, academia, ChatGPT..."></div>
+      <div class="field"><label>Empresa / fornecedor</label><input name="provider" value="${attr(s.provider || '')}" placeholder="Ex.: Google, Amazon"></div>
+      <div class="field"><label>Valor por cobrança</label><input name="amount" type="number" min="0.01" step="0.01" required value="${attr(s.amount ?? '')}"></div>
+      <div class="field"><label>Periodicidade</label><select name="recurrence">${recurrenceOptions(s.recurrence || 'Mensal')}</select></div>
+      <div class="field"><label>Próxima cobrança</label><input name="next_charge" type="date" value="${attr(s.next_charge || t)}" required></div>
+      <div class="field"><label>Status</label><select name="status"><option ${selected(s.status,'Ativa')}>Ativa</option><option ${selected(s.status,'Pausada')}>Pausada</option><option ${selected(s.status,'Cancelada')}>Cancelada</option></select></div>
+      <div class="field"><label>Cartão</label><select name="card_id">${selectOptions(state.bootstrap.cards, s.card_id, 'id', 'name', 'Nenhum')}</select></div>
+      <div class="field"><label>Conta bancária</label><select name="account_id">${selectOptions(state.bootstrap.accounts, s.account_id, 'id', 'name', 'Nenhuma')}</select></div>
+      <div class="field"><label>Categoria</label><select name="category">${categoryOptions(s.category || 'Assinaturas')}</select></div>
+      <div class="field"><label>Início</label><input name="start_date" type="date" value="${attr(s.start_date || '')}"></div>
+      <div class="field"><label>Fim do período grátis</label><input name="trial_end" type="date" value="${attr(s.trial_end || '')}"></div>
+      <div class="field"><label>Cor no calendário</label><input name="color" type="color" value="${attr(s.color || '#14b8a6')}"></div>
+      <div class="field full"><label>Observações</label><textarea name="notes" placeholder="Plano, usuário, reajuste, observações...">${esc(s.notes || '')}</textarea></div>
+    </div><div class="form-actions"><button type="button" class="secondary-btn" data-close>Cancelar</button><button class="primary-btn">${editing ? 'Salvar alterações' : 'Salvar assinatura'}</button></div></form>`;
+  }
+
+  if (kind === 'investment') {
+    const i = payload || {};
+    setModal(editing ? 'Editar investimento' : 'Novo investimento');
+    body.innerHTML = `<form class="modal-form" id="investmentForm" data-id="${editing ? i.id : ''}"><div class="form-grid">
+      <div class="field"><label>Tipo</label><select name="type"><option ${selected(i.type,'CDB')}>CDB</option><option ${selected(i.type,'CDI')}>CDI</option><option ${selected(i.type,'Tesouro')}>Tesouro</option><option ${selected(i.type,'LCI')}>LCI</option><option ${selected(i.type,'LCA')}>LCA</option><option ${selected(i.type,'FII')}>FII</option><option ${selected(i.type,'Ações')}>Ações</option><option ${selected(i.type,'ETF')}>ETF</option><option ${selected(i.type,'Fundos')}>Fundos</option><option ${selected(i.type,'Criptomoedas')}>Criptomoedas</option><option ${selected(i.type,'Previdência')}>Previdência</option><option ${selected(i.type,'Poupança')}>Poupança</option><option ${selected(i.type,'Outros')}>Outros</option></select></div>
+      <div class="field"><label>Instituição</label><input name="institution" value="${attr(i.institution || '')}" placeholder="Ex.: Nubank, XP, BTG"></div>
+      <div class="field full"><label>Produto / ativo</label><input name="product" required value="${attr(i.product || '')}" placeholder="Ex.: CDB 120% CDI, XPML11, Tesouro IPCA+"></div>
+      <div class="form-divider"></div>
+      <div class="field"><label>Capital aplicado</label><input name="invested_value" type="number" min="0" step="0.01" required value="${attr(i.invested_value ?? '')}"><span class="field-help">Quanto você efetivamente colocou nesse investimento.</span></div>
+      <div class="field"><label>Valor atual</label><input name="current_value" type="number" min="0" step="0.01" value="${attr(i.current_value ?? '')}"><span class="field-help">Atualize quando quiser para acompanhar lucro e rentabilidade.</span></div>
+      <div class="field"><label>Quantidade de cotas/ações</label><input name="quantity" type="number" min="0" step="0.00000001" value="${attr(i.quantity ?? '')}" placeholder="Opcional"></div>
+      <div class="field"><label>Preço médio</label><input name="average_price" type="number" min="0" step="0.0001" value="${attr(i.average_price ?? '')}" placeholder="Opcional"></div>
+      <div class="form-divider"></div>
+      <div class="field"><label>Forma de rendimento</label><select name="benchmark" id="investmentBenchmark"><option ${selected(i.benchmark || 'CDI','CDI')}>CDI</option><option ${selected(i.benchmark,'Prefixado')}>Prefixado</option><option ${selected(i.benchmark,'IPCA')}>IPCA</option><option ${selected(i.benchmark,'Outro')}>Outro</option></select><span class="field-help">Para CDB/LCI/LCA, normalmente basta usar CDI.</span></div>
+      <div class="field investment-cdi-field"><label>% do CDI</label><input name="benchmark_percent" type="number" min="0" step="0.01" value="${attr(i.benchmark_percent ?? 100)}" placeholder="Ex.: 100, 110, 120 ou 130"><span class="field-help">O valor do CDI é buscado automaticamente no Banco Central.</span></div>
+      <div class="field investment-manual-rate-field hidden"><label>Taxa contratada (% a.a.)</label><input name="expected_annual_rate" type="number" step="0.01" value="${attr(i.expected_annual_rate ?? i.profitability ?? '')}" placeholder="Ex.: 12"><span class="field-help">Use apenas quando o investimento não for atrelado ao CDI.</span></div>
+      <div class="field"><label>Aporte mensal planejado</label><input name="monthly_contribution" type="number" min="0" step="0.01" value="${attr(i.monthly_contribution ?? 0)}" placeholder="0,00"></div>
+      <div class="form-divider"></div>
+      <div class="field"><label>Data da aplicação</label><input name="application_date" type="date" value="${attr(i.application_date || t)}"></div>
+      <div class="field"><label>Vencimento</label><input name="maturity_date" type="date" value="${attr(i.maturity_date || '')}"></div>
+      <div class="field"><label>Liquidez</label><select name="liquidity"><option value="" ${selected(i.liquidity,'')}>Não informada</option><option ${selected(i.liquidity,'Diária')}>Diária</option><option ${selected(i.liquidity,'D+1')}>D+1</option><option ${selected(i.liquidity,'D+2')}>D+2</option><option ${selected(i.liquidity,'D+30')}>D+30</option><option ${selected(i.liquidity,'No vencimento')}>No vencimento</option><option ${selected(i.liquidity,'Variável')}>Variável</option></select></div>
+      <div class="field"><label>Risco</label><select name="risk_level"><option value="" ${selected(i.risk_level,'')}>Não informado</option><option ${selected(i.risk_level,'Baixo')}>Baixo</option><option ${selected(i.risk_level,'Médio')}>Médio</option><option ${selected(i.risk_level,'Alto')}>Alto</option><option ${selected(i.risk_level,'Muito alto')}>Muito alto</option></select></div>
+      <div class="field"><label>Status</label><select name="status"><option ${selected(i.status,'Ativo')}>Ativo</option><option ${selected(i.status,'Encerrado')}>Encerrado</option></select></div>
+      <div class="field"><label>Cor</label><input name="color" type="color" value="${attr(i.color || '#22c55e')}"></div>
+      <div class="field full"><label>Observações</label><textarea name="notes" placeholder="Objetivo, estratégia, taxa contratada, observações...">${esc(i.notes || '')}</textarea></div>
+    </div><div class="form-actions"><button type="button" class="secondary-btn" data-close>Cancelar</button><button class="primary-btn">${editing ? 'Salvar alterações' : 'Salvar investimento'}</button></div></form>`;
+  }
+
+  if (kind === 'goal') {
+    const g = payload || {};
+    setModal(editing ? 'Editar meta' : 'Nova meta');
+    body.innerHTML = `<form class="modal-form" id="goalForm" data-id="${editing ? g.id : ''}"><div class="form-grid">
+      <div class="field full"><label>Nome da meta</label><input name="name" required value="${attr(g.name || '')}" placeholder="Ex.: Entrada do apartamento"></div>
+      <div class="field"><label>Valor alvo</label><input name="target_value" type="number" min="1" step="0.01" required value="${attr(g.target_value ?? '')}"></div>
+      <div class="field"><label>Valor atual</label><input name="current_value" type="number" min="0" step="0.01" value="${attr(g.current_value ?? 0)}"></div>
+      <div class="field"><label>Data objetivo</label><input name="target_date" type="date" value="${attr(g.target_date || '')}"></div>
+    </div><div class="form-actions"><button type="button" class="secondary-btn" data-close>Cancelar</button><button class="primary-btn">${editing ? 'Salvar alterações' : 'Salvar meta'}</button></div></form>`;
+  }
+
+  if (kind === 'cashflowRescue') {
+    const r = payload || {};
+    const inv = state.bootstrap.investments.find(x => Number(x.id) === Number(r.investment_id));
+    setModal('Registrar resgate', 'FLUXO DE CAIXA');
+    body.innerHTML = `<form class="modal-form" id="cashflowRescueForm"><div class="form-grid">
+      <div class="field"><label>Valor do resgate</label><input name="amount" type="number" min="0.01" step="0.01" required value="${attr(r.amount ?? '')}"></div>
+      <div class="field"><label>Data</label><input name="transaction_date" type="date" required value="${attr(r.transaction_date || t)}"></div>
+      <div class="field full"><label>Investimento</label><select name="investment_id" required>${selectOptions(state.bootstrap.investments, r.investment_id, 'id', 'product', 'Selecione')}</select></div>
+      <div class="field full"><label>Conta de destino</label><select name="account_id" required>${selectOptions(state.bootstrap.accounts, '', 'id', 'name', 'Selecione a conta')}</select></div>
+      <div class="field full"><span class="field-help">O resgate só é registrado quando você confirmar. Ele entra como Resgate de investimento e passa a atualizar Conta, Investimentos, Dashboard e Calendário pelas regras já existentes.</span></div>
+    </div><div class="form-actions"><button type="button" class="secondary-btn" data-close>Cancelar</button><button class="primary-btn" type="submit">Registrar resgate</button></div></form>`;
+    if (inv) $('#modalEyebrow').textContent = `FLUXO DE CAIXA • ${inv.product}`;
+  }
+
+  if (kind === 'calendarMovement') {
+    const tx = payload;
+    const positive = tx.type === 'income' || tx.type === 'rescue';
+    setModal('Lançamento no calendário', 'DETALHES');
+    body.innerHTML = `<div class="modal-form"><div class="entity-card"><span class="badge ${positive ? 'paid' : ''}">${esc(txTypeLabel(tx.type))}</span><h3>${esc(tx.description)}</h3><p>${positive ? '+' : '−'} ${money(tx.amount)} • ${dateBR(tx.transaction_date)}</p></div><div class="form-actions"><button class="secondary-btn" data-close>Fechar</button><button class="secondary-btn" data-edit-tx="${tx.id}"><i data-lucide="pencil"></i>Editar</button><button class="danger-btn" data-delete-tx="${tx.id}">Excluir</button></div></div>`;
+  }
+
+  if (kind === 'calendarBill') {
+    const b = payload;
+    setModal('Conta no calendário', 'DETALHES');
+    body.innerHTML = `<div class="modal-form"><div class="entity-card"><span class="badge">${esc(b.status)}</span><h3>${esc(b.name)}</h3><p>${money(b.amount)} • vence ${dateBR(b.due_date)}${b.series_id ? ` • ${esc(b.recurrence)}` : ''}</p></div><div class="form-actions"><button class="secondary-btn" data-close>Fechar</button><button class="secondary-btn" data-edit-bill="${b.id}"><i data-lucide="pencil"></i>Editar</button><button class="primary-btn" data-toggle-bill="${b.id}">${b.status === 'Pago' ? 'Desmarcar pagamento' : 'Marcar como pago'}</button><button class="danger-btn" data-delete-bill="${b.id}">Excluir</button></div></div>`;
+  }
+
+  if (kind === 'calendarTx') {
+    const tx = payload;
+    setModal('Parcela / cartão', 'DETALHES');
+    body.innerHTML = `<div class="modal-form"><div class="entity-card"><span class="badge">${tx.installment_total ? `Parcela ${tx.installment_no}/${tx.installment_total}` : 'Cartão'}</span><h3>${esc(tx.description)}</h3><p>${money(tx.amount)} • fatura ${dateBR(tx.invoice_due_date)}</p></div><div class="form-actions"><button class="secondary-btn" data-close>Fechar</button><button class="secondary-btn" data-edit-tx="${tx.id}"><i data-lucide="pencil"></i>Editar</button><button class="danger-btn" data-delete-tx="${tx.id}">Excluir</button></div></div>`;
+  }
+
+  if (kind === 'calendarSubscription') {
+    const s = payload;
+    setModal('Assinatura', 'DETALHES');
+    body.innerHTML = `<div class="modal-form"><div class="entity-card" style="--entity:${attr(s.color || '#14b8a6')}"><span class="badge">${esc(s.status)}</span><h3>${esc(s.name)}</h3><p>${money(s.amount)} • ${esc(s.recurrence)} • próxima ${dateBR(s.next_charge)}</p></div><div class="form-actions"><button class="secondary-btn" data-close>Fechar</button><button class="secondary-btn" data-edit-subscription="${s.id}"><i data-lucide="pencil"></i>Editar</button><button class="danger-btn" data-delete-subscription="${s.id}">Excluir</button></div></div>`;
+  }
+
+  $('#modal').classList.add('open');
+  if (kind === 'movement') {
+    const selector = $('#movementCreateType');
+    const redraw = () => renderUnifiedMovementForm(selector?.value || 'expense');
+    $$('[data-movement-type]').forEach(btn => btn.addEventListener('click', () => {
+      const value = btn.dataset.movementType || 'expense';
+      if (selector) selector.value = value;
+      $$('[data-movement-type]').forEach(x => x.classList.toggle('active', x === btn));
+      redraw();
+    }));
+    redraw();
+    return;
+  }
+  bindModalForms();
+  iconRefresh();
+  if (kind === 'transaction') toggleTxFields();
+  if (kind === 'bill') toggleBillRecurrence();
+  if (kind === 'investment') toggleInvestmentRateFields();
+}
+
+function toggleTxFields() {
+  const type = $('#txType')?.value || $('#transactionForm input[name="type"]')?.value;
+  const editing = !!$('#transactionForm')?.dataset.id;
+  $$('.card-field').forEach(x => x.classList.toggle('hidden', type !== 'card'));
+  $$('.account-field').forEach(x => x.classList.toggle('hidden', type === 'card'));
+  $$('.transfer-destination-field').forEach(x => x.classList.toggle('hidden', type !== 'transfer'));
+  $$('.category-field').forEach(x => x.classList.toggle('hidden', type === 'transfer'));
+  $$('.investment-select-field').forEach(x => x.classList.toggle('hidden', !['investment', 'rescue'].includes(type) || editing));
+  const invId = $('#txInvestmentId')?.value || '';
+  const showNew = type === 'investment' && !editing && !invId;  $$('.new-investment-field').forEach(x => x.classList.toggle('hidden', !showNew));
+  if (type === 'rescue' && $('#txInvestmentId')) {
+    $('#txInvestmentId').querySelector('option[value=""]').textContent = 'Selecione o investimento';
+  }
+}
+
+function toggleBillRecurrence() {
+  const recurrence = $('#billRecurrence')?.value || 'Nenhuma';
+  $$('.recurrence-count-field').forEach(x => x.classList.toggle('hidden', recurrence === 'Nenhuma'));
+  const label = $('#billRecurrenceCountLabel');
+  const help = $('#billRecurrenceCountHelp');
+  const countInput = $('#billForm input[name="recurrence_count"]');
+  const meta = {
+    'Semanal':['Quantas semanas?','Ex.: 12 gera 12 vencimentos semanais.',12],
+    'Mensal':['Quantos meses?','Ex.: 12 gera 12 vencimentos mensais.',12],
+    'Bimestral':['Quantas ocorrências?','Cada ocorrência avança 2 meses.',6],
+    'Trimestral':['Quantas ocorrências?','Cada ocorrência avança 3 meses.',4],
+    'Semestral':['Quantas ocorrências?','Cada ocorrência avança 6 meses.',2],
+    'Anual':['Quantos anos?','Ex.: 5 gera 5 vencimentos anuais.',5],
+  };
+  const cfg = meta[recurrence] || ['Quantidade de ocorrências','',1];
+  if (label) label.textContent = cfg[0];
+  if (help) help.textContent = cfg[1];
+  if (countInput && !countInput.dataset.touched) countInput.value = String(cfg[2]);
+}
+
+function toggleInvestmentRateFields() {
+  const benchmark = $('#investmentBenchmark')?.value || 'CDI';
+  const isCdi = benchmark === 'CDI';
+  $$('.investment-cdi-field').forEach(x => x.classList.toggle('hidden', !isCdi));
+  $$('.investment-manual-rate-field').forEach(x => x.classList.toggle('hidden', isCdi));
+}
+
+
+function bindTransactionForm() {
+  const tx = $('#transactionForm');
+  if (!tx) return;
+  $('#txType')?.addEventListener('change', toggleTxFields);
+  $('#txInvestmentId')?.addEventListener('change', toggleTxFields);
+  tx.onsubmit = async e => {
+    e.preventDefault();
+    const id = tx.dataset.id;
+    try {
+      const returnPage = state.modalReturnPage || 'movements';
+      await api(id ? `/api/transactions/${id}` : '/api/transactions', { method: id ? 'PUT' : 'POST', body: JSON.stringify(formObject(tx)) });
+      closeOverlays(); await refreshBootstrap(); toast(id ? 'Movimentação atualizada.' : 'Movimentação salva.');
+      if (returnPage === 'calendar') { state.calendar?.refetchEvents(); await showPage('calendar'); }
+      else if (returnPage === 'cashflow') await showPage('cashflow');
+      else await showPage('movements');
+      state.calendar?.refetchEvents();
+    } catch (err) { toast(err.message); }
+  };
+}
+
+function bindBillForm() {
+  const billForm = $('#billForm');
+  if (!billForm) return;
+  const recurrenceInput = billForm.querySelector('input[name="recurrence_count"]');
+  recurrenceInput?.addEventListener('input', () => { recurrenceInput.dataset.touched = '1'; });
+  billForm.onsubmit = async e => {
+    e.preventDefault();
+    const id = billForm.dataset.id;
+    const d = formObject(billForm);
+    const scope = d.edit_scope || 'one';
+    delete d.edit_scope;
+    try {
+      const returnPage = state.modalReturnPage || 'movements';
+      await api(id ? `/api/bills/${id}?scope=${scope}` : '/api/bills', { method: id ? 'PUT' : 'POST', body: JSON.stringify(d) });
+      closeOverlays(); await refreshBootstrap(); toast(id ? 'Conta atualizada.' : 'Conta salva.');
+      if (returnPage === 'calendar') { state.calendar?.refetchEvents(); await showPage('calendar'); }
+      else if (returnPage === 'cashflow') await showPage('cashflow');
+      else await showPage('movements');
+      state.calendar?.refetchEvents();
+    } catch (err) { toast(err.message); }
+  };
+}
+
+function bindModalForms() {
+  bindTransactionForm();
+  bindBillForm();
+  $('#billRecurrence')?.addEventListener('change', toggleBillRecurrence);
+  $('#investmentBenchmark')?.addEventListener('change', toggleInvestmentRateFields);
+
+  const forms = [
+    ['accountForm', '/api/accounts', 'Conta salva.', 'accounts'],
+    ['cardForm', '/api/cards', 'Cartão salvo.', 'cards'],
+    ['subscriptionForm', '/api/subscriptions', 'Assinatura salva.', 'subscriptions'],
+    ['investmentForm', '/api/investments', 'Investimento salvo.', 'investments'],
+    ['goalForm', '/api/goals', 'Meta salva.', 'goals'],
+  ];
+  forms.forEach(([id, baseUrl, message, page]) => {
+    const form = $(`#${id}`);
+    if (!form) return;
+    form.onsubmit = async e => {
+      e.preventDefault();
+      const itemId = form.dataset.id;
+      try {
+        await api(itemId ? `${baseUrl}/${itemId}` : baseUrl, { method: itemId ? 'PUT' : 'POST', body: JSON.stringify(formObject(form)) });
+        closeOverlays(); await refreshBootstrap(); toast(itemId ? 'Alterações salvas.' : message); await showPage(page);
+      } catch (err) { toast(err.message); }
+    };
+  });
+
+  const cashflowRescueForm = $('#cashflowRescueForm');
+  if (cashflowRescueForm) {
+    cashflowRescueForm.onsubmit = async e => {
+      e.preventDefault();
+      const d = formObject(cashflowRescueForm);
+      const inv = state.bootstrap.investments.find(x => Number(x.id) === Number(d.investment_id));
+      d.type = 'rescue';
+      d.description = `Resgate ${inv?.product || 'investimento'}`;
+      d.category = 'Investimentos';
+      try {
+        await api('/api/transactions', {method:'POST', body:JSON.stringify(d)});
+        closeOverlays(); await refreshBootstrap(); toast('Resgate registrado.'); await loadCashflow(); state.calendar?.refetchEvents();
+      } catch (err) { toast(err.message); }
+    };
+  }
+}
+
+function initCalendar(refetch = false) {
+  if (!state.calendar) {
+    state.calendar = new FullCalendar.Calendar($('#financialCalendar'), {
+      initialView: 'dayGridMonth', locale: 'pt-br', height: 'auto', firstDay: 0,
+      headerToolbar: { left: 'prev,next today', center: 'title', right: window.innerWidth < 620 ? 'dayGridMonth,listWeek' : 'dayGridMonth,timeGridWeek,listWeek' },
+      buttonText: { today: 'Hoje', month: 'Mês', week: 'Semana', list: 'Lista' },
+      events: async (info, success, failure) => { try { success(await api(`/api/calendar?start=${info.startStr}&end=${info.endStr}`)); } catch (err) { failure(err); } }, dayMaxEvents: window.innerWidth < 620 ? 2 : 4,
+      eventClick: info => openCalendarEvent(info.event),
+    });
+    state.calendar.render();
+  } else if (refetch) state.calendar.refetchEvents();
+}
+
+
+function cashflowColor(kind) {
+  return ({
+    bill:'#f59e0b', bill_paid:'#22c55e', card:'#8b5cf6', subscription:'#14b8a6',
+    income:'#22c55e', expense:'#3b82f6', investment:'#6366f1', rescue:'#06b6d4', transfer:'#22d3ee'
+  })[kind] || '#3b82f6';
+}
+
+function initCashflowCalendar(data) {
+  if (!window.FullCalendar || !$('#cashflowCalendar')) return;
+  const host = $('#cashflowCalendar');
+  const balanceByDate = new Map((data.days || []).map(day => [day.date, Number(day.balance_after || 0)]));
+  const events = (data.events || []).map(e => ({
+    id:`cf-${e.source}-${e.source_id || ''}-${e.date}-${e.kind}`,
+    title:`${e.label} • ${money(e.amount)}`,
+    start:e.date,
+    color:cashflowColor(e.kind),
+    extendedProps:{...e, cashflowKind:e.kind}
+  }));
+
+  if (state.cashflowCalendar) {
+    state.cashflowCalendar.destroy();
+    state.cashflowCalendar = null;
+  }
+  state.cashflowCalendar = new FullCalendar.Calendar(host, {
+    initialView:'dayGridMonth', locale:'pt-br', height:'auto', firstDay:0,
+    initialDate:`${data.selected_month}-01`,
+    headerToolbar:{left:'',center:'title',right:window.innerWidth < 620 ? 'dayGridMonth,listWeek' : 'dayGridMonth,timeGridWeek,listWeek'},
+    buttonText:{month:'Mês',week:'Semana',list:'Lista'},
+    events,
+    dayMaxEvents:window.innerWidth < 620 ? 2 : 4,
+    eventClick:info => openCashflowEvent(info.event),
+    dayCellDidMount:arg => {
+      const ds = `${arg.date.getFullYear()}-${String(arg.date.getMonth()+1).padStart(2,'0')}-${String(arg.date.getDate()).padStart(2,'0')}`;
+      if (!balanceByDate.has(ds)) return;
+      const value = balanceByDate.get(ds);
+      const el = document.createElement('div');
+      el.className = `cashflow-day-balance ${value > 0.004 ? 'positive' : value < -0.004 ? 'negative' : 'zero'}`;
+      el.textContent = `Saldo ${money(value)}`;
+      el.title = `Saldo final projetado: ${money(value)}`;
+      arg.el.querySelector('.fc-daygrid-day-frame')?.appendChild(el);
+    }
+  });
+  state.cashflowCalendar.render();
+}
+
+async function loadCashflow() {
+  if (!state.cashflowMonth) state.cashflowMonth = currentMonthKey();
+  const data = await api(`/api/cashflow?month=${encodeURIComponent(state.cashflowMonth)}`);
+  state.cashflowData = data;
+  state.cashflowMonth = data.selected_month;
+
+  $('#cashflowMonthPicker').value = data.selected_month;
+  $('#cashflowMonthText').textContent = data.month_label;
+  $('#cashflowCurrentMonth').classList.toggle('hidden', data.selected_month === currentMonthKey());
+  if (document.activeElement !== $('#cashflowReserve')) {
+    $('#cashflowReserve').value = Number(data.reserve || 0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  }
+
+  $('#cfStartingCash').textContent = money(data.month_start_balance);
+  $('#cfInflow').textContent = money(data.monthly_inflow);
+  $('#cfOutflow').textContent = money(data.monthly_outflow);
+  $('#cfEndCash').textContent = money(data.projected_end_cash);
+  $('#cfRescue').textContent = money(data.recommended_rescue);
+  $('#cfKeepInvested').textContent = money(data.can_keep_invested);
+
+  const end = Number(data.projected_end_cash || 0);
+  let insight = `Se nada mudar, você termina ${data.month_label} com ${money(end)} em caixa.`;
+  if (Number(data.lowest_balance || 0) < 0) {
+    insight += ` O menor saldo projetado é ${money(data.lowest_balance)} em ${dateBR(data.lowest_balance_date)}.`;
+  } else if (data.lowest_balance_date) {
+    insight += ` Menor saldo do mês: ${money(data.lowest_balance)} em ${dateBR(data.lowest_balance_date)}.`;
+  }
+  $('#cashflowInsight').innerHTML = `<div><i data-lucide="calendar-range"></i><div><small>Saldo dia a dia</small><strong>${esc(insight)}</strong></div></div>`;
+
+  const rescueRows = [];
+  (data.days || []).forEach(day => (day.rescue_sources || []).forEach(source => rescueRows.push({day,source})));
+  $('#cashflowRescueList').innerHTML = rescueRows.length ? rescueRows.map(({day,source}) => `
+    <div class="list-row cashflow-plan-row">
+      <div class="row-main"><div class="row-icon"><i data-lucide="arrow-down-to-line"></i></div><div><strong>${dateBR(day.date)} • ${esc(source.product)}</strong><small>${esc(source.institution || 'Instituição não informada')} • sugestão para manter a reserva</small></div></div>
+      <div class="money negative">${money(source.amount)}</div>
+      <div class="mini-actions"><button class="success" data-cashflow-rescue="1" data-date="${attr(day.date)}" data-amount="${attr(source.amount)}" data-investment="${attr(source.investment_id)}" title="Registrar resgate"><i data-lucide="check"></i></button></div>
+    </div>`).join('') : '<div class="empty-state">Nenhum resgate sugerido para manter a reserva escolhida.</div>';
+
+  $('#cashflowLiquidityList').innerHTML = (data.investments || []).length ? data.investments.map(i => `
+    <div class="list-row cashflow-liquidity-row">
+      <div class="row-main"><div class="row-icon"><i data-lucide="trending-up"></i></div><div><strong>${esc(i.product)}</strong><small>${esc(i.institution || 'Instituição não informada')} • ${esc(i.liquidity)}</small></div></div>
+      <span class="badge ${i.is_liquid ? 'paid' : 'paused'}">${i.is_liquid ? 'Disponível' : 'Não usar'}</span>
+      <div class="money">${money(i.value)}</div><div></div>
+    </div>`).join('') : '<div class="empty-state">Nenhum investimento cadastrado.</div>';
+
+  initCashflowCalendar(data);
+  iconRefresh();
+}
+
+async function openCashflowEvent(event) {
+  const p = event.extendedProps || {};
+  try {
+    state.modalReturnPage = 'cashflow';
+    if (p.source === 'bill') {
+      const list = await api('/api/bills'); state.data.bills = list; const item = list.find(x => Number(x.id) === Number(p.source_id)); if (item) openModal('calendarBill', item); return;
+    }
+    if (p.source === 'transaction') {
+      const list = await api('/api/transactions'); state.data.transactions = list; const item = list.find(x => Number(x.id) === Number(p.source_id)); if (item) openModal('calendarMovement', item); return;
+    }
+    if (p.source === 'subscription') {
+      const data = await api('/api/subscriptions'); state.data.subscriptions = data.items; const item = data.items.find(x => Number(x.id) === Number(p.source_id)); if (item) openModal('calendarSubscription', item); return;
+    }
+    if (p.source === 'card_invoice') { await showPage('cards'); }
+  } catch (err) { toast(err.message); }
+}
+
+async function openCalendarEvent(event) {
+  const kind = event.extendedProps.kind;
+  const id = Number(event.extendedProps.item_id);
+  state.modalReturnPage = 'calendar';
+  try {
+    if (kind === 'bill') {
+      const list = await api('/api/bills'); state.data.bills = list; const item = list.find(x => x.id === id); if (item) openModal('calendarBill', item);
+    }
+    if (kind === 'transaction') {
+      const list = await api('/api/transactions'); state.data.transactions = list; const item = list.find(x => x.id === id); if (item) openModal('calendarTx', item);
+    }
+    if (kind === 'cash_transaction') {
+      const list = await api('/api/transactions'); state.data.transactions = list; const item = list.find(x => x.id === id); if (item) openModal('calendarMovement', item);
+    }
+    if (kind === 'subscription') {
+      const data = await api('/api/subscriptions'); state.data.subscriptions = data.items; const item = data.items.find(x => x.id === id); if (item) openModal('calendarSubscription', item);
+    }
+  } catch (err) { toast(err.message); }
+}
+
+function byId(list, id) { return list.find(x => Number(x.id) === Number(id)); }
+
+async function ensureData(kind) {
+  if (kind === 'transactions' && !state.data.transactions.length) await loadTransactions();
+  if (kind === 'accounts' && !state.data.accounts.length) await loadAccounts();
+  if (kind === 'cards' && !state.data.cards.length) await loadCards();
+  if (kind === 'bills' && !state.data.bills.length) await loadBills();
+  if (kind === 'subscriptions' && !state.data.subscriptions.length) await loadSubscriptions();
+  if (kind === 'investments' && !state.data.investments.length) await loadInvestments();
+  if (kind === 'goals' && !state.data.goals.length) await loadGoals();
+}
+
+async function deleteTransaction(id) {
+  await ensureData('transactions');
+  const tx = byId(state.data.transactions, id);
+  if (!tx) return;
+  let scope = 'one';
+  if (tx.installment_total > 1) {
+    const choice = prompt('Excluir parcelamento:\n1 = somente esta parcela\n2 = esta e as próximas\n3 = compra inteira', '1');
+    if (!choice) return;
+    scope = choice === '2' ? 'future' : choice === '3' ? 'all' : 'one';
+  } else if (!confirm('Excluir este lançamento?')) return;
+  const returnPage = activePageId();
+  await api(`/api/transactions/${id}?scope=${scope}`, { method: 'DELETE' });
+  closeOverlays(); toast('Lançamento excluído.'); await refreshBootstrap();
+  if (returnPage === 'movements') await loadMovements(); else if (returnPage === 'cashflow') await loadCashflow(); else await loadTransactions();
+  state.calendar?.refetchEvents();
+  state.cashflowCalendar && returnPage !== 'cashflow' && await loadCashflow();
+}
+
+async function toggleBill(id) {
+  await ensureData('bills');
+  const bill = byId(state.data.bills, id);
+  if (!bill) return;
+  const status = bill.status === 'Pago' ? 'A pagar' : 'Pago';
+  const returnPage = activePageId();
+  await api(`/api/bills/${id}`, { method: 'PUT', body: JSON.stringify({ status }) });
+  closeOverlays(); toast(status === 'Pago' ? 'Conta marcada como paga.' : 'Pagamento desmarcado.'); await refreshBootstrap();
+  if (returnPage === 'movements') await loadMovements(); else if (returnPage === 'cashflow') await loadCashflow(); else await loadBills();
+  state.calendar?.refetchEvents();
+  state.cashflowCalendar && returnPage !== 'cashflow' && await loadCashflow();
+}
+
+async function deleteBill(id) {
+  await ensureData('bills');
+  const bill = byId(state.data.bills, id);
+  if (!bill) return;
+  let scope = 'one';
+  if (bill.series_id) {
+    const choice = prompt('Excluir conta recorrente:\n1 = somente esta ocorrência\n2 = esta e as próximas\n3 = toda a série', '1');
+    if (!choice) return;
+    scope = choice === '2' ? 'future' : choice === '3' ? 'all' : 'one';
+  } else if (!confirm('Excluir esta conta a pagar?')) return;
+  const returnPage = activePageId();
+  await api(`/api/bills/${id}?scope=${scope}`, { method: 'DELETE' });
+  closeOverlays(); toast('Conta excluída.'); await refreshBootstrap();
+  if (returnPage === 'movements') await loadMovements(); else if (returnPage === 'cashflow') await loadCashflow(); else await loadBills();
+  state.calendar?.refetchEvents();
+  state.cashflowCalendar && returnPage !== 'cashflow' && await loadCashflow();
+}
+
+async function toggleSubscription(id) {
+  await ensureData('subscriptions');
+  const s = byId(state.data.subscriptions, id);
+  if (!s) return;
+  const status = s.status === 'Ativa' ? 'Pausada' : 'Ativa';
+  await api(`/api/subscriptions/${id}`, { method: 'PUT', body: JSON.stringify({ status }) });
+  toast(status === 'Ativa' ? 'Assinatura ativada.' : 'Assinatura pausada.'); await loadSubscriptions(); state.calendar?.refetchEvents();
+}
+
+let searchTimer;
+document.addEventListener('input', e => {
+  if (e.target.id === 'txSearch') { clearTimeout(searchTimer); searchTimer = setTimeout(loadTransactions, 240); }
+  if (e.target.id === 'movementSearch') { clearTimeout(searchTimer); searchTimer = setTimeout(loadMovements, 240); }
+  if (e.target.id === 'subscriptionSearch') { clearTimeout(searchTimer); searchTimer = setTimeout(loadSubscriptions, 240); }
+});
+
+$('#movementFilter')?.addEventListener('change', loadMovements);
+
+document.addEventListener('click', async e => {
+  try {
+    const page = e.target.closest('[data-page]');
+    if (page) { await showPage(page.dataset.page); return; }
+
+    const opener = e.target.closest('[data-open]');
+    if (opener) {
+      state.modalReturnPage = ['movements','calendar'].includes(activePageId()) ? activePageId() : 'movements';
+      openModal(opener.dataset.open);
+      return;
+    }
+
+    if (e.target.closest('[data-close]')) { closeOverlays(); return; }
+    if (e.target.closest('#mobileMore')) { $('#moreSheet').classList.add('open'); return; }
+
+    const editTx = e.target.closest('[data-edit-tx]');
+    if (editTx) {
+      const sourcePage = activePageId();
+      await ensureData('transactions'); const item = byId(state.data.transactions, editTx.dataset.editTx); closeOverlays();
+      state.modalReturnPage = ['movements','calendar'].includes(sourcePage) ? sourcePage : 'movements';
+      if (item) openModal('transaction', item); return;
+    }
+    const delTx = e.target.closest('[data-delete-tx]');
+    if (delTx) { await deleteTransaction(delTx.dataset.deleteTx); return; }
+
+    const editA = e.target.closest('[data-edit-account]');
+    if (editA) { await ensureData('accounts'); const item = byId(state.data.accounts, editA.dataset.editAccount); if (item) openModal('account', item); return; }
+    const delA = e.target.closest('[data-delete-account]');
+    if (delA && confirm('Excluir esta conta?')) { await api(`/api/accounts/${delA.dataset.deleteAccount}`, { method: 'DELETE' }); await refreshBootstrap(); toast('Conta excluída.'); await loadAccounts(); return; }
+
+    const editC = e.target.closest('[data-edit-card]');
+    if (editC) { await ensureData('cards'); const item = byId(state.data.cards, editC.dataset.editCard); if (item) openModal('card', item); return; }
+    const delC = e.target.closest('[data-delete-card]');
+    if (delC && confirm('Excluir este cartão? Os lançamentos continuam registrados, mas sem vínculo.')) { await api(`/api/cards/${delC.dataset.deleteCard}`, { method: 'DELETE' }); await refreshBootstrap(); toast('Cartão excluído.'); await loadCards(); return; }
+
+    const editB = e.target.closest('[data-edit-bill]');
+    if (editB) {
+      const sourcePage = activePageId();
+      await ensureData('bills'); const item = byId(state.data.bills, editB.dataset.editBill); closeOverlays();
+      state.modalReturnPage = ['movements','calendar'].includes(sourcePage) ? sourcePage : 'movements';
+      if (item) openModal('bill', item); return;
+    }
+    const togB = e.target.closest('[data-toggle-bill]');
+    if (togB) { await toggleBill(togB.dataset.toggleBill); return; }
+    const delB = e.target.closest('[data-delete-bill]');
+    if (delB) { await deleteBill(delB.dataset.deleteBill); return; }
+
+    const editS = e.target.closest('[data-edit-subscription]');
+    if (editS) { await ensureData('subscriptions'); const item = byId(state.data.subscriptions, editS.dataset.editSubscription); closeOverlays(); if (item) openModal('subscription', item); return; }
+    const togS = e.target.closest('[data-toggle-subscription]');
+    if (togS) { await toggleSubscription(togS.dataset.toggleSubscription); return; }
+    const delS = e.target.closest('[data-delete-subscription]');
+    if (delS && confirm('Excluir esta assinatura?')) { await api(`/api/subscriptions/${delS.dataset.deleteSubscription}`, { method: 'DELETE' }); closeOverlays(); toast('Assinatura excluída.'); await loadSubscriptions(); state.calendar?.refetchEvents(); return; }
+
+    const editI = e.target.closest('[data-edit-investment]');
+    if (editI) { await ensureData('investments'); const item = byId(state.data.investments, editI.dataset.editInvestment); if (item) openModal('investment', item); return; }    const delI = e.target.closest('[data-delete-investment]');
+    if (delI && confirm('Excluir este investimento da carteira?')) { await api(`/api/investments/${delI.dataset.deleteInvestment}`, { method: 'DELETE' }); toast('Investimento excluído.'); await refreshBootstrap(); await loadInvestments(); return; }
+
+    const editG = e.target.closest('[data-edit-goal]');
+    if (editG) { await ensureData('goals'); const item = byId(state.data.goals, editG.dataset.editGoal); if (item) openModal('goal', item); return; }
+    const delG = e.target.closest('[data-delete-goal]');
+    if (delG && confirm('Excluir esta meta?')) { await api(`/api/goals/${delG.dataset.deleteGoal}`, { method: 'DELETE' }); toast('Meta excluída.'); await loadGoals(); return; }
+
+    if (e.target.closest('#refreshBtn')) { await refreshBootstrap(); await showPage($('.page.active').id); toast('Dados atualizados.'); }
+  } catch (err) { toast(err.message); }
+});
+
+$('#dashboardPrevMonth')?.addEventListener('click', async () => {
+  state.dashboardMonth = shiftMonthKey(state.dashboardMonth, -1);
+  await loadDashboard();
+});
+$('#dashboardNextMonth')?.addEventListener('click', async () => {
+  state.dashboardMonth = shiftMonthKey(state.dashboardMonth, 1);
+  await loadDashboard();
+});
+$('#dashboardCurrentMonth')?.addEventListener('click', async () => {
+  state.dashboardMonth = currentMonthKey();
+  await loadDashboard();
+});
+$('#dashboardMonthPicker')?.addEventListener('change', async e => {
+  if (!e.target.value) return;
+  state.dashboardMonth = e.target.value;
+  await loadDashboard();
+});
+
+// Extensão aditiva: navegação mensal da visão unificada.
+$('#movementPrevMonth')?.addEventListener('click', async () => {
+  state.movementMonth = shiftMonthKey(state.movementMonth, -1);
+  await loadMovements();
+});
+$('#movementNextMonth')?.addEventListener('click', async () => {
+  state.movementMonth = shiftMonthKey(state.movementMonth, 1);
+  await loadMovements();
+});
+$('#movementCurrentMonth')?.addEventListener('click', async () => {
+  state.movementMonth = currentMonthKey();
+  await loadMovements();
+});
+$('#movementMonthPicker')?.addEventListener('change', async e => {
+  if (!e.target.value) return;
+  state.movementMonth = e.target.value;
+  await loadMovements();
+});
+
+$('#restoreFile').addEventListener('change', async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (!confirm('Restaurar este backup? O banco atual será substituído.')) return;
+  const fd = new FormData(); fd.append('file', file);
+  try { await api('/api/restore', { method: 'POST', body: fd }); toast('Backup restaurado. Recarregando...'); setTimeout(() => location.reload(), 700); }
+  catch (err) { toast(err.message); }
+});
+
+
+// build v4: remove caches de versões antigas para evitar menu duplicado após atualização.
+if ('caches' in window) {
+  caches.keys().then(keys => Promise.all(keys.filter(k => k.startsWith('meu-financeiro-') && k !== 'meu-financeiro-cloud-v4.0.0').map(k => caches.delete(k)))).catch(() => {});
+}
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); state.deferredPrompt = e; $('#installPwaBtn').classList.remove('hidden'); });
+$('#installPwaBtn').addEventListener('click', async () => { if (!state.deferredPrompt) return; state.deferredPrompt.prompt(); await state.deferredPrompt.userChoice; state.deferredPrompt = null; $('#installPwaBtn').classList.add('hidden'); });
+
+
+async function cloudExportBackup() {
+  const tables=['accounts','cards','categories','transactions','bills','investments','subscriptions','goals','assets','settings'];
+  const backup={version:1,exported_at:new Date().toISOString()};
+  for(const t of tables) backup[t]=await sbRows(t);
+  const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`meu-financeiro-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+$('#cloudBackupBtn')?.addEventListener('click', async()=>{try{await cloudExportBackup();toast('Backup gerado.')}catch(e){toast(e.message)}});
+$('#cloudLogoutBtn')?.addEventListener('click', async()=>{await sb.auth.signOut();location.reload()});
+
+(async function init() {
+  try { await refreshBootstrap(); await loadDashboard(); iconRefresh(); }
+  catch (err) { toast(err.message); }
+})();
+</script></body>
+</html>

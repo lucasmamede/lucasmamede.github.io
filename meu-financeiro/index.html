@@ -620,8 +620,11 @@ async function loadTransactions() {
   const q = $('#txSearch')?.value?.trim() || '';
   const data = await api(`/api/transactions${q ? `?q=${encodeURIComponent(q)}` : ''}`);
   state.data.transactions = data;
-  $('#transactionList').innerHTML = data.length ? data.map(tx => txRow(tx)).join('') : '<div class="empty-state">Nenhum lançamento encontrado.</div>';
-  iconRefresh();
+  const target = $('#transactionList');
+  if (target) {
+    target.innerHTML = data.length ? data.map(tx => txRow(tx)).join('') : '<div class="empty-state">Nenhum lançamento encontrado.</div>';
+    iconRefresh();
+  }
 }
 
 
@@ -733,7 +736,9 @@ async function loadCards() {
 async function loadBills() {
   const data = await api('/api/bills');
   state.data.bills = data;
-  $('#billList').innerHTML = data.length ? data.map(b => {
+  const target = $('#billList');
+  if (!target) return;
+  target.innerHTML = data.length ? data.map(b => {
     const overdue = b.status !== 'Pago' && b.due_date < todayISO();
     const series = b.series_id ? ` • ${esc(b.recurrence)} #${Number(b.series_index) + 1}` : b.recurrence && b.recurrence !== 'Nenhuma' ? ` • ${esc(b.recurrence)}` : '';
     return `<div class="list-row">
@@ -1242,7 +1247,7 @@ function bindTransactionForm() {
       await api(id ? `/api/transactions/${id}` : '/api/transactions', { method: id ? 'PUT' : 'POST', body: JSON.stringify(formObject(tx)) });
       closeOverlays(); await refreshBootstrap(); toast(id ? 'Movimentação atualizada.' : 'Movimentação salva.');
       if (returnPage === 'calendar') { state.calendar?.refetchEvents(); await showPage('calendar'); }
-      else if (returnPage === 'cashflow') await showPage('cashflow');
+      else if (returnPage === 'cashflow') await showPage('movements');
       else await showPage('movements');
       state.calendar?.refetchEvents();
     } catch (err) { toast(err.message); }
@@ -1265,7 +1270,7 @@ function bindBillForm() {
       await api(id ? `/api/bills/${id}?scope=${scope}` : '/api/bills', { method: id ? 'PUT' : 'POST', body: JSON.stringify(d) });
       closeOverlays(); await refreshBootstrap(); toast(id ? 'Conta atualizada.' : 'Conta salva.');
       if (returnPage === 'calendar') { state.calendar?.refetchEvents(); await showPage('calendar'); }
-      else if (returnPage === 'cashflow') await showPage('cashflow');
+      else if (returnPage === 'cashflow') await showPage('movements');
       else await showPage('movements');
       state.calendar?.refetchEvents();
     } catch (err) { toast(err.message); }
@@ -1375,6 +1380,9 @@ function initCashflowCalendar(data) {
 }
 
 async function loadCashflow() {
+  // A página Fluxo de Caixa foi removida da produção. Mantemos a função
+  // apenas por compatibilidade com chamadas antigas, sem tocar no DOM.
+  if (!document.getElementById('cashflow')) return;
   if (!state.cashflowMonth) state.cashflowMonth = currentMonthKey();
   const data = await api(`/api/cashflow?month=${encodeURIComponent(state.cashflowMonth)}`);
   state.cashflowData = data;

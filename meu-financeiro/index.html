@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0b1020">
   <title>Meu Financeiro</title>
-  
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -93,8 +97,8 @@
 @media(max-width:900px){.receipt-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.receipt-main-grid{grid-template-columns:1fr}.receipt-meta-grid{grid-template-columns:1fr 1fr}.receipt-meta-grid .field:first-child{grid-column:1/-1}}
 @media(max-width:620px){.receipt-summary-grid{grid-template-columns:1fr 1fr}.receipt-summary-grid .small-metric{min-height:112px}.receipt-items-head{display:none}.receipt-item-row{grid-template-columns:minmax(0,1fr) 74px 105px 40px}.receipt-meta-grid{grid-template-columns:1fr}.receipt-meta-grid .field:first-child{grid-column:auto}.receipt-history-row{grid-template-columns:minmax(0,1fr) auto}.receipt-history-row .receipt-delete-btn{grid-column:2}.receipt-photo-btn{width:100%;justify-content:center}}
 
-.receipt-qr-btn{align-self:flex-start}.receipt-qr-scanner{display:flex;flex-direction:column;gap:10px}.receipt-qr-reader{width:100%;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:#020713;min-height:260px}.receipt-qr-reader video{width:100%!important;max-height:520px;object-fit:cover;border-radius:14px}.receipt-qr-reader #qr-shaded-region{border-color:rgba(124,92,255,.7)!important}.receipt-qr-reader img{max-width:56px}.receipt-qr-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#9db2d2;font-size:11px}.receipt-qr-action-buttons{display:flex;gap:8px;flex:0 0 auto}.receipt-qr-actions .secondary-btn{flex:0 0 auto}.receipt-qr-scanner .text-btn{align-self:flex-start}.receipt-qr-status-ok{color:#4ade80!important}.receipt-qr-status-warn{color:#fbbf24!important}
-@media(max-width:620px){.receipt-qr-btn{width:100%;justify-content:center}.receipt-qr-actions{align-items:flex-start;flex-direction:column}.receipt-qr-action-buttons{width:100%;display:grid;grid-template-columns:1fr 1fr}.receipt-qr-actions .secondary-btn{width:100%}.receipt-qr-reader{min-height:300px}}
+.receipt-qr-btn{align-self:flex-start}.receipt-qr-scanner{display:flex;flex-direction:column;gap:10px}.receipt-camera-toolbar{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:end}.receipt-camera-toolbar label{display:flex;flex-direction:column;gap:6px;color:#9db2d2;font-size:10px;font-weight:700}.receipt-camera-toolbar select{min-height:42px;border:1px solid var(--line);border-radius:12px;background:#111a2c;color:#fff;padding:8px 10px;min-width:0}.receipt-qr-reader{width:100%;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:#020713;min-height:260px}.receipt-qr-reader video{width:100%!important;max-height:520px;object-fit:cover;border-radius:14px}.receipt-qr-reader #qr-shaded-region{border-color:rgba(124,92,255,.7)!important}.receipt-qr-reader img{max-width:56px}.receipt-qr-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#9db2d2;font-size:11px}.receipt-qr-action-buttons{display:flex;gap:8px;flex:0 0 auto}.receipt-qr-actions .secondary-btn{flex:0 0 auto}.receipt-camera-info{font-size:9px;color:#6f819d;line-height:1.45}.receipt-qr-scanner .text-btn{align-self:flex-start}.receipt-qr-status-ok{color:#4ade80!important}.receipt-qr-status-warn{color:#fbbf24!important}
+@media(max-width:620px){.receipt-qr-btn{width:100%;justify-content:center}.receipt-camera-toolbar{grid-template-columns:1fr 1fr}.receipt-camera-toolbar label{grid-column:1/-1}.receipt-qr-actions{align-items:flex-start;flex-direction:column}.receipt-qr-action-buttons{width:100%;display:grid;grid-template-columns:1fr 1fr}.receipt-qr-actions .secondary-btn{width:100%}.receipt-qr-reader{min-height:300px}}
 </style></head>
 <body>
 <div id="cloudAuthGate" class="cloud-auth-gate">
@@ -276,6 +280,11 @@
           </button>
 
           <div id="receiptQrScanner" class="receipt-qr-scanner hidden">
+            <div class="receipt-camera-toolbar">
+              <label><span>Câmera</span><select id="receiptCameraSelect"></select></label>
+              <button class="secondary-btn" id="receiptNextCameraBtn" type="button"><i data-lucide="switch-camera"></i>Trocar</button>
+              <button class="secondary-btn hidden" id="receiptTorchQrBtn" type="button"><i data-lucide="flashlight"></i>Lanterna</button>
+            </div>
             <div id="receiptQrReader" class="receipt-qr-reader"></div>
             <div class="receipt-qr-actions">
               <span id="receiptQrStatus">Aponte para o QR Code do cupom.</span>
@@ -284,6 +293,7 @@
                 <button class="secondary-btn" id="receiptStopQrBtn" type="button">Parar câmera</button>
               </div>
             </div>
+            <div id="receiptCameraInfo" class="receipt-camera-info"></div>
             <a id="receiptQrOpenLink" class="text-btn hidden" target="_blank" rel="noopener">Abrir consulta oficial da NFC-e</a>
           </div>
 
@@ -430,9 +440,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
 let cloudStarted=false;
 function cloudSetMessage(id,msg,ok=false){const el=document.getElementById(id);if(el){el.textContent=msg||'';el.classList.toggle('ok',!!ok)}}
@@ -511,10 +518,17 @@ async function api(url,opts={}){await window.cloudReady;const u=new URL(url,loca
 if(p==='/api/restore'&&m==='POST'){
   const file=opts.body instanceof FormData?opts.body.get('file'):null;
   if(!file)throw new Error('Selecione um backup JSON.');
-  const backup=JSON.parse(await file.text());
-  const tables=['transactions','bills','subscriptions','goals','investments','cards','accounts','assets','settings','categories'];
-  for(const table of tables){const del=await sb.from(table).delete().eq('user_id',uid);if(del.error)throw del.error;const rows=(backup[table]||[]).map(x=>({...x,user_id:uid}));if(rows.length){const ins=await sb.from(table).insert(rows);if(ins.error)throw ins.error}}
-  return {ok:true};
+  let backup;
+  try{backup=JSON.parse(await file.text())}catch(_){throw new Error('Backup inválido: o arquivo não contém um JSON válido.')}
+  if(!backup||typeof backup!=='object'||Array.isArray(backup))throw new Error('Backup inválido.');
+  const required=['accounts','cards','categories','transactions','bills','investments','subscriptions','goals','assets','settings'];
+  const missing=required.filter(k=>!Array.isArray(backup[k]));
+  if(missing.length)throw new Error('Backup incompleto: faltam '+missing.join(', ')+'.');
+  if(backup.receipts!==undefined&&!Array.isArray(backup.receipts))throw new Error('Backup inválido: receipts.');
+  if(backup.receipt_items!==undefined&&!Array.isArray(backup.receipt_items))throw new Error('Backup inválido: receipt_items.');
+  const {data,error}=await sb.rpc('restore_financial_backup_v2',{p_backup:backup});
+  if(error)throw error;
+  return data||{ok:true};
 }
 if(p==='/api/bootstrap'){const [accounts,cards,categories,investments]=await Promise.all([sbRows('accounts','name'),sbRows('cards','name'),sbRows('categories','name'),sbRows('investments','product')]);return{accounts,cards,categories,investments:investments.filter(x=>x.status!=='Encerrado').map(x=>({id:x.id,product:x.product,institution:x.institution,type:x.type,current_value:x.current_value}))}}
 if(p==='/api/dashboard')return cloudDashboard(u.searchParams.get('month'));
@@ -527,7 +541,7 @@ if(p==='/api/bills'&&m==='GET')return billsEnriched();if(p==='/api/bills'&&m==='
 z=p.match(/^\/api\/bills\/(\d+)$/);if(z){const id=Number(z[1]),all=await sbRows('bills'),old=all.find(x=>x.id===id);if(!old)throw new Error('Conta não encontrada.');const scope=u.searchParams.get('scope')||'one';let targets=[old];if(old.series_id&&scope==='future')targets=all.filter(x=>x.series_id===old.series_id&&n(x.series_index)>=n(old.series_index));if(old.series_id&&scope==='all')targets=all.filter(x=>x.series_id===old.series_id);if(m==='DELETE'){const r=await sb.from('bills').delete().in('id',targets.map(x=>x.id));if(r.error)throw r.error;return{ok:true,deleted:targets.length}}if(Object.keys(body).every(k=>k==='status')){const r=await sb.from('bills').update({status:body.status,paid_at:body.status==='Pago'?new Date().toISOString():null}).eq('id',id);if(r.error)throw r.error;return{ok:true}}const baseDue=body.due_date||old.due_date,rec=body.recurrence||old.recurrence;for(const x of targets){const rel=n(x.series_index)-n(old.series_index),patch={name:body.name??x.name,amount:n(body.amount)||n(x.amount),due_date:targets.length>1?addRecurrenceISO(baseDue,rec,rel):baseDue,category:body.category??x.category,recurrence:rec,account_id:emptyId(body.account_id),status:targets.length===1?(body.status||x.status):x.status,notes:body.notes??x.notes};patch.paid_at=patch.status==='Pago'?new Date().toISOString():null;const r=await sb.from('bills').update(patch).eq('id',x.id).select('*').single();if(r.error)throw r.error}if(!old.series_id&&rec!=='Nenhuma'&&n(body.recurrence_count)>1){const sid=crypto.randomUUID();await sb.from('bills').update({series_id:sid,series_index:0}).eq('id',id);const fresh=(await sbRows('bills')).find(x=>x.id===id),rows=[];for(let i=1;i<n(body.recurrence_count);i++)rows.push({...fresh,id:undefined,user_id:uid,due_date:addRecurrenceISO(baseDue,rec,i),status:'A pagar',paid_at:null,series_id:sid,series_index:i,created_at:undefined});const r=await sb.from('bills').insert(rows.map(({id,created_at,...x})=>x));if(r.error)throw r.error}return{ok:true}}
 if(p==='/api/investments'&&m==='GET'){const [items,settings]=await Promise.all([sbRows('investments'),sbRows('settings')]);const cdi=n(settings.find(x=>x.key==='cdi_annual_pct')?.value),ref=settings.find(x=>x.key==='cdi_reference_date')?.value||'';for(const x of items){x.calculated_current_value=n(x.current_value);x.capital_as_of_today=n(x.invested_value);x.effective_annual_rate=String(x.benchmark||'').toUpperCase()==='CDI'?cdi*(n(x.benchmark_percent)||100)/100:n(x.expected_annual_rate||x.profitability)}const active=items.filter(x=>x.status!=='Encerrado'),current=active.reduce((a,x)=>a+n(x.calculated_current_value),0),principal=active.reduce((a,x)=>a+n(x.invested_value),0),monthly=active.reduce((a,x)=>a+n(x.monthly_contribution),0);let w=0,b=0;for(const x of active){w+=n(x.current_value)*n(x.effective_annual_rate);b+=n(x.current_value)}const rate=b?w/b:0,mr=Math.pow(1+rate/100,1/12)-1;const alloc=(key)=>{const o={};for(const x of active)o[x[key]||'Não informada']=(o[x[key]||'Não informada']||0)+n(x.current_value);return Object.entries(o).sort((a,b)=>b[1]-a[1]).map(([label,value])=>({label,value,percent:current?value/current*100:0}))};return{items,summary:{current,principal,result:current-principal,return_pct:principal?(current-principal)/principal*100:0,active_count:active.length,monthly_contribution:monthly,weighted_annual_rate:rate,estimated_monthly_yield:current*mr,cdi_annual_rate:cdi,cdi_reference_date:ref},allocation_type:alloc('type'),allocation_institution:alloc('institution')}}if(p==='/api/investments'&&m==='POST'){const invested=n(body.invested_value),payload={...body,user_id:uid,invested_value:invested,current_value:body.current_value===''||body.current_value==null?invested:n(body.current_value),quantity:body.quantity===''||body.quantity==null?null:n(body.quantity),average_price:body.average_price===''||body.average_price==null?null:n(body.average_price),profitability:body.profitability===''||body.profitability==null?null:n(body.profitability),expected_annual_rate:body.expected_annual_rate===''||body.expected_annual_rate==null?null:n(body.expected_annual_rate),monthly_contribution:body.monthly_contribution===''||body.monthly_contribution==null?0:n(body.monthly_contribution),benchmark_percent:body.benchmark_percent===''||body.benchmark_percent==null?null:n(body.benchmark_percent),application_date:body.application_date||isoDate(new Date()),maturity_date:body.maturity_date||null,updated_at:new Date().toISOString()};const r=await sb.from('investments').insert(payload).select('id').single();if(r.error)throw r.error;return r.data}z=p.match(/^\/api\/investments\/(\d+)$/);if(z){if(m==='DELETE'){await sb.from('transactions').update({investment_id:null}).eq('investment_id',z[1]);const r=await sb.from('investments').delete().eq('id',z[1]);if(r.error)throw r.error;return{ok:true}}const payload={...body,quantity:body.quantity===''||body.quantity==null?null:n(body.quantity),average_price:body.average_price===''||body.average_price==null?null:n(body.average_price),profitability:body.profitability===''||body.profitability==null?null:n(body.profitability),expected_annual_rate:body.expected_annual_rate===''||body.expected_annual_rate==null?null:n(body.expected_annual_rate),monthly_contribution:body.monthly_contribution===''||body.monthly_contribution==null?0:n(body.monthly_contribution),benchmark_percent:body.benchmark_percent===''||body.benchmark_percent==null?null:n(body.benchmark_percent),maturity_date:body.maturity_date||null,updated_at:new Date().toISOString()};if(body.invested_value!==undefined)payload.invested_value=n(body.invested_value);if(body.current_value!==undefined)payload.current_value=body.current_value===''||body.current_value==null?n(body.invested_value):n(body.current_value);const r=await sb.from('investments').update(payload).eq('id',z[1]);if(r.error)throw r.error;return{ok:true}}
 if(p==='/api/subscriptions'&&m==='GET'){const [items,acc,cards]=await Promise.all([sbRows('subscriptions'),sbRows('accounts'),sbRows('cards')]);const am=new Map(acc.map(x=>[x.id,x.name])),cm=new Map(cards.map(x=>[x.id,x.name])),q=(u.searchParams.get('q')||'').toLowerCase();let list=items.map(x=>({...x,account_name:am.get(x.account_id)||null,card_name:cm.get(x.card_id)||null})).filter(x=>!q||`${x.name} ${x.provider} ${x.category}`.toLowerCase().includes(q));const active=list.filter(x=>x.status==='Ativa'),monthly=active.reduce((a,x)=>a+monthlyEquivalent(x.amount,x.recurrence),0),today=isoDate(new Date()),end=isoDate(new Date(Date.now()+31*86400000));let next30=0,count=0;for(const x of active)for(const d of subOccurrences(x,today,end)){next30+=n(x.amount);count++}return{items:list,summary:{monthly,annual:monthly*12,active_count:active.length,next30,next30_count:count}}}if(p==='/api/subscriptions'&&m==='POST'){const payload={...body,user_id:uid,amount:n(body.amount),card_id:emptyId(body.card_id),account_id:emptyId(body.account_id),start_date:body.start_date||null,trial_end:body.trial_end||null,provider:body.provider||'',category:body.category||'Assinaturas',notes:body.notes||'',updated_at:new Date().toISOString()};const r=await sb.from('subscriptions').insert(payload).select('id').single();if(r.error)throw r.error;return r.data}z=p.match(/^\/api\/subscriptions\/(\d+)$/);if(z){if(m==='DELETE'){const r=await sb.from('subscriptions').delete().eq('id',z[1]);if(r.error)throw r.error;return{ok:true}}const payload={...body,amount:n(body.amount),card_id:emptyId(body.card_id),account_id:emptyId(body.account_id),start_date:body.start_date||null,trial_end:body.trial_end||null,provider:body.provider||'',category:body.category||'Assinaturas',notes:body.notes||'',updated_at:new Date().toISOString()};const r=await sb.from('subscriptions').update(payload).eq('id',z[1]);if(r.error)throw r.error;return{ok:true}}
-if(p==='/api/goals'&&m==='GET')return (await sbRows('goals')).sort((a,b)=>b.id-a.id);if(p==='/api/goals'&&m==='POST'){const r=await sb.from('goals').insert({...body,user_id:uid,updated_at:new Date().toISOString()}).select('id').single();if(r.error)throw r.error;return r.data}z=p.match(/^\/api\/goals\/(\d+)$/);if(z){if(m==='DELETE'){const r=await sb.from('goals').delete().eq('id',z[1]);if(r.error)throw r.error;return{ok:true}}const r=await sb.from('goals').update({...body,updated_at:new Date().toISOString()}).eq('id',z[1]);if(r.error)throw r.error;return{ok:true}}
+if(p==='/api/goals'&&m==='GET')return (await sbRows('goals')).sort((a,b)=>b.id-a.id);if(p==='/api/goals'&&m==='POST'){const payload={...body,user_id:uid,target_value:n(body.target_value),current_value:n(body.current_value),target_date:body.target_date||null,updated_at:new Date().toISOString()};const r=await sb.from('goals').insert(payload).select('id').single();if(r.error)throw r.error;return r.data}z=p.match(/^\/api\/goals\/(\d+)$/);if(z){if(m==='DELETE'){const r=await sb.from('goals').delete().eq('id',z[1]);if(r.error)throw r.error;return{ok:true}}const payload={...body,target_value:n(body.target_value),current_value:n(body.current_value),target_date:body.target_date||null,updated_at:new Date().toISOString()};const r=await sb.from('goals').update(payload).eq('id',z[1]);if(r.error)throw r.error;return{ok:true}}
 if(p==='/api/calendar'){const start=(u.searchParams.get('start')||'2000-01-01').slice(0,10),end=(u.searchParams.get('end')||'2100-01-01').slice(0,10),[b,tx,subs]=await Promise.all([sbRows('bills'),sbRows('transactions'),sbRows('subscriptions')]),ev=[];for(const x of b.filter(x=>x.due_date>=start&&x.due_date<end))ev.push({id:`bill-${x.id}`,title:`${x.name} • R$ ${n(x.amount).toFixed(2)}`,start:x.due_date,color:x.status==='Pago'?'#22c55e':x.due_date<isoDate(new Date())?'#ef4444':'#f59e0b',extendedProps:{kind:'bill',item_id:x.id}});for(const x of tx.filter(x=>x.type==='card'&&x.invoice_due_date>=start&&x.invoice_due_date<end))ev.push({id:`tx-${x.id}`,title:`${x.description}${x.installment_total?` ${x.installment_no}/${x.installment_total}`:''} • R$ ${n(x.amount).toFixed(2)}`,start:x.invoice_due_date,color:'#8b5cf6',extendedProps:{kind:'transaction',item_id:x.id}});const colors={income:'#22c55e',expense:'#3b82f6',investment:'#6366f1',rescue:'#06b6d4',transfer:'#22d3ee'};for(const x of tx.filter(x=>x.type!=='card'&&x.transaction_date>=start&&x.transaction_date<end))ev.push({id:`cash-tx-${x.id}`,title:`${x.description} • R$ ${n(x.amount).toFixed(2)}`,start:x.transaction_date,color:colors[x.type]||'#3b82f6',extendedProps:{kind:'cash_transaction',item_id:x.id}});for(const s of subs)for(const d of subOccurrences(s,start,end))ev.push({id:`sub-${s.id}-${d}`,title:`${s.name} • R$ ${n(s.amount).toFixed(2)}`,start:d,color:s.color||'#14b8a6',extendedProps:{kind:'subscription',item_id:s.id}});return ev}
 throw new Error(`Operação não suportada: ${m} ${p}`)}
 
@@ -1416,6 +1430,47 @@ let receiptPreviewUrl = null;
 let receiptQrScannerInstance = null;
 let receiptQrRunning = false;
 let receiptQrProcessing = false;
+let receiptQrCameras = [];
+let receiptQrCurrentCameraId = null;
+let receiptQrNoReadTimer = null;
+let receiptQrTorchOn = false;
+const receiptScriptPromises = new Map();
+
+function receiptLoadScript(id, src, test) {
+  if (test()) return Promise.resolve();
+  if (receiptScriptPromises.has(id)) return receiptScriptPromises.get(id);
+  const promise = new Promise((resolve,reject)=>{
+    const existing=document.getElementById(id);
+    if(existing){
+      existing.addEventListener('load',()=>test()?resolve():reject(new Error('Falha ao carregar recurso.')),{once:true});
+      existing.addEventListener('error',()=>reject(new Error('Falha ao carregar recurso.')),{once:true});
+      return;
+    }
+    const s=document.createElement('script');
+    s.id=id;s.src=src;s.async=true;
+    s.onload=()=>test()?resolve():reject(new Error('Recurso carregado, mas não inicializou.'));
+    s.onerror=()=>reject(new Error('Não consegui carregar o leitor. Verifique sua conexão.'));
+    document.head.appendChild(s);
+  });
+  receiptScriptPromises.set(id,promise);
+  return promise;
+}
+
+async function ensureReceiptQrLibrary() {
+  await receiptLoadScript(
+    'receipt-html5-qrcode-lib',
+    'https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js',
+    ()=>!!window.Html5Qrcode
+  );
+}
+
+async function ensureReceiptOcrLibrary() {
+  await receiptLoadScript(
+    'receipt-tesseract-lib',
+    'https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js',
+    ()=>!!window.Tesseract
+  );
+}
 
 function receiptSetQrStatus(message, kind='') {
   const el = $('#receiptQrStatus');
@@ -1425,142 +1480,211 @@ function receiptSetQrStatus(message, kind='') {
   el.classList.toggle('receipt-qr-status-warn', kind === 'warn');
 }
 
+function receiptCameraScore(camera) {
+  const label=String(camera?.label||'').toLowerCase();
+  let score=0;
+  if(/back|rear|traseira|environment/.test(label))score+=100;
+  if(/front|frontal|selfie|user/.test(label))score-=300;
+  if(/main|principal|wide(?!.*ultra)|1x/.test(label))score+=35;
+  if(/ultra|0\.5|0,5/.test(label))score-=80;
+  if(/macro/.test(label))score-=90;
+  if(/tele|zoom/.test(label))score-=45;
+  return score;
+}
+
+async function receiptEnsureCameraPermission() {
+  let stream=null;
+  try {
+    stream=await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:{ideal:'environment'}},
+      audio:false
+    });
+  } finally {
+    stream?.getTracks?.().forEach(t=>t.stop());
+  }
+}
+
+async function receiptRefreshCameraList(preferredId='') {
+  await receiptEnsureCameraPermission();
+  receiptQrCameras=await Html5Qrcode.getCameras();
+  if(!receiptQrCameras.length)throw new Error('Nenhuma câmera encontrada.');
+
+  const originalOrder=new Map(receiptQrCameras.map((c,i)=>[c.id,i]));
+  receiptQrCameras=[...receiptQrCameras].sort((a,b)=>{
+    const d=receiptCameraScore(b)-receiptCameraScore(a);
+    return d||((originalOrder.get(a.id)||0)-(originalOrder.get(b.id)||0));
+  });
+
+  const select=$('#receiptCameraSelect');
+  select.innerHTML=receiptQrCameras.map((c,i)=>`<option value="${attr(c.id)}">${esc(c.label||`Câmera ${i+1}`)}</option>`).join('');
+
+  const stored=localStorage.getItem('meu-financeiro-receipt-camera')||'';
+  const chosen=[preferredId,stored,receiptQrCameras[0]?.id].find(id=>id&&receiptQrCameras.some(c=>c.id===id))||receiptQrCameras[0].id;
+  select.value=chosen;
+  return chosen;
+}
+
 async function receiptStopQrScanner() {
-  const scanner = receiptQrScannerInstance;
-  receiptQrScannerInstance = null;
-  receiptQrRunning = false;
-  if (!scanner) return;
-  try { await scanner.stop(); } catch (_) {}
-  try { scanner.clear(); } catch (_) {}
+  clearTimeout(receiptQrNoReadTimer);
+  receiptQrNoReadTimer=null;
+  const scanner=receiptQrScannerInstance;
+  receiptQrScannerInstance=null;
+  receiptQrRunning=false;
+  receiptQrTorchOn=false;
+  $('#receiptTorchQrBtn')?.classList.add('hidden');
+  if(!scanner)return;
+  try{await scanner.stop()}catch(_){}
+  try{scanner.clear()}catch(_){}
 }
 
 function receiptGetQrVideoTrack() {
-  const video = $('#receiptQrReader video');
-  const stream = video?.srcObject;
-  return stream?.getVideoTracks?.()?.[0] || null;
+  const video=$('#receiptQrReader video');
+  return video?.srcObject?.getVideoTracks?.()?.[0]||null;
 }
 
 async function receiptTuneQrCamera(forceRefocus=false) {
-  const track = receiptGetQrVideoTrack();
-  if (!track) return false;
+  const track=receiptGetQrVideoTrack();
+  if(!track)return false;
+  try{track.contentHint='detail'}catch(_){}
 
-  try { track.contentHint = 'detail'; } catch (_) {}
+  let caps={};
+  let settings={};
+  try{caps=track.getCapabilities?.()||{}}catch(_){}
+  try{settings=track.getSettings?.()||{}}catch(_){}
 
-  let caps = {};
-  try { caps = track.getCapabilities ? track.getCapabilities() : {}; } catch (_) {}
-
-  // Pede a melhor qualidade possível sem forçar uma resolução que o aparelho não suporte.
-  try {
-    const constraints = {};
-    if (caps.width?.max) constraints.width = {ideal:Math.min(1920,caps.width.max)};
-    if (caps.height?.max) constraints.height = {ideal:Math.min(1080,caps.height.max)};
-    if (Object.keys(constraints).length) await track.applyConstraints(constraints);
-  } catch (_) {}
-
-  // Autofoco contínuo quando o navegador/câmera expõe o recurso.
-  try {
-    const focusModes = Array.isArray(caps.focusMode) ? caps.focusMode : [];
-    if (forceRefocus && focusModes.includes('single-shot')) {
+  try{
+    const modes=Array.isArray(caps.focusMode)?caps.focusMode:[];
+    if(forceRefocus&&modes.includes('single-shot')){
       await track.applyConstraints({advanced:[{focusMode:'single-shot'}]});
-      await new Promise(r=>setTimeout(r,350));
+      await new Promise(r=>setTimeout(r,300));
     }
-    if (focusModes.includes('continuous')) {
+    if(modes.includes('continuous')){
       await track.applyConstraints({advanced:[{focusMode:'continuous'}]});
-    } else if (focusModes.includes('single-shot')) {
+    }else if(modes.includes('single-shot')&&!forceRefocus){
       await track.applyConstraints({advanced:[{focusMode:'single-shot'}]});
     }
-  } catch (_) {}
+  }catch(_){}
 
-  // Um zoom leve ajuda o celular a usar o conjunto óptico principal e evita
-  // que o usuário precise encostar demais o aparelho no QR.
-  try {
-    const z = caps.zoom;
-    if (z && Number.isFinite(z.min) && Number.isFinite(z.max) && z.max > z.min) {
-      const base = Math.max(z.min,1);
-      const target = Math.min(z.max,Math.max(base,Math.min(1.45,base + (z.max-base)*0.08)));
-      await track.applyConstraints({advanced:[{zoom:target}]});
+  try{
+    if(caps.zoom&&Number.isFinite(caps.zoom.min)&&Number.isFinite(caps.zoom.max)){
+      const one=Math.min(caps.zoom.max,Math.max(caps.zoom.min,1));
+      await track.applyConstraints({advanced:[{zoom:one}]});
     }
-  } catch (_) {}
+  }catch(_){}
 
+  const torchBtn=$('#receiptTorchQrBtn');
+  if(caps.torch)torchBtn?.classList.remove('hidden');else torchBtn?.classList.add('hidden');
+
+  try{settings=track.getSettings?.()||settings}catch(_){}
+  const modes=Array.isArray(caps.focusMode)?caps.focusMode.join(', '):'não exposto';
+  const camera=receiptQrCameras.find(c=>c.id===receiptQrCurrentCameraId);
+  const info=[
+    camera?.label||track.label||'Câmera traseira',
+    settings.width&&settings.height?`${settings.width}×${settings.height}`:'',
+    `foco: ${modes}`
+  ].filter(Boolean).join(' • ');
+  if($('#receiptCameraInfo'))$('#receiptCameraInfo').textContent=info;
   return true;
 }
 
-async function receiptStartQrScanner() {
-  if (!window.Html5Qrcode) throw new Error('Leitor de QR Code ainda não carregou. Feche e abra a página novamente.');
-  if (!navigator.mediaDevices?.getUserMedia) throw new Error('Este navegador não liberou acesso à câmera.');
+async function receiptToggleTorch() {
+  const track=receiptGetQrVideoTrack();
+  if(!track)throw new Error('Câmera não está ativa.');
+  const caps=track.getCapabilities?.()||{};
+  if(!caps.torch)throw new Error('Esta câmera não libera a lanterna no navegador.');
+  receiptQrTorchOn=!receiptQrTorchOn;
+  await track.applyConstraints({advanced:[{torch:receiptQrTorchOn}]});
+  const btn=$('#receiptTorchQrBtn');
+  if(btn)btn.innerHTML=receiptQrTorchOn?'<i data-lucide="flashlight-off"></i>Desligar':'<i data-lucide="flashlight"></i>Lanterna';
+  iconRefresh();
+}
 
+async function receiptStartQrScanner(preferredId='') {
+  if(!navigator.mediaDevices?.getUserMedia)throw new Error('Este navegador não liberou acesso à câmera.');
+  await ensureReceiptQrLibrary();
   await receiptStopQrScanner();
-  receiptQrProcessing = false;
+
+  receiptQrProcessing=false;
   $('#receiptQrOpenLink')?.classList.add('hidden');
   $('#receiptQrScanner').classList.remove('hidden');
-  receiptSetQrStatus('Abrindo a câmera traseira...');
+  receiptSetQrStatus('Localizando a melhor câmera traseira...');
 
-  const reader = $('#receiptQrReader');
-  if (reader) reader.innerHTML = '';
+  const cameraId=await receiptRefreshCameraList(preferredId);
+  receiptQrCurrentCameraId=cameraId;
+  localStorage.setItem('meu-financeiro-receipt-camera',cameraId);
 
-  const formats = window.Html5QrcodeSupportedFormats ? [Html5QrcodeSupportedFormats.QR_CODE] : undefined;
-  receiptQrScannerInstance = new Html5Qrcode('receiptQrReader', formats ? {formatsToSupport:formats, verbose:false} : {verbose:false});
+  const reader=$('#receiptQrReader');
+  if(reader)reader.innerHTML='';
 
-  const qrbox = (viewfinderWidth, viewfinderHeight) => {
-    const side = Math.floor(Math.min(viewfinderWidth, viewfinderHeight) * 0.72);
-    return {width:Math.max(190,Math.min(side,320)),height:Math.max(190,Math.min(side,320))};
+  const formats=window.Html5QrcodeSupportedFormats?[Html5QrcodeSupportedFormats.QR_CODE]:undefined;
+  receiptQrScannerInstance=new Html5Qrcode(
+    'receiptQrReader',
+    formats?{formatsToSupport:formats,verbose:false}:{verbose:false}
+  );
+
+  const qrbox=(w,h)=>{
+    const side=Math.floor(Math.min(w,h)*0.72);
+    const bounded=Math.max(200,Math.min(side,340));
+    return{width:bounded,height:bounded};
   };
 
-  const onSuccess = async decodedText => {
-    if (receiptQrProcessing || !decodedText) return;
-    receiptQrProcessing = true;
+  const onSuccess=async decodedText=>{
+    if(receiptQrProcessing||!decodedText)return;
+    receiptQrProcessing=true;
     receiptSetQrStatus('QR Code detectado. Consultando a NFC-e...','ok');
     await receiptStopQrScanner();
-    try { await receiptHandleQrValue(decodedText); }
-    finally { receiptQrProcessing = false; }
+    try{await receiptHandleQrValue(decodedText)}
+    finally{receiptQrProcessing=false}
   };
 
-  const onFailure = () => {};
+  const cameraConstraints={
+    deviceId:{exact:cameraId},
+    width:{ideal:1920},
+    height:{ideal:1080},
+    frameRate:{ideal:30,max:30}
+  };
 
-  let started = false;
-  try {
+  try{
     await receiptQrScannerInstance.start(
-      {facingMode:'environment'},
-      {
-        fps:12,
-        qrbox,
-        disableFlip:true,
-        videoConstraints:{
-          facingMode:{ideal:'environment'},
-          width:{ideal:1920},
-          height:{ideal:1080},
-          frameRate:{ideal:30,max:30}
-        }
-      },
+      cameraConstraints,
+      {fps:12,qrbox,disableFlip:true},
       onSuccess,
-      onFailure
+      ()=>{}
     );
-    started = true;
-  } catch (firstError) {
-    try {
-      const cameras = await Html5Qrcode.getCameras();
-      if (!cameras?.length) throw firstError;
-      const preferred = cameras.find(c => /back|rear|traseira|environment/i.test(c.label)) || cameras[cameras.length-1];
+  }catch(firstError){
+    // Alguns Androids rejeitam resolução ideal junto com deviceId.
+    try{
       await receiptQrScannerInstance.start(
-        preferred.id,
+        cameraId,
         {fps:12,qrbox,disableFlip:true},
         onSuccess,
-        onFailure
+        ()=>{}
       );
-      started = true;
-    } catch (_) {
+    }catch(_){
       throw firstError;
     }
   }
 
-  if (!started) throw new Error('Não consegui iniciar a câmera.');
+  receiptQrRunning=true;
+  $('#receiptCameraSelect').value=cameraId;
+  receiptSetQrStatus('Aponte o QR dentro do quadrado. Não precisa encostar o celular.');
+  setTimeout(()=>receiptTuneQrCamera(false).catch(()=>{}),300);
+  receiptQrNoReadTimer=setTimeout(()=>{
+    if(receiptQrRunning&&!receiptQrProcessing){
+      receiptSetQrStatus('Ainda não leu. Tente “Trocar”, “Refocar” ou afaste um pouco o celular.','warn');
+    }
+  },8000);
+}
 
-  receiptQrRunning = true;
-  receiptSetQrStatus('Aponte o QR Code dentro do quadrado. Mantenha cerca de 15–30 cm de distância.');
-  setTimeout(async () => {
-    if (!receiptQrScannerInstance || !receiptQrRunning) return;
-    await receiptTuneQrCamera(false);
-  },350);
+async function receiptNextQrCamera() {
+  if(!receiptQrCameras.length){
+    await receiptStartQrScanner();
+    return;
+  }
+  const idx=Math.max(0,receiptQrCameras.findIndex(c=>c.id===receiptQrCurrentCameraId));
+  const next=receiptQrCameras[(idx+1)%receiptQrCameras.length];
+  receiptSetQrStatus('Trocando a câmera...');
+  await receiptStartQrScanner(next.id);
 }
 
 async function receiptHandleQrValue(value) {
@@ -1721,7 +1845,8 @@ function receiptItemRow(item={}) {
 
 async function receiptAnalyzeImage(file) {
   if (!file) return;
-  if (!window.Tesseract) throw new Error('Leitor de cupom ainda não carregou. Tente novamente em alguns segundos.');
+  $('#receiptOcrStatus').textContent = 'Carregando leitor de cupom...';
+  await ensureReceiptOcrLibrary();
   if (receiptPreviewUrl) URL.revokeObjectURL(receiptPreviewUrl);
   receiptPreviewUrl = URL.createObjectURL(file);
   $('#receiptImagePreview').src = receiptPreviewUrl;
@@ -2189,18 +2314,29 @@ $('#receiptStartQrBtn')?.addEventListener('click', async () => {
   try { await receiptStartQrScanner(); }
   catch (err) { receiptSetQrStatus(err.message,'warn'); toast(err.message); }
 });
+$('#receiptCameraSelect')?.addEventListener('change', async e => {
+  try { await receiptStartQrScanner(e.target.value); }
+  catch (err) { receiptSetQrStatus(err.message,'warn'); toast(err.message); }
+});
+$('#receiptNextCameraBtn')?.addEventListener('click', async () => {
+  try { await receiptNextQrCamera(); }
+  catch (err) { receiptSetQrStatus(err.message,'warn'); toast(err.message); }
+});
+$('#receiptTorchQrBtn')?.addEventListener('click', async () => {
+  try { await receiptToggleTorch(); }
+  catch (err) { receiptSetQrStatus(err.message,'warn'); }
+});
 $('#receiptRefocusQrBtn')?.addEventListener('click', async () => {
   try {
     receiptSetQrStatus('Refocando a câmera...');
     const ok = await receiptTuneQrCamera(true);
-    receiptSetQrStatus(ok ? 'Foco ajustado. Aponte novamente para o QR Code.' : 'Não consegui acessar o foco desta câmera.', ok ? 'ok' : 'warn');
-  } catch (err) {
+    receiptSetQrStatus(ok ? 'Foco solicitado. Aponte novamente para o QR Code.' : 'Não consegui acessar o foco desta câmera.', ok ? 'ok' : 'warn');
+  } catch (_) {
     receiptSetQrStatus('Este navegador não permite controlar o foco manualmente.','warn');
   }
 });
-
-$('#receiptStopQrBtn')?.addEventListener('click', () => {
-  receiptStopQrScanner();
+$('#receiptStopQrBtn')?.addEventListener('click', async () => {
+  await receiptStopQrScanner();
   receiptSetQrStatus('Câmera parada.');
 });
 document.addEventListener('visibilitychange', () => { if (document.hidden) receiptStopQrScanner().catch(()=>{}); });
@@ -2252,17 +2388,43 @@ $('#restoreFile').addEventListener('change', async e => {
 });
 
 
-// build v4: remove caches de versões antigas para evitar menu duplicado após atualização.
+// PWA real, sem cache agressivo: atualização do sistema continua vindo da rede.
 if ('caches' in window) {
-  caches.keys().then(keys => Promise.all(keys.filter(k => k.startsWith('meu-financeiro-') && k !== 'meu-financeiro-cloud-v4.0.0').map(k => caches.delete(k)))).catch(() => {});
+  caches.keys().then(keys => Promise.all(keys.filter(k => k.startsWith('meu-financeiro-')).map(k => caches.delete(k)))).catch(() => {});
 }
-window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); state.deferredPrompt = e; $('#installPwaBtn').classList.remove('hidden'); });
-$('#installPwaBtn').addEventListener('click', async () => { if (!state.deferredPrompt) return; state.deferredPrompt.prompt(); await state.deferredPrompt.userChoice; state.deferredPrompt = null; $('#installPwaBtn').classList.add('hidden'); });
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('./service-worker.js', {scope:'./'})
+    .then(() => {
+      const standalone=window.matchMedia?.('(display-mode: standalone)').matches;
+      if(standalone&&$('#pwaStatus'))$('#pwaStatus').textContent='Aplicativo instalado neste dispositivo.';
+    })
+    .catch(() => {
+      if($('#pwaStatus'))$('#pwaStatus').textContent='Não consegui registrar o modo aplicativo neste navegador.';
+    });
+}
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  state.deferredPrompt=e;
+  $('#installPwaBtn').classList.remove('hidden');
+  if($('#pwaStatus'))$('#pwaStatus').textContent='Pronto para instalar como aplicativo.';
+});
+window.addEventListener('appinstalled',()=>{
+  state.deferredPrompt=null;
+  $('#installPwaBtn').classList.add('hidden');
+  if($('#pwaStatus'))$('#pwaStatus').textContent='Aplicativo instalado neste dispositivo.';
+});
+$('#installPwaBtn').addEventListener('click', async () => {
+  if (!state.deferredPrompt) return;
+  state.deferredPrompt.prompt();
+  await state.deferredPrompt.userChoice;
+  state.deferredPrompt=null;
+  $('#installPwaBtn').classList.add('hidden');
+});
 
 
 async function cloudExportBackup() {
-  const tables=['accounts','cards','categories','transactions','bills','investments','subscriptions','goals','assets','settings'];
-  const backup={version:1,exported_at:new Date().toISOString()};
+  const tables=['accounts','cards','categories','transactions','bills','investments','subscriptions','goals','assets','settings','receipts','receipt_items'];
+  const backup={version:2,exported_at:new Date().toISOString()};
   for(const t of tables) backup[t]=await sbRows(t);
   const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`meu-financeiro-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);

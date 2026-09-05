@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Teste de câmera • Meu Financeiro</title>
+<style>
+:root{color-scheme:dark;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+*{box-sizing:border-box}body{margin:0;background:#07101f;color:#fff;padding:16px 16px 36px}
+.wrap{max-width:760px;margin:auto}.card{background:#0e1a2e;border:1px solid #263651;border-radius:18px;padding:16px;margin:12px 0}
+h1{font-size:22px;margin:0 0 8px}h2{font-size:16px;margin:0 0 12px}.muted{color:#94a3b8;font-size:13px;line-height:1.5}
+video{width:100%;aspect-ratio:4/3;object-fit:cover;background:#000;border-radius:16px;border:1px solid #2b3c5a}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+button,select,input{min-height:44px;border-radius:12px;border:1px solid #334765;background:#14233b;color:#fff;padding:10px;font:inherit}
+button{font-weight:750;cursor:pointer}.primary{background:#6d5dfc;border-color:#7f72ff}.ok{color:#4ade80}.warn{color:#fbbf24}.bad{color:#fb7185}
+pre{white-space:pre-wrap;word-break:break-word;background:#07101f;border:1px solid #263651;border-radius:12px;padding:12px;font-size:11px;line-height:1.5}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.status{font-size:13px;min-height:20px;margin-top:10px}
+label{display:flex;flex-direction:column;gap:6px;font-size:12px;color:#a9bad2}
+input[type=range]{padding:0}
+.badge{display:inline-flex;padding:5px 8px;border-radius:999px;background:#13223a;color:#a9bad2;font-size:11px}
+canvas{display:none}
+@media(max-width:600px){.grid,.grid3{grid-template-columns:1fr}.row{align-items:stretch}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Diagnóstico da câmera</h1>
+  <p class="muted">Esta página é separada do app. Ela não altera nenhum dado financeiro. Serve apenas para descobrir por que o QR não está focando no seu celular.</p>
+
+  <div class="card">
+    <h2>1. Câmera</h2>
+    <video id="video" playsinline muted autoplay></video>
+    <canvas id="canvas"></canvas>
+    <div class="status" id="status">Toque em “Iniciar teste”.</div>
+    <div class="grid" style="margin-top:12px">
+      <button class="primary" id="start">Iniciar teste</button>
+      <button id="stop">Parar</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. Escolher câmera</h2>
+    <label>Câmeras detectadas
+      <select id="cameraSelect"><option value="">Inicie o teste primeiro</option></select>
+    </label>
+    <div class="grid" style="margin-top:10px">
+      <button id="applyCamera">Usar esta câmera</button>
+      <button id="nextCamera">Próxima câmera</button>
+    </div>
+    <p class="muted">Alguns celulares expõem várias câmeras traseiras ao navegador. A câmera escolhida automaticamente pode ser a ultra-wide, que fica ruim para QR de perto.</p>
+  </div>
+
+  <div class="card">
+    <h2>3. Foco e zoom</h2>
+    <div class="grid3">
+      <button id="focusContinuous">Foco contínuo</button>
+      <button id="focusSingle">Refocar agora</button>
+      <button id="torch">Lanterna</button>
+    </div>
+    <label style="margin-top:12px">Zoom
+      <input id="zoom" type="range" min="1" max="1" step="0.1" value="1">
+    </label>
+    <div id="focusInfo" class="muted" style="margin-top:8px">As capacidades aparecem após iniciar.</div>
+  </div>
+
+  <div class="card">
+    <h2>4. Leitura do QR</h2>
+    <div class="row">
+      <span class="badge" id="engine">Motor: aguardando</span>
+      <span class="badge" id="frames">0 leituras</span>
+    </div>
+    <div id="qrResult" class="status">Nenhum QR detectado ainda.</div>
+  </div>
+
+  <div class="card">
+    <h2>5. Diagnóstico</h2>
+    <button id="copy">Copiar diagnóstico</button>
+    <pre id="diag">Aguardando teste...</pre>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+let stream=null,track=null,devices=[],scanId=0,frameCount=0,torchOn=false,detector=null;
+
+function status(msg,cls=''){const e=$('#status');e.textContent=msg;e.className='status '+cls}
+function safe(v){try{return JSON.parse(JSON.stringify(v))}catch{return String(v)}}
+function getCaps(){try{return track?.getCapabilities?.()||{}}catch{return{}}}
+function getSettings(){try{return track?.getSettings?.()||{}}catch{return{}}}
+function getConstraints(){try{return track?.getConstraints?.()||{}}catch{return{}}}
+
+async function refreshDevices(){
+  const all=await navigator.mediaDevices.enumerateDevices();
+  devices=all.filter(d=>d.kind==='videoinput');
+  const sel=$('#cameraSelect');
+  sel.innerHTML='';
+  devices.forEach((d,i)=>{
+    const o=document.createElement('option');
+    o.value=d.deviceId;
+    o.textContent=(d.label||('Câmera '+(i+1)))+' ['+(i+1)+']';
+    sel.appendChild(o);
+  });
+  const current=getSettings().deviceId;
+  if(current) sel.value=current;
+}
+
+async function stop(){
+  cancelAnimationFrame(scanId);scanId=0;
+  if(stream)stream.getTracks().forEach(t=>t.stop());
+  stream=null;track=null;$('#video').srcObject=null;
+  status('Câmera parada.');
+}
+
+async function start(deviceId=''){
+  await stop();
+  status('Solicitando acesso à câmera...');
+  const videoConstraints=deviceId
+    ? {deviceId:{exact:deviceId},width:{ideal:1920},height:{ideal:1080},frameRate:{ideal:30}}
+    : {facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080},frameRate:{ideal:30}};
+  stream=await navigator.mediaDevices.getUserMedia({video:videoConstraints,audio:false});
+  track=stream.getVideoTracks()[0];
+  try{track.contentHint='detail'}catch{}
+  $('#video').srcObject=stream;
+  await $('#video').play();
+  await refreshDevices();
+  configureControls();
+  try{detector=('BarcodeDetector'in window)?new BarcodeDetector({formats:['qr_code']}):null}catch{detector=null}
+  $('#engine').textContent='Motor: '+(detector?'BarcodeDetector + jsQR':'jsQR');
+  status('Câmera ativa. Aponte para um QR.', 'ok');
+  frameCount=0;scan();
+  updateDiag();
+}
+
+function configureControls(){
+  const c=getCaps();
+  const modes=Array.isArray(c.focusMode)?c.focusMode:[];
+  $('#focusContinuous').disabled=!modes.includes('continuous');
+  $('#focusSingle').disabled=!modes.includes('single-shot');
+  $('#torch').disabled=!c.torch;
+  const z=$('#zoom');
+  if(c.zoom && Number.isFinite(c.zoom.min)&&Number.isFinite(c.zoom.max)){
+    z.disabled=false;z.min=c.zoom.min;z.max=c.zoom.max;z.step=c.zoom.step||0.1;z.value=getSettings().zoom||c.zoom.min;
+  }else{z.disabled=true;z.min=1;z.max=1;z.value=1}
+  $('#focusInfo').textContent='focusMode: '+(modes.length?modes.join(', '):'não exposto')+' • zoom: '+(c.zoom?JSON.stringify(c.zoom):'não exposto')+' • torch: '+String(!!c.torch);
+}
+
+async function applyAdvanced(obj){
+  if(!track)throw new Error('Câmera não iniciada');
+  await track.applyConstraints({advanced:[obj]});
+  updateDiag();
+}
+
+async function scan(){
+  if(!track)return;
+  const v=$('#video');
+  try{
+    let value='';
+    if(detector&&v.readyState>=2){
+      const codes=await detector.detect(v);
+      value=codes?.[0]?.rawValue||'';
+    }
+    if(!value&&window.jsQR&&v.readyState>=2&&v.videoWidth){
+      const c=$('#canvas'),ctx=c.getContext('2d',{willReadFrequently:true});
+      const max=960,scale=Math.min(1,max/v.videoWidth);
+      c.width=Math.round(v.videoWidth*scale);c.height=Math.round(v.videoHeight*scale);
+      ctx.drawImage(v,0,0,c.width,c.height);
+      const img=ctx.getImageData(0,0,c.width,c.height);
+      value=jsQR(img.data,img.width,img.height,{inversionAttempts:'attemptBoth'})?.data||'';
+    }
+    frameCount++;$('#frames').textContent=frameCount+' leituras';
+    if(value){$('#qrResult').textContent='QR detectado: '+value;$('#qrResult').className='status ok';}
+  }catch(e){}
+  scanId=requestAnimationFrame(scan);
+}
+
+function updateDiag(){
+  const payload={
+    time:new Date().toISOString(),
+    secureContext:window.isSecureContext,
+    userAgent:navigator.userAgent,
+    platform:navigator.platform,
+    mediaDevices:!!navigator.mediaDevices,
+    barcodeDetector:'BarcodeDetector'in window,
+    cameraLabel:track?.label||null,
+    settings:safe(getSettings()),
+    capabilities:safe(getCaps()),
+    constraints:safe(getConstraints()),
+    cameras:devices.map((d,i)=>({i:i+1,label:d.label,deviceId:d.deviceId?d.deviceId.slice(0,8)+'…':null}))
+  };
+  $('#diag').textContent=JSON.stringify(payload,null,2);
+}
+
+$('#start').onclick=()=>start().catch(e=>status(e.name+': '+e.message,'bad'));
+$('#stop').onclick=()=>stop();
+$('#applyCamera').onclick=()=>start($('#cameraSelect').value).catch(e=>status(e.name+': '+e.message,'bad'));
+$('#nextCamera').onclick=async()=>{
+  if(!devices.length)return;
+  const current=$('#cameraSelect').selectedIndex;
+  const next=(current+1)%devices.length;
+  $('#cameraSelect').selectedIndex=next;
+  start($('#cameraSelect').value).catch(e=>status(e.name+': '+e.message,'bad'));
+};
+$('#focusContinuous').onclick=()=>applyAdvanced({focusMode:'continuous'}).then(()=>status('Foco contínuo solicitado.','ok')).catch(e=>status(e.message,'warn'));
+$('#focusSingle').onclick=async()=>{
+  try{
+    await applyAdvanced({focusMode:'single-shot'});status('Refoco solicitado.','ok');
+    setTimeout(()=>applyAdvanced({focusMode:'continuous'}).catch(()=>{}),500);
+  }catch(e){status(e.message,'warn')}
+};
+$('#torch').onclick=async()=>{try{torchOn=!torchOn;await applyAdvanced({torch:torchOn});$('#torch').textContent=torchOn?'Desligar lanterna':'Lanterna'}catch(e){status(e.message,'warn')}};
+$('#zoom').oninput=()=>applyAdvanced({zoom:Number($('#zoom').value)}).catch(()=>{});
+$('#copy').onclick=async()=>{await navigator.clipboard.writeText($('#diag').textContent);$('#copy').textContent='Copiado';setTimeout(()=>$('#copy').textContent='Copiar diagnóstico',1200)};
+window.addEventListener('beforeunload',()=>{if(stream)stream.getTracks().forEach(t=>t.stop())});
+</script>
+</body>
+</html>

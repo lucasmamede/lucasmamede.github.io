@@ -93,8 +93,8 @@
 @media(max-width:900px){.receipt-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.receipt-main-grid{grid-template-columns:1fr}.receipt-meta-grid{grid-template-columns:1fr 1fr}.receipt-meta-grid .field:first-child{grid-column:1/-1}}
 @media(max-width:620px){.receipt-summary-grid{grid-template-columns:1fr 1fr}.receipt-summary-grid .small-metric{min-height:112px}.receipt-items-head{display:none}.receipt-item-row{grid-template-columns:minmax(0,1fr) 74px 105px 40px}.receipt-meta-grid{grid-template-columns:1fr}.receipt-meta-grid .field:first-child{grid-column:auto}.receipt-history-row{grid-template-columns:minmax(0,1fr) auto}.receipt-history-row .receipt-delete-btn{grid-column:2}.receipt-photo-btn{width:100%;justify-content:center}}
 
-.receipt-qr-btn{align-self:flex-start}.receipt-qr-scanner{display:flex;flex-direction:column;gap:10px}.receipt-qr-reader{width:100%;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:#020713;min-height:260px}.receipt-qr-reader video{width:100%!important;max-height:520px;object-fit:cover;border-radius:14px}.receipt-qr-reader #qr-shaded-region{border-color:rgba(124,92,255,.7)!important}.receipt-qr-reader img{max-width:56px}.receipt-qr-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#9db2d2;font-size:11px}.receipt-qr-actions .secondary-btn{flex:0 0 auto}.receipt-qr-scanner .text-btn{align-self:flex-start}.receipt-qr-status-ok{color:#4ade80!important}.receipt-qr-status-warn{color:#fbbf24!important}
-@media(max-width:620px){.receipt-qr-btn{width:100%;justify-content:center}.receipt-qr-actions{align-items:flex-start;flex-direction:column}.receipt-qr-actions .secondary-btn{width:100%}.receipt-qr-reader{min-height:300px}}
+.receipt-qr-btn{align-self:flex-start}.receipt-qr-scanner{display:flex;flex-direction:column;gap:10px}.receipt-qr-reader{width:100%;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:#020713;min-height:260px}.receipt-qr-reader video{width:100%!important;max-height:520px;object-fit:cover;border-radius:14px}.receipt-qr-reader #qr-shaded-region{border-color:rgba(124,92,255,.7)!important}.receipt-qr-reader img{max-width:56px}.receipt-qr-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#9db2d2;font-size:11px}.receipt-qr-action-buttons{display:flex;gap:8px;flex:0 0 auto}.receipt-qr-actions .secondary-btn{flex:0 0 auto}.receipt-qr-scanner .text-btn{align-self:flex-start}.receipt-qr-status-ok{color:#4ade80!important}.receipt-qr-status-warn{color:#fbbf24!important}
+@media(max-width:620px){.receipt-qr-btn{width:100%;justify-content:center}.receipt-qr-actions{align-items:flex-start;flex-direction:column}.receipt-qr-action-buttons{width:100%;display:grid;grid-template-columns:1fr 1fr}.receipt-qr-actions .secondary-btn{width:100%}.receipt-qr-reader{min-height:300px}}
 </style></head>
 <body>
 <div id="cloudAuthGate" class="cloud-auth-gate">
@@ -279,7 +279,10 @@
             <div id="receiptQrReader" class="receipt-qr-reader"></div>
             <div class="receipt-qr-actions">
               <span id="receiptQrStatus">Aponte para o QR Code do cupom.</span>
-              <button class="secondary-btn" id="receiptStopQrBtn" type="button">Parar câmera</button>
+              <div class="receipt-qr-action-buttons">
+                <button class="secondary-btn" id="receiptRefocusQrBtn" type="button"><i data-lucide="focus"></i>Refocar</button>
+                <button class="secondary-btn" id="receiptStopQrBtn" type="button">Parar câmera</button>
+              </div>
             </div>
             <a id="receiptQrOpenLink" class="text-btn hidden" target="_blank" rel="noopener">Abrir consulta oficial da NFC-e</a>
           </div>
@@ -1431,6 +1434,57 @@ async function receiptStopQrScanner() {
   try { scanner.clear(); } catch (_) {}
 }
 
+function receiptGetQrVideoTrack() {
+  const video = $('#receiptQrReader video');
+  const stream = video?.srcObject;
+  return stream?.getVideoTracks?.()?.[0] || null;
+}
+
+async function receiptTuneQrCamera(forceRefocus=false) {
+  const track = receiptGetQrVideoTrack();
+  if (!track) return false;
+
+  try { track.contentHint = 'detail'; } catch (_) {}
+
+  let caps = {};
+  try { caps = track.getCapabilities ? track.getCapabilities() : {}; } catch (_) {}
+
+  // Pede a melhor qualidade possível sem forçar uma resolução que o aparelho não suporte.
+  try {
+    const constraints = {};
+    if (caps.width?.max) constraints.width = {ideal:Math.min(1920,caps.width.max)};
+    if (caps.height?.max) constraints.height = {ideal:Math.min(1080,caps.height.max)};
+    if (Object.keys(constraints).length) await track.applyConstraints(constraints);
+  } catch (_) {}
+
+  // Autofoco contínuo quando o navegador/câmera expõe o recurso.
+  try {
+    const focusModes = Array.isArray(caps.focusMode) ? caps.focusMode : [];
+    if (forceRefocus && focusModes.includes('single-shot')) {
+      await track.applyConstraints({advanced:[{focusMode:'single-shot'}]});
+      await new Promise(r=>setTimeout(r,350));
+    }
+    if (focusModes.includes('continuous')) {
+      await track.applyConstraints({advanced:[{focusMode:'continuous'}]});
+    } else if (focusModes.includes('single-shot')) {
+      await track.applyConstraints({advanced:[{focusMode:'single-shot'}]});
+    }
+  } catch (_) {}
+
+  // Um zoom leve ajuda o celular a usar o conjunto óptico principal e evita
+  // que o usuário precise encostar demais o aparelho no QR.
+  try {
+    const z = caps.zoom;
+    if (z && Number.isFinite(z.min) && Number.isFinite(z.max) && z.max > z.min) {
+      const base = Math.max(z.min,1);
+      const target = Math.min(z.max,Math.max(base,Math.min(1.45,base + (z.max-base)*0.08)));
+      await track.applyConstraints({advanced:[{zoom:target}]});
+    }
+  } catch (_) {}
+
+  return true;
+}
+
 async function receiptStartQrScanner() {
   if (!window.Html5Qrcode) throw new Error('Leitor de QR Code ainda não carregou. Feche e abra a página novamente.');
   if (!navigator.mediaDevices?.getUserMedia) throw new Error('Este navegador não liberou acesso à câmera.');
@@ -1467,7 +1521,17 @@ async function receiptStartQrScanner() {
   try {
     await receiptQrScannerInstance.start(
       {facingMode:'environment'},
-      {fps:15,qrbox,aspectRatio:1.333333,disableFlip:false},
+      {
+        fps:12,
+        qrbox,
+        disableFlip:true,
+        videoConstraints:{
+          facingMode:{ideal:'environment'},
+          width:{ideal:1920},
+          height:{ideal:1080},
+          frameRate:{ideal:30,max:30}
+        }
+      },
       onSuccess,
       onFailure
     );
@@ -1479,7 +1543,7 @@ async function receiptStartQrScanner() {
       const preferred = cameras.find(c => /back|rear|traseira|environment/i.test(c.label)) || cameras[cameras.length-1];
       await receiptQrScannerInstance.start(
         preferred.id,
-        {fps:15,qrbox,disableFlip:false},
+        {fps:12,qrbox,disableFlip:true},
         onSuccess,
         onFailure
       );
@@ -1492,17 +1556,11 @@ async function receiptStartQrScanner() {
   if (!started) throw new Error('Não consegui iniciar a câmera.');
 
   receiptQrRunning = true;
-  receiptSetQrStatus('Aponte o QR Code dentro do quadrado. A leitura é automática.');
-
-  // Tenta melhorar foco/zoom em aparelhos que suportam isso.
+  receiptSetQrStatus('Aponte o QR Code dentro do quadrado. Mantenha cerca de 15–30 cm de distância.');
   setTimeout(async () => {
     if (!receiptQrScannerInstance || !receiptQrRunning) return;
-    try {
-      await receiptQrScannerInstance.applyVideoConstraints({
-        advanced:[{focusMode:'continuous'}]
-      });
-    } catch (_) {}
-  },700);
+    await receiptTuneQrCamera(false);
+  },350);
 }
 
 async function receiptHandleQrValue(value) {
@@ -2131,6 +2189,16 @@ $('#receiptStartQrBtn')?.addEventListener('click', async () => {
   try { await receiptStartQrScanner(); }
   catch (err) { receiptSetQrStatus(err.message,'warn'); toast(err.message); }
 });
+$('#receiptRefocusQrBtn')?.addEventListener('click', async () => {
+  try {
+    receiptSetQrStatus('Refocando a câmera...');
+    const ok = await receiptTuneQrCamera(true);
+    receiptSetQrStatus(ok ? 'Foco ajustado. Aponte novamente para o QR Code.' : 'Não consegui acessar o foco desta câmera.', ok ? 'ok' : 'warn');
+  } catch (err) {
+    receiptSetQrStatus('Este navegador não permite controlar o foco manualmente.','warn');
+  }
+});
+
 $('#receiptStopQrBtn')?.addEventListener('click', () => {
   receiptStopQrScanner();
   receiptSetQrStatus('Câmera parada.');

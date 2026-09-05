@@ -88,6 +88,10 @@
 .cloud-auth-gate{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at 30% 20%,rgba(99,102,241,.18),transparent 35%),#070b14}
 .cloud-auth-card{width:min(460px,100%);border:1px solid #263651;border-radius:24px;background:#0d1729;padding:28px;box-shadow:0 30px 90px rgba(0,0,0,.45)}
 .cloud-auth-brand{margin-bottom:26px}.cloud-auth-card h1,.cloud-auth-card h2{margin:8px 0}.cloud-auth-form{display:grid;gap:13px;margin-top:20px}.cloud-auth-form label{display:grid;gap:7px;font-size:12px;color:#9fb0c9;font-weight:700}.cloud-auth-form input{width:100%;border:1px solid #2a3954;border-radius:12px;padding:13px 14px;background:#111c30;color:#f8fafc;font:inherit}.cloud-auth-message{min-height:20px;color:#f87171;font-size:13px}.cloud-auth-message.ok{color:#4ade80}
+
+.receipt-page{padding-bottom:30px}.receipt-intro{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:18px}.receipt-intro h2{margin:3px 0 7px;font-size:24px}.receipt-intro p,.receipt-help{margin:0;color:var(--muted);line-height:1.55;max-width:820px}.receipt-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:14px}.receipt-summary-grid .small-metric strong{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.receipt-main-grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:14px;margin-bottom:14px}.receipt-capture-panel{display:flex;flex-direction:column;gap:13px}.receipt-photo-btn{align-self:flex-start}.receipt-ocr-status{font-size:12px;color:#8fb4e8;min-height:18px}.receipt-progress{height:5px;border-radius:999px;background:#132039;overflow:hidden}.receipt-progress span{display:block;width:0;height:100%;background:linear-gradient(90deg,#6d5dfc,#22c55e);transition:width .2s ease}.receipt-image-preview{max-height:230px;width:100%;object-fit:contain;border:1px solid var(--line);border-radius:14px;background:#09111f}.receipt-or-divider{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:11px;margin-top:3px}.receipt-or-divider:before,.receipt-or-divider:after{content:"";height:1px;background:var(--line);flex:1}.receipt-raw-text{min-height:110px;width:100%;resize:vertical}.receipt-review{margin-bottom:14px}.receipt-meta-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin-bottom:16px}.receipt-items-head,.receipt-item-row{display:grid;grid-template-columns:minmax(0,1fr) 95px 130px 44px;gap:8px;align-items:center}.receipt-items-head{padding:0 6px 8px;color:var(--muted);font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}.receipt-detected-items{display:flex;flex-direction:column;gap:8px}.receipt-item-row{padding:8px;background:#0c1628;border:1px solid var(--line);border-radius:13px}.receipt-item-row input{min-width:0}.receipt-ranking{display:flex;flex-direction:column;gap:11px}.receipt-rank-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 14px;align-items:center}.receipt-rank-name{font-weight:750;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.receipt-rank-value{font-weight:800}.receipt-rank-bar{grid-column:1/-1;height:7px;background:#111d32;border-radius:999px;overflow:hidden}.receipt-rank-bar span{display:block;height:100%;background:linear-gradient(90deg,#6d5dfc,#22d3ee);border-radius:999px}.receipt-history{display:flex;flex-direction:column;gap:8px}.receipt-history-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#0c1628}.receipt-history-row strong{display:block}.receipt-history-row small{color:var(--muted)}.receipt-history-total{font-weight:850;white-space:nowrap}.receipt-delete-btn{width:38px;height:38px;border:1px solid rgba(239,68,68,.28);border-radius:11px;background:rgba(239,68,68,.08);color:#fb7185;display:grid;place-items:center;cursor:pointer}
+@media(max-width:900px){.receipt-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.receipt-main-grid{grid-template-columns:1fr}.receipt-meta-grid{grid-template-columns:1fr 1fr}.receipt-meta-grid .field:first-child{grid-column:1/-1}}
+@media(max-width:620px){.receipt-summary-grid{grid-template-columns:1fr 1fr}.receipt-summary-grid .small-metric{min-height:112px}.receipt-items-head{display:none}.receipt-item-row{grid-template-columns:minmax(0,1fr) 74px 105px 40px}.receipt-meta-grid{grid-template-columns:1fr}.receipt-meta-grid .field:first-child{grid-column:auto}.receipt-history-row{grid-template-columns:minmax(0,1fr) auto}.receipt-history-row .receipt-delete-btn{grid-column:2}.receipt-photo-btn{width:100%;justify-content:center}}
 </style></head>
 <body>
 <div id="cloudAuthGate" class="cloud-auth-gate">
@@ -123,7 +127,9 @@
       <button data-page="movements"><i data-lucide="list-tree"></i>Lançamentos</button>
       <button data-page="accounts"><i data-lucide="wallet-cards"></i>Contas</button>
       <button data-page="cards"><i data-lucide="credit-card"></i>Cartões</button>
+    <button data-page="receipts"><i data-lucide="scan-line"></i>Cupons</button>
       <button data-page="calendar"><i data-lucide="calendar-days"></i>Calendário</button>
+      <button data-page="receipts"><i data-lucide="scan-line"></i>Cupons</button>
       <button data-page="subscriptions"><i data-lucide="repeat-2"></i>Assinaturas</button>
       <button data-page="investments"><i data-lucide="chart-no-axes-combined"></i>Investimentos</button>
       <button data-page="goals"><i data-lucide="target"></i>Metas</button>
@@ -163,7 +169,6 @@
         <article class="metric-card warning" data-page="cards"><div class="metric-icon"><i data-lucide="credit-card"></i></div><small>Faturas do mês</small><strong id="mInvoices">R$ 0,00</strong><span>Por vencimento da fatura</span></article>
         <article class="metric-card subscription" data-page="subscriptions"><div class="metric-icon"><i data-lucide="repeat-2"></i></div><small>Assinaturas no mês</small><strong id="mSubscriptions">R$ 0,00</strong><span>Incluídas nos gastos do mês</span></article>
         <article class="metric-card" data-page="investments"><div class="metric-icon"><i data-lucide="trending-up"></i></div><small>Investimentos</small><strong id="mInvested">R$ 0,00</strong><span id="mInvestedCaption">Valor atual da carteira</span></article>
-        <article class="metric-card" data-page="dashboard"><div class="metric-icon"><i data-lucide="landmark"></i></div><small>Patrimônio</small><strong id="mPatrimony">R$ 0,00</strong><span>Contas + investimentos + bens − dívidas</span></article>
       </div>
 
       <div class="insight-strip">
@@ -242,6 +247,66 @@
         <span><b class="dot pending"></b>A pagar</span><span><b class="dot paid"></b>Pago</span><span><b class="dot overdue"></b>Atrasado</span><span><b class="dot carddot"></b>Cartão/parcela</span><span><b class="dot subdot"></b>Assinatura</span><span><b class="dot movementdot"></b>Lançamento</span>
       </div>
       <div class="panel calendar-panel"><div id="financialCalendar"></div></div>
+    </section>
+
+    <section id="receipts" class="page receipt-page">
+      <div class="receipt-intro">
+        <div>
+          <small class="eyebrow">LABORATÓRIO DE COMPRAS</small>
+          <h2>Cupons de supermercado</h2>
+          <p>Fotografe um cupom para extrair os produtos e descobrir onde seu dinheiro do mercado está indo. Esta área é independente e não altera lançamentos nem saldos.</p>
+        </div>
+      </div>
+
+      <div class="receipt-summary-grid">
+        <article class="small-metric"><small>Total analisado</small><strong id="receiptTotalSpent">R$ 0,00</strong><span>somando os cupons salvos</span></article>
+        <article class="small-metric"><small>Cupons salvos</small><strong id="receiptCount">0</strong><span>compras analisadas</span></article>
+        <article class="small-metric"><small>Maior gasto</small><strong id="receiptTopSpend">—</strong><span id="receiptTopSpendValue">nenhum item ainda</span></article>
+        <article class="small-metric"><small>Mais comprado</small><strong id="receiptTopQty">—</strong><span id="receiptTopQtyValue">nenhum item ainda</span></article>
+      </div>
+
+      <div class="receipt-main-grid">
+        <article class="panel receipt-capture-panel">
+          <div class="panel-head"><div><small>DIGITALIZAR</small><h3>Adicionar cupom</h3></div></div>
+          <p class="receipt-help">No celular, use a câmera. No computador, selecione uma foto do cupom. O reconhecimento acontece no próprio navegador.</p>
+          <label class="primary-btn receipt-photo-btn">
+            <i data-lucide="camera"></i>Fotografar / enviar cupom
+            <input id="receiptPhotoInput" type="file" accept="image/*" capture="environment" hidden>
+          </label>
+          <div id="receiptOcrStatus" class="receipt-ocr-status">Nenhuma imagem selecionada.</div>
+          <div class="receipt-progress"><span id="receiptOcrProgress"></span></div>
+          <img id="receiptImagePreview" class="receipt-image-preview hidden" alt="Prévia do cupom">
+
+          <div class="receipt-or-divider"><span>ou teste colando o texto do cupom</span></div>
+          <textarea id="receiptRawText" class="receipt-raw-text" placeholder="Cole aqui o texto do cupom fiscal para testar a extração..."></textarea>
+          <button class="secondary-btn" id="receiptAnalyzeTextBtn"><i data-lucide="scan-text"></i>Analisar texto</button>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head"><div><small>RANKING</small><h3>Onde você mais gasta</h3></div></div>
+          <div id="receiptTopItems" class="receipt-ranking empty-state">Digitalize seus primeiros cupons para montar o ranking.</div>
+        </article>
+      </div>
+
+      <article id="receiptReview" class="panel receipt-review hidden">
+        <div class="panel-head"><div><small>CONFERÊNCIA</small><h3>Revise antes de salvar</h3></div><button class="secondary-btn" id="receiptAddItemBtn"><i data-lucide="plus"></i>Adicionar item</button></div>
+        <div class="receipt-meta-grid">
+          <div class="field"><label>Mercado</label><input id="receiptStoreName" placeholder="Ex.: Supermercado BH"></div>
+          <div class="field"><label>Data da compra</label><input id="receiptPurchaseDate" type="date"></div>
+          <div class="field"><label>Total do cupom</label><input id="receiptTotalAmount" type="number" min="0" step="0.01"></div>
+        </div>
+        <div class="receipt-items-head"><span>Produto</span><span>Qtd.</span><span>Valor</span><span></span></div>
+        <div id="receiptDetectedItems" class="receipt-detected-items"></div>
+        <div class="form-actions">
+          <button class="secondary-btn" id="receiptCancelReviewBtn">Cancelar</button>
+          <button class="primary-btn" id="receiptSaveBtn"><i data-lucide="save"></i>Salvar cupom</button>
+        </div>
+      </article>
+
+      <article class="panel receipt-history-panel">
+        <div class="panel-head"><div><small>HISTÓRICO</small><h3>Cupons recentes</h3></div></div>
+        <div id="receiptHistory" class="receipt-history empty-state">Nenhum cupom salvo.</div>
+      </article>
     </section>
 
     <section id="subscriptions" class="page">
@@ -345,6 +410,7 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script>
 let cloudStarted=false;
 function cloudSetMessage(id,msg,ok=false){const el=document.getElementById(id);if(el){el.textContent=msg||'';el.classList.toggle('ok',!!ok)}}
@@ -463,7 +529,7 @@ function iconRefresh() { window.lucide?.createIcons(); }
 function pageTitle(id) {
   return ({
     dashboard: 'Dashboard', movements: 'Lançamentos', accounts: 'Contas', cards: 'Cartões',
-    calendar: 'Calendário financeiro', subscriptions: 'Assinaturas',
+    calendar: 'Calendário financeiro', receipts: 'Cupons de supermercado', subscriptions: 'Assinaturas',
     investments: 'Investimentos', goals: 'Metas', settings: 'Configurações'
   })[id] || 'Meu Financeiro';
 }
@@ -483,6 +549,7 @@ async function showPage(id) {
   if (id === 'investments') await loadInvestments();
   if (id === 'goals') await loadGoals();
   if (id === 'calendar') initCalendar(true);
+  if (id === 'receipts') await loadReceipts();
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
   iconRefresh();
@@ -548,7 +615,6 @@ async function loadDashboard() {
       investmentCaption.textContent = `Projetado até ${valueDate}${changeText}${cdiText}${missingRates ? ` • ${missingRates} sem referência` : ''}`;
     }
   }
-  $('#mPatrimony').textContent = money(d.patrimony);
   $('#mInvoices').textContent = money(d.monthly_invoices);
   $('#mExpenses').textContent = money(d.expenses);
   $('#mIncomes').textContent = money(d.incomes);
@@ -1320,6 +1386,252 @@ function bindModalForms() {
   }
 }
 
+
+let receiptPreviewUrl = null;
+
+function receiptParseNumber(value) {
+  let s = String(value ?? '').trim().replace(/R\$/gi,'').replace(/\s/g,'');
+  if (!s) return 0;
+  if (s.includes(',')) s = s.replace(/\./g,'').replace(',','.');
+  const v = Number(s);
+  return Number.isFinite(v) ? v : 0;
+}
+
+function receiptNormalizeName(name) {
+  return String(name || '').replace(/\s+/g,' ').trim().toUpperCase();
+}
+
+function receiptParseText(text) {
+  const raw = String(text || '').replace(/\r/g,'');
+  const lines = raw.split('\n').map(x => x.replace(/\s+/g,' ').trim()).filter(Boolean);
+  const ignore = /(CNPJ|CPF|CONSUMIDOR|CHAVE|NFC-?E|SAT|DANFE|TRIBUT|ICMS|PAGAMENTO|DINHEIRO|CART[AÃ]O|TROCO|SUBTOTAL|TOTAL A PAGAR|VALOR TOTAL|VALOR PAGO|DESCONTO|ACR[EÉ]SCIMO|PROTOCOLO|AUTORIZA[CÇ][AÃ]O|DOCUMENTO AUXILIAR)/i;
+
+  let purchaseDate = isoDate(new Date());
+  for (const line of lines) {
+    const m = line.match(/\b(\d{2})[\/.-](\d{2})[\/.-](\d{2,4})\b/);
+    if (m) {
+      const y = m[3].length === 2 ? '20' + m[3] : m[3];
+      purchaseDate = `${y}-${m[2]}-${m[1]}`;
+      break;
+    }
+  }
+
+  let storeName = 'Mercado';
+  for (const line of lines.slice(0,10)) {
+    if (line.length >= 4 && !ignore.test(line) && !/^\d+$/.test(line) && !/R\$/.test(line)) {
+      storeName = line.replace(/^[\W\d_]+/,'').trim().slice(0,80) || 'Mercado';
+      break;
+    }
+  }
+
+  let explicitTotal = 0;
+  for (const line of lines) {
+    if (/(TOTAL A PAGAR|VALOR TOTAL|TOTAL R\$|TOTAL$)/i.test(line)) {
+      const all = [...line.matchAll(/(?:R\$\s*)?(\d{1,3}(?:\.\d{3})*,\d{2}|\d+,\d{2}|\d+\.\d{2})/g)];
+      if (all.length) explicitTotal = receiptParseNumber(all[all.length-1][1]);
+    }
+  }
+
+  const items = [];
+  const moneyEnd = /(?:R\$\s*)?(\d{1,3}(?:\.\d{3})*,\d{2}|\d+,\d{2}|\d+\.\d{2})\s*$/;
+  for (let idx=0; idx<lines.length; idx++) {
+    const line = lines[idx];
+    if (ignore.test(line)) continue;
+    const m = line.match(moneyEnd);
+    if (!m) continue;
+    const total = receiptParseNumber(m[1]);
+    if (!(total > 0)) continue;
+
+    let desc = line.slice(0, m.index).replace(/(?:R\$)?\s*$/,'').trim();
+    if ((!desc || desc.length < 2) && idx > 0 && !ignore.test(lines[idx-1]) && !moneyEnd.test(lines[idx-1])) desc = lines[idx-1];
+    desc = desc
+      .replace(/^\d{1,6}\s*[-–.:]?\s*/,'')
+      .replace(/\b\d+(?:[.,]\d+)?\s*[xX]\s*\d+(?:[.,]\d+)?\s*$/,'')
+      .trim();
+    if (desc.length < 2 || /^\d+$/.test(desc)) continue;
+
+    let quantity = 1;
+    const qm = line.match(/\b(\d+(?:[.,]\d+)?)\s*(?:X|UN|UND|UNID|KG|G|L|LT)\b/i);
+    if (qm) quantity = Math.max(.001, receiptParseNumber(qm[1]) || 1);
+
+    items.push({name:desc.slice(0,120), quantity, total});
+  }
+
+  const deDup = [];
+  const seen = new Set();
+  for (const item of items) {
+    const key = `${receiptNormalizeName(item.name)}|${item.total.toFixed(2)}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    deDup.push(item);
+  }
+
+  return {
+    raw,
+    storeName,
+    purchaseDate,
+    total: explicitTotal || deDup.reduce((a,x)=>a+x.total,0),
+    items: deDup
+  };
+}
+
+function receiptRenderReview(parsed) {
+  $('#receiptStoreName').value = parsed.storeName || 'Mercado';
+  $('#receiptPurchaseDate').value = parsed.purchaseDate || isoDate(new Date());
+  $('#receiptTotalAmount').value = Number(parsed.total || 0).toFixed(2);
+  $('#receiptRawText').value = parsed.raw || $('#receiptRawText').value || '';
+  const host = $('#receiptDetectedItems');
+  const rows = parsed.items?.length ? parsed.items : [{name:'',quantity:1,total:0}];
+  host.innerHTML = rows.map(item => receiptItemRow(item)).join('');
+  $('#receiptReview').classList.remove('hidden');
+  $('#receiptReview').scrollIntoView({behavior:'smooth',block:'start'});
+  iconRefresh();
+}
+
+function receiptItemRow(item={}) {
+  return `<div class="receipt-item-row">
+    <input class="receipt-item-name" value="${attr(item.name || '')}" placeholder="Produto">
+    <input class="receipt-item-qty" type="number" min="0.001" step="0.001" value="${attr(item.quantity ?? 1)}">
+    <input class="receipt-item-total" type="number" min="0" step="0.01" value="${attr(Number(item.total || 0).toFixed(2))}">
+    <button class="receipt-delete-btn" type="button" data-remove-receipt-item title="Remover"><i data-lucide="trash-2"></i></button>
+  </div>`;
+}
+
+async function receiptAnalyzeImage(file) {
+  if (!file) return;
+  if (!window.Tesseract) throw new Error('Leitor de cupom ainda não carregou. Tente novamente em alguns segundos.');
+  if (receiptPreviewUrl) URL.revokeObjectURL(receiptPreviewUrl);
+  receiptPreviewUrl = URL.createObjectURL(file);
+  $('#receiptImagePreview').src = receiptPreviewUrl;
+  $('#receiptImagePreview').classList.remove('hidden');
+  $('#receiptOcrProgress').style.width = '3%';
+  $('#receiptOcrStatus').textContent = 'Lendo o cupom...';
+
+  const result = await Tesseract.recognize(file,'por',{
+    logger:m=>{
+      if (m.status === 'recognizing text') {
+        const pct = Math.max(3,Math.round((m.progress || 0)*100));
+        $('#receiptOcrProgress').style.width = pct + '%';
+        $('#receiptOcrStatus').textContent = `Reconhecendo produtos... ${pct}%`;
+      } else if (m.status) {
+        $('#receiptOcrStatus').textContent = 'Preparando leitura...';
+      }
+    }
+  });
+
+  $('#receiptOcrProgress').style.width = '100%';
+  $('#receiptOcrStatus').textContent = 'Leitura concluída. Confira os produtos abaixo.';
+  const parsed = receiptParseText(result?.data?.text || '');
+  receiptRenderReview(parsed);
+}
+
+async function receiptSave() {
+  const uid = await userId();
+  const itemRows = [...document.querySelectorAll('#receiptDetectedItems .receipt-item-row')];
+  const items = itemRows.map(row => ({
+    name: row.querySelector('.receipt-item-name')?.value?.trim() || '',
+    quantity: Number(row.querySelector('.receipt-item-qty')?.value || 1),
+    total: Number(row.querySelector('.receipt-item-total')?.value || 0)
+  })).filter(x => x.name && x.total >= 0);
+
+  if (!items.length) throw new Error('Revise e informe pelo menos um produto.');
+  const calculated = items.reduce((a,x)=>a+x.total,0);
+  const totalAmount = Number($('#receiptTotalAmount').value || 0) || calculated;
+
+  const receiptPayload = {
+    user_id:uid,
+    store_name:$('#receiptStoreName').value.trim() || 'Mercado',
+    purchase_date:$('#receiptPurchaseDate').value || isoDate(new Date()),
+    total_amount:totalAmount,
+    source:'ocr',
+    raw_text:$('#receiptRawText').value || ''
+  };
+  const rec = await sb.from('receipts').insert(receiptPayload).select('id').single();
+  if (rec.error) throw rec.error;
+
+  const rows = items.map(x=>({
+    receipt_id:rec.data.id,
+    user_id:uid,
+    item_name:x.name,
+    quantity:Number.isFinite(x.quantity) && x.quantity>0 ? x.quantity : 1,
+    total_price:Number.isFinite(x.total) ? x.total : 0,
+    unit_price:(Number.isFinite(x.quantity) && x.quantity>0) ? x.total/x.quantity : null
+  }));
+  const ins = await sb.from('receipt_items').insert(rows);
+  if (ins.error) {
+    await sb.from('receipts').delete().eq('id',rec.data.id);
+    throw ins.error;
+  }
+
+  $('#receiptReview').classList.add('hidden');
+  $('#receiptRawText').value = '';
+  $('#receiptPhotoInput').value = '';
+  $('#receiptOcrStatus').textContent = 'Cupom salvo.';
+  $('#receiptOcrProgress').style.width = '0';
+  toast('Cupom salvo para análise.');
+  await loadReceipts();
+}
+
+async function loadReceipts() {
+  const uid = await userId();
+  const [rRec,rItems] = await Promise.all([
+    sb.from('receipts').select('*').eq('user_id',uid).order('purchase_date',{ascending:false}).order('id',{ascending:false}),
+    sb.from('receipt_items').select('*').eq('user_id',uid).order('id',{ascending:false})
+  ]);
+  if (rRec.error) throw rRec.error;
+  if (rItems.error) throw rItems.error;
+  const receipts = rRec.data || [], items = rItems.data || [];
+
+  $('#receiptCount').textContent = String(receipts.length);
+  $('#receiptTotalSpent').textContent = money(receipts.reduce((a,x)=>a+n(x.total_amount),0));
+
+  const agg = new Map();
+  for (const item of items) {
+    const key = receiptNormalizeName(item.item_name);
+    const cur = agg.get(key) || {name:item.item_name,total:0,qty:0};
+    cur.total += n(item.total_price);
+    cur.qty += n(item.quantity) || 1;
+    agg.set(key,cur);
+  }
+  const rankedSpend = [...agg.values()].sort((a,b)=>b.total-a.total);
+  const rankedQty = [...agg.values()].sort((a,b)=>b.qty-a.qty);
+  const topSpend = rankedSpend[0], topQty = rankedQty[0];
+  $('#receiptTopSpend').textContent = topSpend?.name || '—';
+  $('#receiptTopSpendValue').textContent = topSpend ? money(topSpend.total) : 'nenhum item ainda';
+  $('#receiptTopQty').textContent = topQty?.name || '—';
+  $('#receiptTopQtyValue').textContent = topQty ? `${topQty.qty.toLocaleString('pt-BR',{maximumFractionDigits:3})} unidades/kg` : 'nenhum item ainda';
+
+  const rankingHost = $('#receiptTopItems');
+  if (!rankedSpend.length) {
+    rankingHost.className = 'receipt-ranking empty-state';
+    rankingHost.textContent = 'Digitalize seus primeiros cupons para montar o ranking.';
+  } else {
+    const max = Math.max(1,rankedSpend[0].total);
+    rankingHost.className = 'receipt-ranking';
+    rankingHost.innerHTML = rankedSpend.slice(0,12).map((x,i)=>`<div class="receipt-rank-row">
+      <span class="receipt-rank-name">${i+1}. ${esc(x.name)}</span>
+      <span class="receipt-rank-value">${money(x.total)}</span>
+      <div class="receipt-rank-bar"><span style="width:${Math.max(3,x.total/max*100)}%"></span></div>
+    </div>`).join('');
+  }
+
+  const counts = new Map();
+  for (const item of items) counts.set(item.receipt_id,(counts.get(item.receipt_id)||0)+1);
+  const history = $('#receiptHistory');
+  if (!receipts.length) {
+    history.className = 'receipt-history empty-state';
+    history.textContent = 'Nenhum cupom salvo.';
+  } else {
+    history.className = 'receipt-history';
+    history.innerHTML = receipts.slice(0,30).map(r=>`<div class="receipt-history-row">
+      <div><strong>${esc(r.store_name || 'Mercado')}</strong><small>${formatDate(r.purchase_date)} • ${counts.get(r.id)||0} itens</small></div>
+      <span class="receipt-history-total">${money(r.total_amount)}</span>
+      <button class="receipt-delete-btn" data-delete-receipt="${r.id}" title="Excluir cupom"><i data-lucide="trash-2"></i></button>
+    </div>`).join('');
+  }
+  iconRefresh();
+}
+
 function initCalendar(refetch = false) {
   if (!state.calendar) {
     state.calendar = new FullCalendar.Calendar($('#financialCalendar'), {
@@ -1649,6 +1961,43 @@ $('#movementMonthPicker')?.addEventListener('change', async e => {
   if (!e.target.value) return;
   state.movementMonth = e.target.value;
   await loadMovements();
+});
+
+$('#receiptPhotoInput')?.addEventListener('change', async e => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  try { await receiptAnalyzeImage(file); }
+  catch (err) { $('#receiptOcrStatus').textContent = err.message; $('#receiptOcrProgress').style.width='0'; toast(err.message); }
+});
+
+$('#receiptAnalyzeTextBtn')?.addEventListener('click', () => {
+  const text = $('#receiptRawText').value.trim();
+  if (!text) return toast('Cole o texto do cupom primeiro.');
+  receiptRenderReview(receiptParseText(text));
+});
+
+$('#receiptAddItemBtn')?.addEventListener('click', () => {
+  $('#receiptDetectedItems').insertAdjacentHTML('beforeend',receiptItemRow({name:'',quantity:1,total:0}));
+  iconRefresh();
+});
+
+$('#receiptCancelReviewBtn')?.addEventListener('click', () => $('#receiptReview').classList.add('hidden'));
+$('#receiptSaveBtn')?.addEventListener('click', async () => { try { await receiptSave(); } catch (err) { toast(err.message); } });
+
+document.addEventListener('click', async e => {
+  const remove = e.target.closest('[data-remove-receipt-item]');
+  if (remove) { remove.closest('.receipt-item-row')?.remove(); return; }
+  const del = e.target.closest('[data-delete-receipt]');
+  if (del) {
+    if (!confirm('Excluir este cupom e seus itens?')) return;
+    try {
+      const uid=await userId();
+      const r=await sb.from('receipts').delete().eq('id',Number(del.dataset.deleteReceipt)).eq('user_id',uid);
+      if (r.error) throw r.error;
+      toast('Cupom excluído.');
+      await loadReceipts();
+    } catch (err) { toast(err.message); }
+  }
 });
 
 $('#restoreFile').addEventListener('change', async e => {

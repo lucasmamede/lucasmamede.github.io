@@ -441,6 +441,12 @@
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+const SUPABASE_URL='https://ycjpwryzfpigixabxwxd.supabase.co';
+const SUPABASE_KEY='sb_publishable_cbpoSftZ7-XVaDSERT1xRQ_5AEEhARA';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+let cloudUser=null;
+let cloudResolve;
+window.cloudReady=new Promise(r=>cloudResolve=r);
 let cloudStarted=false;
 function cloudSetMessage(id,msg,ok=false){const el=document.getElementById(id);if(el){el.textContent=msg||'';el.classList.toggle('ok',!!ok)}}
 async function cloudSeedCategories(){const uid=cloudUser.id;const defaults=[['Alimentação','expense','#f97316','utensils'],['Mercado','expense','#84cc16','shopping-cart'],['Moradia','expense','#06b6d4','house'],['Transporte','expense','#3b82f6','car'],['Saúde','expense','#ef4444','heart-pulse'],['Educação','expense','#8b5cf6','graduation-cap'],['Lazer','expense','#ec4899','gamepad-2'],['Compras','expense','#f59e0b','shopping-bag'],['Assinaturas','expense','#14b8a6','repeat'],['Investimentos','investment','#22c55e','trending-up'],['Salário','income','#10b981','banknote'],['Outros','expense','#64748b','tag']];const r=await sb.from('categories').insert(defaults.map(([name,kind,color,icon])=>({user_id:uid,name,kind,color,icon})));if(r.error)throw r.error}
@@ -448,7 +454,7 @@ function cloudShowApp(){document.getElementById('cloudAuthGate').style.display='
 async function cloudAfterSession(session){cloudUser=session?.user||null;if(!cloudUser){document.getElementById('cloudAuthGate').style.display='flex';document.getElementById('cloudAuthLogin').classList.remove('hidden');document.getElementById('cloudClaimBox').classList.add('hidden');return}const {count,error}=await sb.from('categories').select('*',{count:'exact',head:true});if(error)throw error;if((count||0)>0){cloudShowApp();return}document.getElementById('cloudAuthLogin').classList.add('hidden');document.getElementById('cloudClaimBox').classList.remove('hidden')}
 document.getElementById('cloudAuthForm').addEventListener('submit',async e=>{e.preventDefault();cloudSetMessage('cloudAuthMessage','Entrando...');const email=document.getElementById('cloudEmail').value.trim(),password=document.getElementById('cloudPassword').value;const {data,error}=await sb.auth.signInWithPassword({email,password});if(error)return cloudSetMessage('cloudAuthMessage',error.message);await cloudAfterSession(data.session)});
 document.getElementById('cloudSignupBtn').addEventListener('click',async()=>{const email=document.getElementById('cloudEmail').value.trim(),password=document.getElementById('cloudPassword').value;if(!email||password.length<6)return cloudSetMessage('cloudAuthMessage','Informe e-mail e senha com pelo menos 6 caracteres.');const {data,error}=await sb.auth.signUp({email,password});if(error)return cloudSetMessage('cloudAuthMessage',error.message);if(!data.session)return cloudSetMessage('cloudAuthMessage','Conta criada. Confirme o e-mail e depois entre.',true);await cloudAfterSession(data.session)});
-document.getElementById('cloudClaimForm').addEventListener('submit',async e=>{e.preventDefault();cloudSetMessage('cloudClaimMessage','Importando...');const code=document.getElementById('cloudClaimCode').value.trim();const {data,error}=await sb.rpc('claim_legacy_data',{p_code:code});if(error||!data)return cloudSetMessage('cloudClaimMessage',error?.message||'Código inválido.');cloudSetMessage('cloudClaimMessage','Dados importados.',true);cloudShowApp()});
+document.getElementById('cloudClaimForm').addEventListener('submit',async e=>{e.preventDefault();cloudSetMessage('cloudClaimMessage','Importando...');try{const code=document.getElementById('cloudClaimCode').value.trim();const {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw new Error('Sessão expirada. Entre novamente.');const r=await fetch(SUPABASE_URL+'/functions/v1/claim-legacy-data',{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+session.access_token},body:JSON.stringify({code})});const result=await r.json();if(!r.ok||!result?.ok)throw new Error(result?.error||'Código inválido.');cloudSetMessage('cloudClaimMessage','Dados importados.',true);cloudShowApp()}catch(err){cloudSetMessage('cloudClaimMessage',err.message||'Código inválido.')}});
 document.getElementById('cloudStartEmptyBtn').addEventListener('click',async()=>{try{await cloudSeedCategories();cloudShowApp()}catch(e){cloudSetMessage('cloudClaimMessage',e.message)}});
 (async()=>{const {data}=await sb.auth.getSession();await cloudAfterSession(data.session)})().catch(e=>cloudSetMessage('cloudAuthMessage',e.message));
 sb.auth.onAuthStateChange((_event,session)=>{if(session&&!cloudStarted)cloudAfterSession(session).catch(e=>cloudSetMessage('cloudAuthMessage',e.message))});
@@ -492,11 +498,6 @@ function shiftMonthKey(key, delta) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
 }
 
-const SUPABASE_URL = 'https://ycjpwryzfpigixabxwxd.supabase.co';const SUPABASE_KEY = 'sb_publishable_cbpoSftZ7-XVaDSERT1xRQ_5AEEhARA';
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-let cloudUser = null;
-let cloudResolve;
-window.cloudReady = new Promise(r => cloudResolve = r);
 const n=v=>Number(v||0); const emptyId=v=>v?Number(v):null;
 function isoDate(d){return d.toISOString().slice(0,10)}
 function parseISO(s){return new Date(`${s}T12:00:00`)}

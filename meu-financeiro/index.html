@@ -1702,11 +1702,14 @@ async function receiptHandleQrValue(value) {
   receiptSetQrStatus('QR detectado. Buscando os produtos...','ok');
 
   try {
+    const {data:{session}}=await sb.auth.getSession();
+    if(!session?.access_token)throw new Error('Sua sessão expirou. Entre novamente no app.');
     const response = await fetch(`${SUPABASE_URL}/functions/v1/nfce-reader`,{
       method:'POST',
       headers:{
         'Content-Type':'application/json',
-        'apikey':SUPABASE_KEY
+        'apikey':SUPABASE_KEY,
+        'Authorization':`Bearer ${session.access_token}`
       },
       body:JSON.stringify({url:url.toString()})
     });

@@ -93,8 +93,8 @@
 @media(max-width:900px){.receipt-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.receipt-main-grid{grid-template-columns:1fr}.receipt-meta-grid{grid-template-columns:1fr 1fr}.receipt-meta-grid .field:first-child{grid-column:1/-1}}
 @media(max-width:620px){.receipt-summary-grid{grid-template-columns:1fr 1fr}.receipt-summary-grid .small-metric{min-height:112px}.receipt-items-head{display:none}.receipt-item-row{grid-template-columns:minmax(0,1fr) 74px 105px 40px}.receipt-meta-grid{grid-template-columns:1fr}.receipt-meta-grid .field:first-child{grid-column:auto}.receipt-history-row{grid-template-columns:minmax(0,1fr) auto}.receipt-history-row .receipt-delete-btn{grid-column:2}.receipt-photo-btn{width:100%;justify-content:center}}
 
-.receipt-qr-btn{align-self:flex-start}.receipt-qr-scanner{display:flex;flex-direction:column;gap:10px}.receipt-qr-video-wrap{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:#020713;aspect-ratio:4/3;max-height:390px}.receipt-qr-video-wrap video{width:100%;height:100%;object-fit:cover;display:block}.receipt-qr-frame{position:absolute;left:50%;top:50%;width:min(64%,260px);aspect-ratio:1;transform:translate(-50%,-50%);border:2px solid #7c5cff;border-radius:22px;box-shadow:0 0 0 999px rgba(0,0,0,.24),0 0 28px rgba(124,92,255,.35);pointer-events:none}.receipt-qr-frame:before,.receipt-qr-frame:after{content:"";position:absolute;inset:14px;border-top:3px solid #22d3ee;border-bottom:3px solid #22d3ee;border-radius:13px;opacity:.7}.receipt-qr-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#9db2d2;font-size:11px}.receipt-qr-actions .secondary-btn{flex:0 0 auto}.receipt-qr-scanner .text-btn{align-self:flex-start}.receipt-qr-status-ok{color:#4ade80!important}.receipt-qr-status-warn{color:#fbbf24!important}
-@media(max-width:620px){.receipt-qr-btn{width:100%;justify-content:center}.receipt-qr-actions{align-items:flex-start;flex-direction:column}.receipt-qr-actions .secondary-btn{width:100%}.receipt-qr-video-wrap{max-height:none}}
+.receipt-qr-btn{align-self:flex-start}.receipt-qr-scanner{display:flex;flex-direction:column;gap:10px}.receipt-qr-reader{width:100%;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:#020713;min-height:260px}.receipt-qr-reader video{width:100%!important;max-height:520px;object-fit:cover;border-radius:14px}.receipt-qr-reader #qr-shaded-region{border-color:rgba(124,92,255,.7)!important}.receipt-qr-reader img{max-width:56px}.receipt-qr-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#9db2d2;font-size:11px}.receipt-qr-actions .secondary-btn{flex:0 0 auto}.receipt-qr-scanner .text-btn{align-self:flex-start}.receipt-qr-status-ok{color:#4ade80!important}.receipt-qr-status-warn{color:#fbbf24!important}
+@media(max-width:620px){.receipt-qr-btn{width:100%;justify-content:center}.receipt-qr-actions{align-items:flex-start;flex-direction:column}.receipt-qr-actions .secondary-btn{width:100%}.receipt-qr-reader{min-height:300px}}
 </style></head>
 <body>
 <div id="cloudAuthGate" class="cloud-auth-gate">
@@ -277,11 +277,7 @@
           </button>
 
           <div id="receiptQrScanner" class="receipt-qr-scanner hidden">
-            <div class="receipt-qr-video-wrap">
-              <video id="receiptQrVideo" playsinline muted></video>
-              <div class="receipt-qr-frame"></div>
-            </div>
-            <canvas id="receiptQrCanvas" class="hidden"></canvas>
+            <div id="receiptQrReader" class="receipt-qr-reader"></div>
             <div class="receipt-qr-actions">
               <span id="receiptQrStatus">Aponte para o QR Code do cupom.</span>
               <button class="secondary-btn" id="receiptStopQrBtn" type="button">Parar câmera</button>
@@ -434,6 +430,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
 let cloudStarted=false;
 function cloudSetMessage(id,msg,ok=false){const el=document.getElementById(id);if(el){el.textContent=msg||'';el.classList.toggle('ok',!!ok)}}
@@ -1414,9 +1411,8 @@ function bindModalForms() {
 let receiptPreviewUrl = null;
 
 
-let receiptQrStream = null;
-let receiptQrFrameHandle = 0;
-let receiptQrDetector = null;
+let receiptQrScannerInstance = null;
+let receiptQrRunning = false;
 let receiptQrProcessing = false;
 
 function receiptSetQrStatus(message, kind='') {
@@ -1427,75 +1423,87 @@ function receiptSetQrStatus(message, kind='') {
   el.classList.toggle('receipt-qr-status-warn', kind === 'warn');
 }
 
-function receiptStopQrScanner() {
-  if (receiptQrFrameHandle) cancelAnimationFrame(receiptQrFrameHandle);
-  receiptQrFrameHandle = 0;
-  if (receiptQrStream) {
-    receiptQrStream.getTracks().forEach(track => track.stop());
-    receiptQrStream = null;
-  }
-  const video = $('#receiptQrVideo');
-  if (video) video.srcObject = null;
+async function receiptStopQrScanner() {
+  const scanner = receiptQrScannerInstance;
+  receiptQrScannerInstance = null;
+  receiptQrRunning = false;
+  if (!scanner) return;
+  try { await scanner.stop(); } catch (_) {}
+  try { scanner.clear(); } catch (_) {}
 }
 
 async function receiptStartQrScanner() {
+  if (!window.Html5Qrcode) throw new Error('Leitor de QR Code ainda não carregou. Feche e abra a página novamente.');
   if (!navigator.mediaDevices?.getUserMedia) throw new Error('Este navegador não liberou acesso à câmera.');
-  receiptStopQrScanner();
+
+  await receiptStopQrScanner();
   receiptQrProcessing = false;
   $('#receiptQrOpenLink')?.classList.add('hidden');
   $('#receiptQrScanner').classList.remove('hidden');
-  receiptSetQrStatus('Abrindo a câmera...');
+  receiptSetQrStatus('Abrindo a câmera traseira...');
 
-  receiptQrStream = await navigator.mediaDevices.getUserMedia({
-    video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},
-    audio:false
-  });
+  const reader = $('#receiptQrReader');
+  if (reader) reader.innerHTML = '';
 
-  const video = $('#receiptQrVideo');
-  video.srcObject = receiptQrStream;
-  await video.play();
+  const formats = window.Html5QrcodeSupportedFormats ? [Html5QrcodeSupportedFormats.QR_CODE] : undefined;
+  receiptQrScannerInstance = new Html5Qrcode('receiptQrReader', formats ? {formatsToSupport:formats, verbose:false} : {verbose:false});
 
+  const qrbox = (viewfinderWidth, viewfinderHeight) => {
+    const side = Math.floor(Math.min(viewfinderWidth, viewfinderHeight) * 0.72);
+    return {width:Math.max(190,Math.min(side,320)),height:Math.max(190,Math.min(side,320))};
+  };
+
+  const onSuccess = async decodedText => {
+    if (receiptQrProcessing || !decodedText) return;
+    receiptQrProcessing = true;
+    receiptSetQrStatus('QR Code detectado. Consultando a NFC-e...','ok');
+    await receiptStopQrScanner();
+    try { await receiptHandleQrValue(decodedText); }
+    finally { receiptQrProcessing = false; }
+  };
+
+  const onFailure = () => {};
+
+  let started = false;
   try {
-    receiptQrDetector = ('BarcodeDetector' in window) ? new BarcodeDetector({formats:['qr_code']}) : null;
-  } catch (_) {
-    receiptQrDetector = null;
+    await receiptQrScannerInstance.start(
+      {facingMode:'environment'},
+      {fps:15,qrbox,aspectRatio:1.333333,disableFlip:false},
+      onSuccess,
+      onFailure
+    );
+    started = true;
+  } catch (firstError) {
+    try {
+      const cameras = await Html5Qrcode.getCameras();
+      if (!cameras?.length) throw firstError;
+      const preferred = cameras.find(c => /back|rear|traseira|environment/i.test(c.label)) || cameras[cameras.length-1];
+      await receiptQrScannerInstance.start(
+        preferred.id,
+        {fps:15,qrbox,disableFlip:false},
+        onSuccess,
+        onFailure
+      );
+      started = true;
+    } catch (_) {
+      throw firstError;
+    }
   }
-  receiptSetQrStatus('Aponte para o QR Code da NFC-e.');
-  receiptQrFrameHandle = requestAnimationFrame(receiptQrScanFrame);
-}
 
-async function receiptQrScanFrame() {
-  const video = $('#receiptQrVideo');
-  if (!receiptQrStream || !video || receiptQrProcessing) return;
+  if (!started) throw new Error('Não consegui iniciar a câmera.');
 
-  try {
-    let value = '';
+  receiptQrRunning = true;
+  receiptSetQrStatus('Aponte o QR Code dentro do quadrado. A leitura é automática.');
 
-    if (receiptQrDetector && video.readyState >= 2) {
-      const codes = await receiptQrDetector.detect(video);
-      value = codes?.[0]?.rawValue || '';
-    } else if (window.jsQR && video.readyState >= 2 && video.videoWidth && video.videoHeight) {
-      const canvas = $('#receiptQrCanvas');
-      const maxWidth = 720;
-      const scale = Math.min(1,maxWidth/video.videoWidth);
-      canvas.width = Math.max(1,Math.round(video.videoWidth*scale));
-      canvas.height = Math.max(1,Math.round(video.videoHeight*scale));
-      const ctx = canvas.getContext('2d',{willReadFrequently:true});
-      ctx.drawImage(video,0,0,canvas.width,canvas.height);
-      const img = ctx.getImageData(0,0,canvas.width,canvas.height);
-      const code = jsQR(img.data,img.width,img.height,{inversionAttempts:'dontInvert'});
-      value = code?.data || '';
-    }
-
-    if (value) {
-      receiptQrProcessing = true;
-      receiptStopQrScanner();
-      await receiptHandleQrValue(value);
-      return;
-    }
-  } catch (_) {}
-
-  if (receiptQrStream) receiptQrFrameHandle = requestAnimationFrame(receiptQrScanFrame);
+  // Tenta melhorar foco/zoom em aparelhos que suportam isso.
+  setTimeout(async () => {
+    if (!receiptQrScannerInstance || !receiptQrRunning) return;
+    try {
+      await receiptQrScannerInstance.applyVideoConstraints({
+        advanced:[{focusMode:'continuous'}]
+      });
+    } catch (_) {}
+  },700);
 }
 
 async function receiptHandleQrValue(value) {
@@ -2128,7 +2136,7 @@ $('#receiptStopQrBtn')?.addEventListener('click', () => {
   receiptStopQrScanner();
   receiptSetQrStatus('Câmera parada.');
 });
-document.addEventListener('visibilitychange', () => { if (document.hidden) receiptStopQrScanner(); });
+document.addEventListener('visibilitychange', () => { if (document.hidden) receiptStopQrScanner().catch(()=>{}); });
 
 $('#receiptPhotoInput')?.addEventListener('change', async e => {
   const file = e.target.files?.[0];

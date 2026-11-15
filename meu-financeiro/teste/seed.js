@@ -2,7 +2,7 @@ window.FinanceDemoSeed = (function FinanceDemoSeed(R) {
  const m=R.today().slice(0,7)+"-01",d=(off,day)=>R.safeDate(Number(R.addMonths(m,off).slice(0,4)),Number(R.addMonths(m,off).slice(5,7)),day);
  const categories=[
  ["Alimentação","expense","#f39762"],["Mercado","expense","#9ad57b"],["Moradia","expense","#70befa"],["Transporte","expense","#c3a3fa"],["Saúde","expense","#f57d91"],["Educação","expense","#92a8f9"],["Lazer","expense","#f5b86b"],["Compras","expense","#da8dff"],["Assinaturas","expense","#65b9c3"],["Salário","income","#56dcaa"],["Freelance","income","#7aebc7"],["Outros","expense","#9fabc2"]
- ].map((x,i)=>({id:"cat-"+i,name:x[0],kind:x[1],color:x[2],archived:false}));
+ ].map((x,i)=>({id:"cat-"+i,name:x[0],kind:x[1],color:x[2],icon:["🍽️","🛒","🏠","🚗","❤️","🎓","🎮","🛍️","🔁","💵","💼","🏷️"][i],archived:false}));
  const cat=name=>categories.find(c=>c.name===name).id;
  const accounts=[{id:"conta-1",name:"Conta principal",bank:"Banco demonstrativo",opening:1600000,color:"#7769f8"},{id:"conta-2",name:"Reserva diária",bank:"Conta digital",opening:250000,color:"#4baddb"},{id:"conta-3",name:"Carteira",bank:"Dinheiro",opening:60000,color:"#39d6a1"}];
  const cards=[{id:"cartao-1",name:"Cartão Platinum",bank:"Banco demonstrativo",limit:1200000,closingDay:27,dueDay:3,color:"#7769f8"},{id:"cartao-2",name:"Cartão Virtual",bank:"Conta digital",limit:500000,closingDay:10,dueDay:18,color:"#399ac2"}];

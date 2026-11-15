@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => localStorage.removeItem('meu-financeiro-laboratorio-demo-v1'));
-  await page.goto('/');
+  await page.goto('./');
 });
 
 test('carrega isolado, sem autenticação, e navega entre telas', async ({ page, isMobile }) => {

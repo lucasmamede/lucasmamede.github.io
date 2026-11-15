@@ -1,0 +1,31 @@
+name: Meu Financeiro - Estudio Teste 2
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'meu-financeiro/teste2/**'
+      - '.github/workflows/meu-financeiro-teste2.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  playwright:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: meu-financeiro/teste2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Instalar dependências
+        run: npm install --no-audit --no-fund
+      - name: Preparar Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Testar desktop e celular
+        run: npm test

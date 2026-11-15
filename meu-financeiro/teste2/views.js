@@ -181,4 +181,4 @@ function settings(db){
  </div></div>`;
 }
 return {esc,money,date,cat,account,card,name,kindNames,kindIcons,kindColors,empty,heading,monthControls,listEntry,nextCommitments,activityRows,home,activity,agenda,cards,accounts,subscriptions,investments,settings};
-})();
+});

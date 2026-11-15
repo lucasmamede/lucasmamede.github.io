@@ -1,0 +1,31 @@
+name: Meu Financeiro - Laboratório (Playwright)
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'meu-financeiro/teste/**'
+      - '.github/workflows/meu-financeiro-lab.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  playwright:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: meu-financeiro/teste
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Instalar dependências de teste
+        run: npm install --no-audit --no-fund
+      - name: Preparar Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Testar desktop e celular
+        run: npm test

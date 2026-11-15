@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0a1220">
+  <meta name="description" content="Meu Financeiro — Laboratório. Demonstração isolada, com dados fictícios.">
+  <title>Meu Financeiro — Laboratório</title>
+  <link rel="icon" href="../icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <script src="./rules.js" defer></script>
+  <script src="./seed.js" defer></script>
+  <script src="./engine.js" defer></script>
+  <script src="./views.js" defer></script>
+  <script src="./tests.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">M</div>
+        <div><strong>Meu Financeiro</strong><small>Laboratório <span class="lab-dot"></span></small></div>
+      </div>
+      <div class="nav-caption">VISÃO GERAL</div>
+      <nav class="side-nav" aria-label="Navegação principal">
+        <button class="nav-item active" data-nav="dashboard"><span class="nav-icon">▦</span> Dashboard</button>
+        <button class="nav-item" data-nav="movements"><span class="nav-icon">⇄</span> Lançamentos</button>
+        <button class="nav-item" data-nav="accounts"><span class="nav-icon">▤</span> Contas</button>
+        <button class="nav-item" data-nav="cards"><span class="nav-icon">▰</span> Cartões</button>
+        <button class="nav-item" data-nav="calendar"><span class="nav-icon">▦</span> Calendário</button>
+        <div class="nav-caption">PLANEJAMENTO</div>
+        <button class="nav-item" data-nav="subscriptions"><span class="nav-icon">⟳</span> Assinaturas</button>
+        <button class="nav-item" data-nav="investments"><span class="nav-icon">↗</span> Investimentos</button>
+        <button class="nav-item" data-nav="settings"><span class="nav-icon">⚙</span> Configurações</button>
+      </nav>
+      <div class="sidebar-end">
+        <div class="safe-card"><div class="safe-dot"></div><div><strong>Dados fictícios</strong><small>Nenhuma conexão com seu Supabase</small></div></div>
+        <div class="version">LAB v1.0 · GitHub Pages</div>
+      </div>
+    </aside>
+    <div class="main-frame">
+      <header class="topbar">
+        <div class="top-left"><button class="icon-button mobile-menu" type="button" id="mobileMenu" aria-label="Abrir menu">☰</button>
+          <div><div class="eyebrow" id="pageEyebrow">VISÃO FINANCEIRA</div><h1 id="pageTitle">Visão geral</h1></div>
+        </div>
+        <div class="top-actions">
+          <span class="environment-tag"><span class="safe-dot"></span> AMBIENTE DE TESTES</span>
+          <button class="soft-btn top-refresh" type="button" data-action="reset" title="Reiniciar dados fictícios">↻ <span>Reiniciar</span></button>
+          <button class="primary-btn" type="button" data-add="expense">＋ <span>Novo lançamento</span></button>
+        </div>
+      </header>
+      <main id="workspace" class="workspace" tabindex="-1"></main>
+      <footer class="footnote">Demonstração local • Os valores não são reais • Alterações ficam somente neste navegador</footer>
+    </div>
+  </div>
+  <nav class="mobile-bottom" aria-label="Acesso rápido">
+    <button type="button" data-nav="dashboard"><span>▦</span>Início</button>
+    <button type="button" data-nav="movements"><span>⇄</span>Lançamentos</button>
+    <button type="button" data-add="expense" class="mobile-add" aria-label="Adicionar lançamento">＋</button>
+    <button type="button" data-nav="calendar"><span>▦</span>Calendário</button>
+    <button type="button" data-action="more"><span>☰</span>Mais</button>
+  </nav>
+  <div id="dialogBackdrop" class="dialog-backdrop hidden" role="presentation">
+    <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+      <div class="dialog-head"><div><small id="dialogKicker" class="eyebrow">CADASTRO</small><h2 id="dialogTitle">Novo registro</h2></div><button type="button" class="icon-button" data-action="close" aria-label="Fechar">✕</button></div>
+      <div id="dialogBody" class="dialog-body"></div>
+    </section>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <noscript><div class="noscript">Ative o JavaScript para acessar o laboratório financeiro.</div></noscript>
+</body>
+</html>

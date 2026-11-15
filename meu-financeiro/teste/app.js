@@ -43,7 +43,7 @@
    ${input("desc","Descrição",v.desc,"text",'required maxlength="100" placeholder="Ex.: Supermercado"')}
    ${input("amount",type==="card"&&!old?"Valor total da compra (R$)":"Valor (R$)",v.amount,"number",'required min="0.01" step="0.01"')}
    ${input("date","Data",v.date,"date","required")}
-   <div class="field" data-txwhen="all"><label for="field_categoryId">Categoria</label><select id="field_categoryId" name="categoryId">${categories(v.categoryId)}</select></div>
+   <div class="field" data-txwhen="all"><label for="field_categoryId">Categoria</label><select id="field_categoryId" name="categoryId">${categories(v.categoryId)}</select><button type="button" class="ghost-btn" data-action="quickCategory">＋ Criar categoria</button></div>
    <div data-txwhen="account" class="field"><label for="field_accountId">Conta bancária</label><select name="accountId" id="field_accountId">${accounts(v.accountId)}</select></div>
    <div data-txwhen="card" class="field"><label for="field_cardId">Cartão</label><select name="cardId" id="field_cardId">${cards(v.cardId)}</select></div>
    <div data-txwhen="transfer" class="field"><label for="field_toAccountId">Conta destino</label><select name="toAccountId" id="field_toAccountId">${accounts(v.toAccountId)}</select></div>
@@ -118,6 +118,7 @@
    ${input("name","Nome",c?.name||"","text",'required maxlength="60"')}
    ${select("kind","Tipo",["expense","income","investment"].map(x=>`<option value="${x}" ${x===(c?.kind||"expense")?"selected":""}>${x==="expense"?"Despesa":x==="income"?"Receita":"Investimento"}</option>`).join(""))}
    ${input("color","Cor",c?.color||"#8170ff","color")}
+   <div class="field"><label>Ícone</label><select name="icon">${["🏷️","🍽️","🛒","🏠","🚗","❤️","🎓","🎮","🛍️","🔁","💵","💼","✈️","🐾"].map(x=>`<option value="${x}" ${(c?.icon||"🏷️")===x?"selected":""}>${x}</option>`).join("")}</select></div>
    <div class="hint-panel wide">Renomear a categoria mantém os vínculos de todo o histórico, pois os lançamentos referenciam seu identificador.</div>${formActions()}</form>`,"CATEGORIAS");
  }
  function openBulk(){
@@ -190,6 +191,7 @@
    const action=btn.dataset.action,id=btn.dataset.id;
    resolve(()=>{
      if(action==="close"){close();return;}
+     if(action==="quickCategory"){const name=prompt("Nome da nova categoria:");if(!name)return;const kind=$("#dynamicForm [name=type]")?.value==="income"?"income":"expense";E.category({name,kind,color:"#8170ff",icon:"🏷️"});const created=E.db.categories[E.db.categories.length-1];const select=$("#field_categoryId");if(select){select.innerHTML=categories(created.id);select.value=created.id;}toast("Categoria criada, pronta para usar.");return;}
      if(action==="more"){more();return;}
      if(action==="prevMonth"||action==="nextMonth"){state.month=R.month(R.addMonths(state.month+"-01",action==="prevMonth"?-1:1));render();return;}
      if(action==="nowMonth"){state.month=R.month(R.today());render();return;}

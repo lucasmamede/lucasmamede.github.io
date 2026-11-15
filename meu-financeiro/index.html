@@ -123,8 +123,32 @@
         <label>Senha<input id="cloudPassword" type="password" autocomplete="current-password" minlength="6" required placeholder="••••••••"></label>
         <button class="primary-btn" type="submit">Entrar</button>
         <button class="secondary-btn" type="button" id="cloudSignupBtn">Criar conta</button>
+        <button type="button" class="secondary-btn" id="cloudForgotPasswordBtn">Esqueci minha senha</button>
       </form>
       <p id="cloudAuthMessage" class="cloud-auth-message"></p>
+    </div>
+    
+    <div id="cloudRecoverRequest" class="hidden">
+      <small class="eyebrow">RECUPERAÇÃO SEGURA</small>
+      <h2>Recuperar minha senha</h2>
+      <p class="muted">Informe o e-mail que você já usa neste aplicativo. Enviaremos um link para definir outra senha. Seus dados não serão alterados.</p>
+      <form id="cloudRecoverForm" class="cloud-auth-form">
+        <label>E-mail<input id="cloudRecoverEmail" type="email" autocomplete="email" required placeholder="seu@email.com"></label>
+        <button class="primary-btn" type="submit">Enviar link de recuperação</button>
+        <button class="secondary-btn" type="button" id="cloudRecoverBackBtn">Voltar ao login</button>
+      </form>
+      <p id="cloudRecoverMessage" class="cloud-auth-message"></p>
+    </div>
+    <div id="cloudRecoverUpdate" class="hidden">
+      <small class="eyebrow">RECUPERAÇÃO SEGURA</small>
+      <h2>Definir nova senha</h2>
+      <p class="muted">Escolha uma senha nova e diferente da anterior. Os registros financeiros continuam na mesma conta.</p>
+      <form id="cloudRecoverUpdateForm" class="cloud-auth-form">
+        <label>Nova senha<input id="cloudRecoverPassword" type="password" autocomplete="new-password" minlength="8" required placeholder="Pelo menos 8 caracteres"></label>
+        <label>Confirme a nova senha<input id="cloudRecoverConfirm" type="password" autocomplete="new-password" minlength="8" required placeholder="Repita a senha"></label>
+        <button class="primary-btn" type="submit">Salvar nova senha</button>
+      </form>
+      <p id="cloudRecoverUpdateMessage" class="cloud-auth-message"></p>
     </div>
     <div id="cloudClaimBox" class="hidden">
       <small class="eyebrow">PRIMEIRO ACESSO</small><h2>Importar seus dados</h2>
@@ -462,16 +486,75 @@ let cloudUser=null;
 let cloudResolve;
 window.cloudReady=new Promise(r=>cloudResolve=r);
 let cloudStarted=false;
+let cloudRecovering = new URLSearchParams(location.hash.replace(/^#/, '')).get('type') === 'recovery'
+  || new URLSearchParams(location.search).get('type') === 'recovery';
+function cloudShowPasswordReset(){
+  cloudRecovering=true;
+  document.getElementById('cloudAuthGate').style.display='flex';
+  document.getElementById('cloudAuthLogin').classList.add('hidden');
+  document.getElementById('cloudRecoverRequest').classList.add('hidden');
+  document.getElementById('cloudClaimBox').classList.add('hidden');
+  document.getElementById('cloudRecoverUpdate').classList.remove('hidden');
+}
+function cloudShowRecoverRequest(){
+  document.getElementById('cloudAuthLogin').classList.add('hidden');
+  document.getElementById('cloudRecoverRequest').classList.remove('hidden');
+  document.getElementById('cloudRecoverUpdate').classList.add('hidden');
+  document.getElementById('cloudClaimBox').classList.add('hidden');
+  document.getElementById('cloudRecoverEmail').value=document.getElementById('cloudEmail').value.trim();
+}
+
 function cloudSetMessage(id,msg,ok=false){const el=document.getElementById(id);if(el){el.textContent=msg||'';el.classList.toggle('ok',!!ok)}}
 async function cloudSeedCategories(){const uid=cloudUser.id;const defaults=[['Alimentação','expense','#f97316','utensils'],['Mercado','expense','#84cc16','shopping-cart'],['Moradia','expense','#06b6d4','house'],['Transporte','expense','#3b82f6','car'],['Saúde','expense','#ef4444','heart-pulse'],['Educação','expense','#8b5cf6','graduation-cap'],['Lazer','expense','#ec4899','gamepad-2'],['Compras','expense','#f59e0b','shopping-bag'],['Assinaturas','expense','#14b8a6','repeat'],['Investimentos','investment','#22c55e','trending-up'],['Salário','income','#10b981','banknote'],['Outros','expense','#64748b','tag']];const r=await sb.from('categories').insert(defaults.map(([name,kind,color,icon])=>({user_id:uid,name,kind,color,icon})));if(r.error)throw r.error}
 function cloudShowApp(){document.getElementById('cloudAuthGate').style.display='none';document.getElementById('cloudAppShell').style.display='grid';const nav=document.getElementById('cloudMobileNav');if(nav)nav.style.display='';if(!cloudStarted){cloudStarted=true;cloudResolve()}}
-async function cloudAfterSession(session){cloudUser=session?.user||null;if(!cloudUser){document.getElementById('cloudAuthGate').style.display='flex';document.getElementById('cloudAuthLogin').classList.remove('hidden');document.getElementById('cloudClaimBox').classList.add('hidden');return}const {count,error}=await sb.from('categories').select('*',{count:'exact',head:true});if(error)throw error;if((count||0)>0){cloudShowApp();return}document.getElementById('cloudAuthLogin').classList.add('hidden');document.getElementById('cloudClaimBox').classList.remove('hidden')}
+async function cloudAfterSession(session){if(cloudRecovering)return;cloudUser=session?.user||null;if(!cloudUser){document.getElementById('cloudAuthGate').style.display='flex';document.getElementById('cloudAuthLogin').classList.remove('hidden');document.getElementById('cloudClaimBox').classList.add('hidden');return}const {count,error}=await sb.from('categories').select('*',{count:'exact',head:true});if(error)throw error;if((count||0)>0){cloudShowApp();return}document.getElementById('cloudAuthLogin').classList.add('hidden');document.getElementById('cloudClaimBox').classList.remove('hidden')}
+document.getElementById('cloudForgotPasswordBtn').addEventListener('click',cloudShowRecoverRequest);
+document.getElementById('cloudRecoverBackBtn').addEventListener('click',()=>{
+  document.getElementById('cloudRecoverRequest').classList.add('hidden');
+  document.getElementById('cloudAuthLogin').classList.remove('hidden');
+});
+document.getElementById('cloudRecoverForm').addEventListener('submit',async event=>{
+  event.preventDefault();
+  const email=document.getElementById('cloudRecoverEmail').value.trim();
+  const submit=event.currentTarget.querySelector('[type="submit"]');
+  submit.disabled=true;
+  cloudSetMessage('cloudRecoverMessage','Solicitando link...');
+  try{
+    const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});
+    if(error)throw error;
+    cloudSetMessage('cloudRecoverMessage','Se este e-mail estiver cadastrado, enviaremos um link de recuperação. Confira sua caixa de entrada e spam.',true);
+  }catch(error){
+    cloudSetMessage('cloudRecoverMessage',error.message||'Falha ao enviar o link.');
+  }finally{submit.disabled=false;}
+});
+document.getElementById('cloudRecoverUpdateForm').addEventListener('submit',async event=>{
+  event.preventDefault();
+  const password=document.getElementById('cloudRecoverPassword').value;
+  const confirmPassword=document.getElementById('cloudRecoverConfirm').value;
+  if(password.length<8)return cloudSetMessage('cloudRecoverUpdateMessage','Use pelo menos 8 caracteres.');
+  if(password!==confirmPassword)return cloudSetMessage('cloudRecoverUpdateMessage','As senhas não coincidem.');
+  const button=event.currentTarget.querySelector('[type="submit"]');
+  button.disabled=true;
+  cloudSetMessage('cloudRecoverUpdateMessage','Atualizando...');
+  try{
+    const {data:{session},error:sessionError}=await sb.auth.getSession();
+    if(sessionError||!session)throw new Error('Link inválido ou expirado. Solicite outro em Esqueci minha senha.');
+    const {error}=await sb.auth.updateUser({password});
+    if(error)throw error;
+    cloudSetMessage('cloudRecoverUpdateMessage','Senha atualizada. Abrindo o aplicativo...',true);
+    location.replace(location.origin+location.pathname);
+  }catch(error){
+    cloudSetMessage('cloudRecoverUpdateMessage',error.message||'Falha ao atualizar a senha.');
+    button.disabled=false;
+  }
+});
+
 document.getElementById('cloudAuthForm').addEventListener('submit',async e=>{e.preventDefault();cloudSetMessage('cloudAuthMessage','Entrando...');const email=document.getElementById('cloudEmail').value.trim(),password=document.getElementById('cloudPassword').value;const {data,error}=await sb.auth.signInWithPassword({email,password});if(error)return cloudSetMessage('cloudAuthMessage',error.message);await cloudAfterSession(data.session)});
 document.getElementById('cloudSignupBtn').addEventListener('click',async()=>{const email=document.getElementById('cloudEmail').value.trim(),password=document.getElementById('cloudPassword').value;if(!email||password.length<6)return cloudSetMessage('cloudAuthMessage','Informe e-mail e senha com pelo menos 6 caracteres.');const {data,error}=await sb.auth.signUp({email,password});if(error)return cloudSetMessage('cloudAuthMessage',error.message);if(!data.session)return cloudSetMessage('cloudAuthMessage','Conta criada. Confirme o e-mail e depois entre.',true);await cloudAfterSession(data.session)});
 document.getElementById('cloudClaimForm').addEventListener('submit',async e=>{e.preventDefault();cloudSetMessage('cloudClaimMessage','Importando...');try{const code=document.getElementById('cloudClaimCode').value.trim();const {data:{session}}=await sb.auth.getSession();if(!session?.access_token)throw new Error('Sessão expirada. Entre novamente.');const r=await fetch(SUPABASE_URL+'/functions/v1/claim-legacy-data',{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+session.access_token},body:JSON.stringify({code})});const result=await r.json();if(!r.ok||!result?.ok)throw new Error(result?.error||'Código inválido.');cloudSetMessage('cloudClaimMessage','Dados importados.',true);cloudShowApp()}catch(err){cloudSetMessage('cloudClaimMessage',err.message||'Código inválido.')}});
 document.getElementById('cloudStartEmptyBtn').addEventListener('click',async()=>{try{await cloudSeedCategories();cloudShowApp()}catch(e){cloudSetMessage('cloudClaimMessage',e.message)}});
-(async()=>{const {data}=await sb.auth.getSession();await cloudAfterSession(data.session)})().catch(e=>cloudSetMessage('cloudAuthMessage',e.message));
-sb.auth.onAuthStateChange((_event,session)=>{if(session&&!cloudStarted)cloudAfterSession(session).catch(e=>cloudSetMessage('cloudAuthMessage',e.message))});
+(async()=>{const {data}=await sb.auth.getSession();if(cloudRecovering)cloudShowPasswordReset();else await cloudAfterSession(data.session)})().catch(e=>cloudSetMessage('cloudAuthMessage',e.message));
+sb.auth.onAuthStateChange((event,session)=>{if(event==='PASSWORD_RECOVERY'){cloudShowPasswordReset();return;}if(session&&!cloudStarted&&!cloudRecovering)cloudAfterSession(session).catch(e=>cloudSetMessage('cloudAuthMessage',e.message))});
 </script>
 <script>const state = {
   bootstrap: { accounts: [], cards: [], categories: [], investments: [] },

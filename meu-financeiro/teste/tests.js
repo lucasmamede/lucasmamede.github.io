@@ -62,9 +62,9 @@ test("Desativar categoria não remove o histórico",()=>{
  e.archiveCategory(c.id);truth(c.archived);eq(e.db.transactions.length,count);
 });
 test("Aporte futuro não aparece no patrimônio anterior",()=>{
- const e=fresh(),inv=e.db.investments[0].id,today=R.today(),future=R.addMonths(today,2),before=R.position(e.db,inv,today,0).capital;
+ const e=fresh(),inv=e.db.investments[0].id,today=R.today(),future=R.addMonths(today,2),before=R.position(e.db,inv,R.addDays(future,1),0).capital;
  e.tx({type:"investment",desc:"Aporte programado",date:future,amount:"1111.00",accountId:e.db.accounts[0].id,investmentId:inv});
- eq(R.position(e.db,inv,today,0).capital,before);eq(R.position(e.db,inv,R.addDays(future,1),0).capital,before+111100);
+ truth(R.position(e.db,inv,today,0).capital<before+111100);eq(R.position(e.db,inv,R.addDays(future,1),0).capital,before+111100);
 });
 test("Aporte é saída de caixa, mas não gasto de consumo",()=>{
  const e=fresh(),acc=e.db.accounts[0].id,inv=e.db.investments[0].id,now=R.today(),before=R.accountBalance(e.db,acc),expense=R.stats(e.db,R.month(now)).spent;

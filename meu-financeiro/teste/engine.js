@@ -1,11 +1,12 @@
-window.FinanceLabEngine = (function FinanceLabEngine(R,Seed){
+window.FinanceLabEngine = (function FinanceLabEngine(R,Seed,store){
  "use strict";
+ store=store||localStorage;
  const KEY="meu-financeiro-laboratorio-demo-v1";
  const arrays=["accounts","cards","categories","transactions","bills","subscriptions","investments","invoicePayments"];
  function valid(d){return !!(d&&d.version===1&&arrays.every(k=>Array.isArray(d[k]))&&d.settings&&typeof d.settings==="object");}
  let db;
- try{const stored=localStorage.getItem(KEY);db=stored?JSON.parse(stored):Seed(R);if(!valid(db))db=Seed(R);}catch(_){db=Seed(R);}
- function persist(){localStorage.setItem(KEY,JSON.stringify(db));return db;}
+ try{const stored=store.getItem(KEY);db=stored?JSON.parse(stored):Seed(R);if(!valid(db))db=Seed(R);}catch(_){db=Seed(R);}
+ function persist(){store.setItem(KEY,JSON.stringify(db));return db;}
  function reset(){db=Seed(R);persist();return db;}
  function load(value){if(!valid(value))throw Error("Arquivo não é um backup do Laboratório.");db=JSON.parse(JSON.stringify(value));persist();}
  persist();

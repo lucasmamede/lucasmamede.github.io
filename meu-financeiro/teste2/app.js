@@ -1,6 +1,6 @@
 (function FinanceStudioApp(){
 "use strict";
-const R=window.FinanceRules, V=window.FinanceStudioViews, E=window.FinanceLabEngine(R,window.FinanceDemoSeed);
+const R=window.FinanceRules, V=window.FinanceStudioViews(R), E=window.FinanceLabEngine(R,window.FinanceDemoSeed);
 const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s)), h=V.esc;
 const state={page:"home",month:R.month(R.today()),kindFilter:"all",search:"",selected:new Set(),selectedDay:"",cardId:E.db.cards[0]?.id,positionDate:R.today(),simMonthly:null,simPct:100,simYears:5};
 const pages={home:"Início",activity:"Lançamentos",agenda:"Agenda",cards:"Cartões",investments:"Investimentos",accounts:"Contas",subscriptions:"Assinaturas",settings:"Configurações"};

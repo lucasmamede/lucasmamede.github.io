@@ -99,6 +99,18 @@
 
 .receipt-qr-btn{align-self:flex-start}.receipt-qr-scanner{display:flex;flex-direction:column;gap:10px}.receipt-camera-toolbar{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px;align-items:end}.receipt-camera-toolbar label{display:flex;flex-direction:column;gap:6px;color:#9db2d2;font-size:10px;font-weight:700}.receipt-camera-toolbar select{min-height:42px;border:1px solid var(--line);border-radius:12px;background:#111a2c;color:#fff;padding:8px 10px;min-width:0}.receipt-qr-reader{width:100%;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:#020713;min-height:260px}.receipt-qr-reader video{width:100%!important;max-height:520px;object-fit:cover;border-radius:14px}.receipt-qr-reader #qr-shaded-region{border-color:rgba(124,92,255,.7)!important}.receipt-qr-reader img{max-width:56px}.receipt-qr-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#9db2d2;font-size:11px}.receipt-qr-action-buttons{display:flex;gap:8px;flex:0 0 auto}.receipt-qr-actions .secondary-btn{flex:0 0 auto}.receipt-camera-info{font-size:9px;color:#6f819d;line-height:1.45}.receipt-qr-scanner .text-btn{align-self:flex-start}.receipt-qr-status-ok{color:#4ade80!important}.receipt-qr-status-warn{color:#fbbf24!important}
 @media(max-width:620px){.receipt-qr-btn{width:100%;justify-content:center}.receipt-camera-toolbar{grid-template-columns:1fr 1fr}.receipt-camera-toolbar label{grid-column:1/-1}.receipt-qr-actions{align-items:flex-start;flex-direction:column}.receipt-qr-action-buttons{width:100%;display:grid;grid-template-columns:1fr 1fr}.receipt-qr-actions .secondary-btn{width:100%}.receipt-qr-reader{min-height:300px}}
+
+.finance-category-panel{grid-column:1/-1}
+.finance-category-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:16px}
+.finance-category-row{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid var(--line);border-radius:12px;min-width:0}
+.finance-category-swatch{flex:0 0 14px;width:14px;height:14px;border-radius:50%;box-shadow:0 0 0 3px rgba(255,255,255,.05)}
+.finance-category-detail{display:flex;flex-direction:column;min-width:0;flex:1;gap:3px}
+.finance-category-detail strong{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.finance-category-detail small{color:var(--muted);font-size:11px}
+.finance-category-row .secondary-btn{padding:8px 10px;font-size:12px;white-space:nowrap}
+#dashboard .dashboard-grid .panel.wide{grid-column:1/-1}
+@media(max-width:650px){.finance-category-list{grid-template-columns:1fr}.finance-category-panel .panel-head{align-items:flex-start;flex-wrap:wrap}}
+
 </style></head>
 <body>
 <div id="cloudAuthGate" class="cloud-auth-gate">
@@ -135,10 +147,8 @@
       <button data-page="accounts"><i data-lucide="wallet-cards"></i>Contas</button>
       <button data-page="cards"><i data-lucide="credit-card"></i>Cartões</button>
       <button data-page="calendar"><i data-lucide="calendar-days"></i>Calendário</button>
-      <button data-page="receipts"><i data-lucide="scan-line"></i>Cupons</button>
       <button data-page="subscriptions"><i data-lucide="repeat-2"></i>Assinaturas</button>
       <button data-page="investments"><i data-lucide="chart-no-axes-combined"></i>Investimentos</button>
-      <button data-page="goals"><i data-lucide="target"></i>Metas</button>
       <button data-page="settings"><i data-lucide="settings"></i>Configurações</button>
     </nav>
     <div class="sidebar-foot"><span class="status-dot"></span>Supabase conectado</div>
@@ -186,7 +196,7 @@
         <article class="panel chart-panel"><div class="panel-head"><div><small>Distribuição</small><h3>Gastos por categoria</h3></div></div><div class="chart-wrap"><canvas id="categoryChart"></canvas></div></article>
         <article class="panel"><div class="panel-head"><div><small>Competência selecionada</small><h3>Vencimentos e assinaturas</h3></div><button class="icon-btn" data-page="calendar"><i data-lucide="arrow-up-right"></i></button></div><div id="upcomingList" class="stack-list empty-state">Nenhum vencimento próximo.</div></article>
         <article class="panel wide"><div class="panel-head"><div><small>Movimentação da competência</small><h3>Últimos lançamentos</h3></div><button class="text-btn" data-page="movements">Ver todos</button></div><div id="recentTransactions" class="tableish empty-state">Nenhum lançamento cadastrado.</div></article>
-        <article class="panel goal-panel"><div class="panel-head"><div><small>Objetivo</small><h3>Meta financeira</h3></div></div><div id="goalSnapshot" class="empty-state">Cadastre uma meta para acompanhar seu progresso.</div></article>
+        <article class="panel goal-panel" style="display:none" aria-hidden="true"><div class="panel-head"><div><small>Objetivo</small><h3>Meta financeira</h3></div></div><div id="goalSnapshot" class="empty-state">Cadastre uma meta para acompanhar seu progresso.</div></article>
       </div>
     </section>
 
@@ -255,7 +265,7 @@
       <div class="panel calendar-panel"><div id="financialCalendar"></div></div>
     </section>
 
-    <section id="receipts" class="page receipt-page">
+    <section id="receipts" class="page receipt-page" style="display:none" aria-hidden="true">
       <div class="receipt-intro">
         <div>
           <small class="eyebrow">LABORATÓRIO DE COMPRAS</small>
@@ -392,13 +402,19 @@
       </div>
     </section>
 
-    <section id="goals" class="page">
+    <section id="goals" class="page" style="display:none" aria-hidden="true">
       <div class="section-toolbar"><p>Metas com progresso, prazo e valor restante.</p><button class="primary-btn" data-open="goal"><i data-lucide="plus"></i>Nova meta</button></div>
       <div id="goalCards" class="card-grid"></div>
     </section>
 
     <section id="settings" class="page">
       <div class="settings-grid">
+        <article class="panel finance-category-panel">
+          <div class="panel-head"><div><small>PERSONALIZAÇÃO</small><h3>Minhas categorias</h3></div><button type="button" class="primary-btn" id="financeCategoryNewBtn"><i data-lucide="plus"></i>Nova categoria</button></div>
+          <p class="muted">Crie ou edite nomes, cores, tipos e ícones. Os lançamentos já cadastrados serão preservados.</p>
+          <div id="financeCategoryList" class="finance-category-list"></div>
+        </article>
+
         <article class="panel"><div class="panel-head"><div><small>Segurança</small><h3>Backup da nuvem</h3></div></div><p>Baixe uma cópia JSON dos seus dados do Supabase.</p><button class="primary-btn" id="cloudBackupBtn"><i data-lucide="download"></i>Fazer backup</button></article>
         <article class="panel"><div class="panel-head"><div><small>Restauração</small><h3>Restaurar backup</h3></div></div><p>Restaura um backup JSON exportado por esta versão.</p><label class="secondary-btn file-btn"><i data-lucide="upload"></i>Selecionar backup<input id="restoreFile" type="file" accept=".json,application/json"></label></article>
         <article class="panel"><div class="panel-head"><div><small>Celular</small><h3>Instalação PWA</h3></div></div><p id="pwaStatus">No Android, abra pelo Chrome e use “Adicionar à tela inicial”.</p><button id="installPwaBtn" class="primary-btn hidden"><i data-lucide="smartphone"></i>Instalar aplicativo</button></article>
@@ -422,10 +438,8 @@
   <div class="more-grid">
     <button data-page="accounts"><i data-lucide="wallet-cards"></i>Contas</button>
     <button data-page="cards"><i data-lucide="credit-card"></i>Cartões</button>
-    <button data-page="receipts"><i data-lucide="scan-line"></i>Cupons</button>
     <button data-page="subscriptions"><i data-lucide="repeat-2"></i>Assinaturas</button>
     <button data-page="investments"><i data-lucide="chart-no-axes-combined"></i>Investimentos</button>
-    <button data-page="goals"><i data-lucide="target"></i>Metas</button>
     <button data-page="settings"><i data-lucide="settings"></i>Configurações</button>
   </div>
 </div></div>
@@ -587,10 +601,77 @@ async function showPage(id) {
   if (id === 'investments') await loadInvestments();
   if (id === 'goals') await loadGoals();
   if (id === 'calendar') initCalendar(true);
+  if (id === 'settings') financeRenderCategories();
   if (id === 'receipts') await loadReceipts();
 
   window.scrollTo({ top: 0, behavior: 'smooth' });
   iconRefresh();
+}
+
+function financeRenderCategories(){
+  const host = document.getElementById('financeCategoryList');
+  if (!host) return;
+  const cats = (state.bootstrap.categories || []).slice().sort((a,b)=>String(a.name).localeCompare(String(b.name),'pt-BR'));
+  host.innerHTML = cats.length ? cats.map(c=>{
+    const color=/^#[0-9a-f]{6}$/i.test(c.color||'')?c.color:'#64748b';
+    const type=({expense:'Despesa',income:'Receita',investment:'Investimento'})[c.kind]||c.kind||'Despesa';
+    return `<div class="finance-category-row"><span class="finance-category-swatch" style="background:${color}"></span><div class="finance-category-detail"><strong>${esc(c.name)}</strong><small>${esc(type)}</small></div><button type="button" class="secondary-btn" data-finance-category-edit="${Number(c.id)}" aria-label="Editar ${attr(c.name)}"><i data-lucide="pencil"></i>Editar</button></div>`;
+  }).join('') : '<p class="muted">Nenhuma categoria cadastrada.</p>';
+  iconRefresh();
+}
+
+function financeOpenCategoryEditor(category=null){
+  const edit=Boolean(category?.id);
+  const name=String(category?.name||'');
+  const color=/^#[0-9a-f]{6}$/i.test(category?.color||'')?category.color:'#64748b';
+  const kind=category?.kind||'expense',currentIcon=category?.icon||'tag';
+  const icons=['tag','utensils','shopping-cart','house','car','heart-pulse','graduation-cap','gamepad-2','shopping-bag','repeat','trending-up','banknote','plane','gift','paw-print','coffee','shirt','dumbbell','smartphone','wrench','wallet','briefcase-business'];
+  if(!icons.includes(currentIcon))icons.unshift(currentIcon);
+  setModal(edit?'Editar categoria':'Nova categoria','ORGANIZAÇÃO FINANCEIRA');
+  $('#modalBody').innerHTML=`
+  <form id="financeCategoryForm" class="modal-form">
+    <div class="field full"><label for="financeCategoryName">Nome da categoria</label><input id="financeCategoryName" name="name" maxlength="60" minlength="2" required placeholder="Ex.: Pets" value="${attr(name)}"></div>
+    <div class="field"><label for="financeCategoryKind">Tipo</label><select id="financeCategoryKind" name="kind">
+      <option value="expense" ${kind==='expense'?'selected':''}>Despesa</option>
+      <option value="income" ${kind==='income'?'selected':''}>Receita</option>
+      <option value="investment" ${kind==='investment'?'selected':''}>Investimento</option>
+    </select></div>
+    <div class="field"><label for="financeCategoryColor">Cor</label><input id="financeCategoryColor" type="color" name="color" value="${color}" style="height:44px;padding:4px;cursor:pointer"></div>
+    <div class="field full"><label for="financeCategoryIcon">Ícone</label><select id="financeCategoryIcon" name="icon">${icons.map(x=>`<option value="${attr(x)}" ${x===currentIcon?'selected':''}>${esc(x)}</option>`).join('')}</select></div>
+    <p class="muted" style="grid-column:1/-1">Ao renomear uma categoria, os lançamentos, contas e assinaturas anteriores são atualizados sem excluir registros.</p>
+    <div class="form-actions"><button type="button" class="secondary-btn" data-close>Cancelar</button><button type="submit" class="primary-btn"><i data-lucide="save"></i>Salvar categoria</button></div>
+  </form>`;
+  $('#modal').classList.add('open');
+  const form=$('#financeCategoryForm');
+  form.onsubmit=async e=>{
+    e.preventDefault();
+    const button=form.querySelector('button[type="submit"]');
+    button.disabled=true;
+    const name=form.querySelector('#financeCategoryName').value.trim();
+    const kind=form.querySelector('#financeCategoryKind').value;
+    const color=form.querySelector('#financeCategoryColor').value;
+    const icon=form.querySelector('#financeCategoryIcon').value;
+    try {
+      if(name.length<2||name.length>60)throw new Error('O nome deve ter de 2 a 60 caracteres.');
+      if(category?.name==='Investimentos'&&(name!=='Investimentos'||kind!=='investment'))throw new Error('A categoria Investimentos é reservada ao controle de aportes e resgates.');
+      const {error}=await sb.rpc('finance_save_category',{p_id:edit?Number(category.id):null,p_name:name,p_kind:kind,p_color:color,p_icon:icon});
+      if(error)throw error;
+      await refreshBootstrap();
+      financeRenderCategories();
+      closeOverlays();
+      toast(edit?'Categoria atualizada, inclusive no histórico.':'Categoria criada.');
+    }catch(err){toast(err.message||'Não foi possível salvar a categoria.');button.disabled=false;}
+  };
+  iconRefresh();
+}
+
+function financeCategoryClick(e){
+  if(e.target.closest('#financeCategoryNewBtn')){e.preventDefault();financeOpenCategoryEditor();return;}
+  const b=e.target.closest('[data-finance-category-edit]');
+  if(!b)return;
+  e.preventDefault();
+  const c=(state.bootstrap.categories||[]).find(x=>Number(x.id)===Number(b.dataset.financeCategoryEdit));
+  if(c)financeOpenCategoryEditor(c);
 }
 
 async function refreshBootstrap() {
@@ -2481,6 +2562,8 @@ async function cloudExportBackup() {
 }
 $('#cloudBackupBtn')?.addEventListener('click', async()=>{try{await cloudExportBackup();toast('Backup gerado.')}catch(e){toast(e.message)}});
 $('#cloudLogoutBtn')?.addEventListener('click', async()=>{await sb.auth.signOut();location.reload()});
+
+document.addEventListener('click', financeCategoryClick);
 
 (async function init() {
   try { await refreshBootstrap(); await loadDashboard(); iconRefresh(); }

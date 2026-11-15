@@ -132,7 +132,7 @@ window.FinanceLabEngine = (function FinanceLabEngine(R,Seed,store){
  function category(input,id=null){
   const name=required(input.name,"a categoria"),kind=["expense","income","investment"].includes(input.kind)?input.kind:"expense",color=/^#[0-9a-f]{6}$/i.test(input.color)?input.color:"#8170ff";
   if(db.categories.some(c=>c.name.toLowerCase()===name.toLowerCase()&&c.id!==id))throw Error("Essa categoria já existe.");
-  const data={name,kind,color,archived:false};
+  const icon=String(input.icon||"🏷️").slice(0,8);const data={name,kind,color,icon,archived:false};
   if(id)Object.assign(belongs("categories",id),data);else db.categories.push({id:R.unique(),...data});
   persist();
  }
